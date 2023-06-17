@@ -44,7 +44,7 @@ class Department
     private Collection $children;
 
     #[ManyToOne(targetEntity: Department::class, inversedBy: 'children')]
-    #[JoinColumn(name: 'parent_code', referencedColumnName: 'id')]
+    #[JoinColumn(name: 'parent', referencedColumnName: 'id')]
     private Department|null $parent = null;
 
     #[ORM\OneToMany(mappedBy: 'department', targetEntity: Employee::class)]

@@ -29,6 +29,9 @@ class Currency
     #[ORM\Column(length: 20)]
     private ?string $code = null;
 
+    #[ORM\Column]
+    private ?int $codeNumeric = null;
+
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
@@ -50,6 +53,22 @@ class Currency
         $this->code = $code;
 
         return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getCodeNumeric(): ?int
+    {
+        return $this->codeNumeric;
+    }
+
+    /**
+     * @param int|null $codeNumeric
+     */
+    public function setCodeNumeric(?int $codeNumeric): void
+    {
+        $this->codeNumeric = $codeNumeric;
     }
 
     public function getName(): ?string
