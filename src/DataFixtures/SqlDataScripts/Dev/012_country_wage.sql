@@ -1,107 +1,698 @@
 INSERT INTO country_wage (country_id, currency_id, created_by_id, amount, date_from, date_to, active, created_at)
+SELECT c.id, cur.id, emp.id, 35.00, '2006.08.06', null, 1, now() FROM country c, currency cur, employee emp
+WHERE c.code = 'AF'
+  AND cur.code = 'USD'
+  AND emp.code = '00001';
+
+INSERT INTO country_wage (country_id, currency_id, created_by_id, amount, date_from, date_to, active, created_at)
+SELECT c.id, cur.id, emp.id, 30.00, '2006.08.06', null, 1, now()
+FROM country c, currency cur, employee emp
+WHERE c.code = 'AL'
+  AND cur.code = 'EUR'
+  AND emp.code = '00001';
+
+INSERT INTO country_wage (country_id, currency_id, created_by_id, amount, date_from, date_to, active, created_at)
+SELECT c.id, cur.id, emp.id, 40.00, '2006.08.06', null, 1, now()
+FROM country c, currency cur, employee emp
+WHERE c.code = 'DZ'
+  AND cur.code = 'USD'
+  AND emp.code = '00001';
+
+INSERT INTO country_wage (country_id, currency_id, created_by_id, amount, date_from, date_to, active, created_at)
+SELECT c.id, cur.id, emp.id, 70.00, '2006.08.06', null, 1, now()
+FROM country c, currency cur, employee emp
+WHERE c.code = 'AD'
+  AND cur.code = 'USD'
+  AND emp.code = '00001';
+
+INSERT INTO country_wage (country_id, currency_id, created_by_id, amount, date_from, date_to, active, created_at)
 SELECT c.id, cur.id, emp.id, 35.00, '2006.08.06', null, 1, now()
 FROM country c, currency cur, employee emp
-WHERE c.code = 'AF'
-AND cur.code = 'USD'
-AND emp.code = '00001';
+WHERE c.code = 'AO'
+  AND cur.code = 'USD'
+  AND emp.code = '00001';
 
+INSERT INTO country_wage (country_id, currency_id, created_by_id, amount, date_from, date_to, active, created_at)
+SELECT c.id, cur.id, emp.id, 50.00, '2006.08.06', null, 1, now()
+FROM country c, currency cur, employee emp
+WHERE c.code = 'AR'
+  AND cur.code = 'USD'
+  AND emp.code = '00001';
 
--- 30,00 AL EUR
--- 40,00 DZ USD
--- 70,00 AD USD
--- 35,00 AO USD
--- 50,00 AR USD
--- 50,00 AM USD
--- 85,00 AU USD
--- 70,00 AT EUR
--- 50,00 AZ USD
--- 70,00 BE EUR
--- 50,00 BY USD
--- 40,00 BO USD
--- 30,00 BA EUR
--- 40,00 BR USD
--- 40,00 BG EUR
--- 60,00 CY EUR
--- 50,00 CZ EUR
--- 40,00 CL USD
--- 70,00 DK EUR
--- 40,00 KP USD
--- 40,00 EG USD
--- 40,00 EE EUR
--- 35,00 ET USD
--- 40,00 PH USD
--- 70,00 FI EUR
--- 70,00 FR EUR
--- 50,00 GE EUR
--- 60,00 GR EUR
--- 26,55 HR EUR
--- 40,00 IN USD
--- 40,00 ID USD
--- 60,00 IQ USD
--- 60,00 IR USD
--- 70,00 IE EUR
--- 80,00 IS EUR
--- 70,00 IT EUR
--- 70,00 IL USD
--- 35,00 JM USD
--- 85,00 JP USD
--- 35,00 YE USD
--- 35,00 JO USD
--- 50,00 ZA USD
--- 85,00 CA USD
--- 50,00 KZ USD
--- 35,00 KE USD
--- 50,00 KG USD
--- 40,00 CO USD
--- 35,00 CG USD
--- 35,00 CU USD
--- 70,00 KW USD
--- 40,00 LV EUR
--- 35,00 LB USD
--- 40,00 LR USD
--- 40,00 LY USD
--- 40,00 LT EUR
--- 80,00 LU EUR
--- 50,00 HU EUR
--- 30,00 MK EUR
--- 40,00 MY USD
--- 60,00 MT EUR
--- 35,00 MX USD
--- 40,00 MD USD
--- 70,00 MC EUR
--- 35,00 MZ USD
--- 70,00 NL EUR
--- 80,00 NO EUR
--- 70,00 NZ USD
--- 50,00 CN USD
--- 95,00 HK USD
--- 70,00 DE EUR
--- 40,00 PK USD
--- 50,00 PA USD
--- 35,00 PE USD
--- 40,00 PL EUR
--- 60,00 PT EUR
--- 70,00 KR USD
--- 40,00 RO EUR
--- 50,00 RU USD
--- 95,00 US USD
--- 50,00 SA USD
--- 35,00 SN USD
--- 85,00 SG USD
--- 50,00 SY USD
--- 50,00 SK EUR
--- 50,00 SI EUR
--- 30,00 RS EUR
--- 30,00 ME EUR
--- 35,00 SD USD
--- 60,00 ES EUR
--- 80,00 SE EUR
--- 80,00 CH EUR
--- 50,00 TJ USD
--- 35,00 TN USD
--- 50,00 TM USD
--- 50,00 TR EUR
--- 70,00 GB EUR
--- 50,00 UA USD
--- 50,00 UA USD
--- 50,00 AE USD
+INSERT INTO country_wage (country_id, currency_id, created_by_id, amount, date_from, date_to, active, created_at)
+SELECT c.id, cur.id, emp.id, 50.00, '2006.08.06', null, 1, now()
+FROM country c, currency cur, employee emp
+WHERE c.code = 'AM'
+  AND cur.code = 'USD'
+  AND emp.code = '00001';
+
+INSERT INTO country_wage (country_id, currency_id, created_by_id, amount, date_from, date_to, active, created_at)
+SELECT c.id, cur.id, emp.id, 85.00, '2006.08.06', null, 1, now()
+FROM country c, currency cur, employee emp
+WHERE c.code = 'AU'
+  AND cur.code = 'USD'
+  AND emp.code = '00001';
+
+INSERT INTO country_wage (country_id, currency_id, created_by_id, amount, date_from, date_to, active, created_at)
+SELECT c.id, cur.id, emp.id, 70.00, '2006.08.06', null, 1, now()
+FROM country c, currency cur, employee emp
+WHERE c.code = 'AT'
+  AND cur.code = 'EUR'
+  AND emp.code = '00001';
+
+INSERT INTO country_wage (country_id, currency_id, created_by_id, amount, date_from, date_to, active, created_at)
+SELECT c.id, cur.id, emp.id, 50.00, '2006.08.06', null, 1, now()
+FROM country c, currency cur, employee emp
+WHERE c.code = 'AZ'
+  AND cur.code = 'USD'
+  AND emp.code = '00001';
+
+INSERT INTO country_wage (country_id, currency_id, created_by_id, amount, date_from, date_to, active, created_at)
+SELECT c.id, cur.id, emp.id, 70.00, '2006.08.06', null, 1, now()
+FROM country c, currency cur, employee emp
+WHERE c.code = 'BE'
+  AND cur.code = 'EUR'
+  AND emp.code = '00001';
+
+INSERT INTO country_wage (country_id, currency_id, created_by_id, amount, date_from, date_to, active, created_at)
+SELECT c.id, cur.id, emp.id, 50.00, '2006.08.06', null, 1, now()
+FROM country c, currency cur, employee emp
+WHERE c.code = 'BY'
+  AND cur.code = 'USD'
+  AND emp.code = '00001';
+
+INSERT INTO country_wage (country_id, currency_id, created_by_id, amount, date_from, date_to, active, created_at)
+SELECT c.id, cur.id, emp.id, 40.00, '2006.08.06', null, 1, now()
+FROM country c, currency cur, employee emp
+WHERE c.code = 'BO'
+  AND cur.code = 'USD'
+  AND emp.code = '00001';
+
+INSERT INTO country_wage (country_id, currency_id, created_by_id, amount, date_from, date_to, active, created_at)
+SELECT c.id, cur.id, emp.id, 30.00, '2006.08.06', null, 1, now()
+FROM country c, currency cur, employee emp
+WHERE c.code = 'BA'
+  AND cur.code = 'EUR'
+  AND emp.code = '00001';
+
+INSERT INTO country_wage (country_id, currency_id, created_by_id, amount, date_from, date_to, active, created_at)
+SELECT c.id, cur.id, emp.id, 40.00, '2006.08.06', null, 1, now()
+FROM country c, currency cur, employee emp
+WHERE c.code = 'BR'
+  AND cur.code = 'USD'
+  AND emp.code = '00001';
+
+INSERT INTO country_wage (country_id, currency_id, created_by_id, amount, date_from, date_to, active, created_at)
+SELECT c.id, cur.id, emp.id, 40.00, '2006.08.06', null, 1, now()
+FROM country c, currency cur, employee emp
+WHERE c.code = 'BG'
+  AND cur.code = 'EUR'
+  AND emp.code = '00001';
+
+INSERT INTO country_wage (country_id, currency_id, created_by_id, amount, date_from, date_to, active, created_at)
+SELECT c.id, cur.id, emp.id, 60.00, '2006.08.06', null, 1, now()
+FROM country c, currency cur, employee emp
+WHERE c.code = 'CY'
+  AND cur.code = 'EUR'
+  AND emp.code = '00001';
+
+INSERT INTO country_wage (country_id, currency_id, created_by_id, amount, date_from, date_to, active, created_at)
+SELECT c.id, cur.id, emp.id, 50.00, '2006.08.06', null, 1, now()
+FROM country c, currency cur, employee emp
+WHERE c.code = 'CZ'
+  AND cur.code = 'EUR'
+  AND emp.code = '00001';
+
+INSERT INTO country_wage (country_id, currency_id, created_by_id, amount, date_from, date_to, active, created_at)
+SELECT c.id, cur.id, emp.id, 40.00, '2006.08.06', null, 1, now()
+FROM country c, currency cur, employee emp
+WHERE c.code = 'CL'
+  AND cur.code = 'USD'
+  AND emp.code = '00001';
+
+INSERT INTO country_wage (country_id, currency_id, created_by_id, amount, date_from, date_to, active, created_at)
+SELECT c.id, cur.id, emp.id, 70.00, '2006.08.06', null, 1, now()
+FROM country c, currency cur, employee emp
+WHERE c.code = 'DK'
+  AND cur.code = 'EUR'
+  AND emp.code = '00001';
+
+INSERT INTO country_wage (country_id, currency_id, created_by_id, amount, date_from, date_to, active, created_at)
+SELECT c.id, cur.id, emp.id, 40.00, '2006.08.06', null, 1, now()
+FROM country c, currency cur, employee emp
+WHERE c.code = 'KP'
+  AND cur.code = 'USD'
+  AND emp.code = '00001';
+
+INSERT INTO country_wage (country_id, currency_id, created_by_id, amount, date_from, date_to, active, created_at)
+SELECT c.id, cur.id, emp.id, 40.00, '2006.08.06', null, 1, now()
+FROM country c, currency cur, employee emp
+WHERE c.code = 'EG'
+  AND cur.code = 'USD'
+  AND emp.code = '00001';
+
+INSERT INTO country_wage (country_id, currency_id, created_by_id, amount, date_from, date_to, active, created_at)
+SELECT c.id, cur.id, emp.id, 40.00, '2006.08.06', null, 1, now()
+FROM country c, currency cur, employee emp
+WHERE c.code = 'EE'
+  AND cur.code = 'EUR'
+  AND emp.code = '00001';
+
+INSERT INTO country_wage (country_id, currency_id, created_by_id, amount, date_from, date_to, active, created_at)
+SELECT c.id, cur.id, emp.id, 35.00, '2006.08.06', null, 1, now()
+FROM country c, currency cur, employee emp
+WHERE c.code = 'ET'
+  AND cur.code = 'USD'
+  AND emp.code = '00001';
+
+INSERT INTO country_wage (country_id, currency_id, created_by_id, amount, date_from, date_to, active, created_at)
+SELECT c.id, cur.id, emp.id, 40.00, '2006.08.06', null, 1, now()
+FROM country c, currency cur, employee emp
+WHERE c.code = 'PH'
+  AND cur.code = 'USD'
+  AND emp.code = '00001';
+
+INSERT INTO country_wage (country_id, currency_id, created_by_id, amount, date_from, date_to, active, created_at)
+SELECT c.id, cur.id, emp.id, 70.00, '2006.08.06', null, 1, now()
+FROM country c, currency cur, employee emp
+WHERE c.code = 'FI'
+  AND cur.code = 'EUR'
+  AND emp.code = '00001';
+
+INSERT INTO country_wage (country_id, currency_id, created_by_id, amount, date_from, date_to, active, created_at)
+SELECT c.id, cur.id, emp.id, 70.00, '2006.08.06', null, 1, now()
+FROM country c, currency cur, employee emp
+WHERE c.code = 'FR'
+  AND cur.code = 'EUR'
+  AND emp.code = '00001';
+
+INSERT INTO country_wage (country_id, currency_id, created_by_id, amount, date_from, date_to, active, created_at)
+SELECT c.id, cur.id, emp.id, 50.00, '2006.08.06', null, 1, now()
+FROM country c, currency cur, employee emp
+WHERE c.code = 'GE'
+  AND cur.code = 'EUR'
+  AND emp.code = '00001';
+
+INSERT INTO country_wage (country_id, currency_id, created_by_id, amount, date_from, date_to, active, created_at)
+SELECT c.id, cur.id, emp.id, 60.00, '2006.08.06', null, 1, now()
+FROM country c, currency cur, employee emp
+WHERE c.code = 'GR'
+  AND cur.code = 'EUR'
+  AND emp.code = '00001';
+
+INSERT INTO country_wage (country_id, currency_id, created_by_id, amount, date_from, date_to, active, created_at)
+SELECT c.id, cur.id, emp.id, 26.55, '2006.08.06', null, 1, now()
+FROM country c, currency cur, employee emp
+WHERE c.code = 'HR'
+  AND cur.code = 'EUR'
+  AND emp.code = '00001';
+
+INSERT INTO country_wage (country_id, currency_id, created_by_id, amount, date_from, date_to, active, created_at)
+SELECT c.id, cur.id, emp.id, 40.00, '2006.08.06', null, 1, now()
+FROM country c, currency cur, employee emp
+WHERE c.code = 'IN'
+  AND cur.code = 'USD'
+  AND emp.code = '00001';
+
+INSERT INTO country_wage (country_id, currency_id, created_by_id, amount, date_from, date_to, active, created_at)
+SELECT c.id, cur.id, emp.id, 40.00, '2006.08.06', null, 1, now()
+FROM country c, currency cur, employee emp
+WHERE c.code = 'ID'
+  AND cur.code = 'USD'
+  AND emp.code = '00001';
+
+INSERT INTO country_wage (country_id, currency_id, created_by_id, amount, date_from, date_to, active, created_at)
+SELECT c.id, cur.id, emp.id, 60.00, '2006.08.06', null, 1, now()
+FROM country c, currency cur, employee emp
+WHERE c.code = 'IQ'
+  AND cur.code = 'USD'
+  AND emp.code = '00001';
+
+INSERT INTO country_wage (country_id, currency_id, created_by_id, amount, date_from, date_to, active, created_at)
+SELECT c.id, cur.id, emp.id, 60.00, '2006.08.06', null, 1, now()
+FROM country c, currency cur, employee emp
+WHERE c.code = 'IR'
+  AND cur.code = 'USD'
+  AND emp.code = '00001';
+
+INSERT INTO country_wage (country_id, currency_id, created_by_id, amount, date_from, date_to, active, created_at)
+SELECT c.id, cur.id, emp.id, 70.00, '2006.08.06', null, 1, now()
+FROM country c, currency cur, employee emp
+WHERE c.code = 'IE'
+  AND cur.code = 'EUR'
+  AND emp.code = '00001';
+
+INSERT INTO country_wage (country_id, currency_id, created_by_id, amount, date_from, date_to, active, created_at)
+SELECT c.id, cur.id, emp.id, 80.00, '2006.08.06', null, 1, now()
+FROM country c, currency cur, employee emp
+WHERE c.code = 'IS'
+  AND cur.code = 'EUR'
+  AND emp.code = '00001';
+
+INSERT INTO country_wage (country_id, currency_id, created_by_id, amount, date_from, date_to, active, created_at)
+SELECT c.id, cur.id, emp.id, 70.00, '2006.08.06', null, 1, now()
+FROM country c, currency cur, employee emp
+WHERE c.code = 'IT'
+  AND cur.code = 'EUR'
+  AND emp.code = '00001';
+
+INSERT INTO country_wage (country_id, currency_id, created_by_id, amount, date_from, date_to, active, created_at)
+SELECT c.id, cur.id, emp.id, 70.00, '2006.08.06', null, 1, now()
+FROM country c, currency cur, employee emp
+WHERE c.code = 'IL'
+  AND cur.code = 'USD'
+  AND emp.code = '00001';
+
+INSERT INTO country_wage (country_id, currency_id, created_by_id, amount, date_from, date_to, active, created_at)
+SELECT c.id, cur.id, emp.id, 35.00, '2006.08.06', null, 1, now()
+FROM country c, currency cur, employee emp
+WHERE c.code = 'JM'
+  AND cur.code = 'USD'
+  AND emp.code = '00001';
+
+INSERT INTO country_wage (country_id, currency_id, created_by_id, amount, date_from, date_to, active, created_at)
+SELECT c.id, cur.id, emp.id, 85.00, '2006.08.06', null, 1, now()
+FROM country c, currency cur, employee emp
+WHERE c.code = 'JP'
+  AND cur.code = 'USD'
+  AND emp.code = '00001';
+
+INSERT INTO country_wage (country_id, currency_id, created_by_id, amount, date_from, date_to, active, created_at)
+SELECT c.id, cur.id, emp.id, 35.00, '2006.08.06', null, 1, now()
+FROM country c, currency cur, employee emp
+WHERE c.code = 'YE'
+  AND cur.code = 'USD'
+  AND emp.code = '00001';
+
+INSERT INTO country_wage (country_id, currency_id, created_by_id, amount, date_from, date_to, active, created_at)
+SELECT c.id, cur.id, emp.id, 35.00, '2006.08.06', null, 1, now()
+FROM country c, currency cur, employee emp
+WHERE c.code = 'JO'
+  AND cur.code = 'USD'
+  AND emp.code = '00001';
+
+INSERT INTO country_wage (country_id, currency_id, created_by_id, amount, date_from, date_to, active, created_at)
+SELECT c.id, cur.id, emp.id, 50.00, '2006.08.06', null, 1, now()
+FROM country c, currency cur, employee emp
+WHERE c.code = 'ZA'
+  AND cur.code = 'USD'
+  AND emp.code = '00001';
+
+INSERT INTO country_wage (country_id, currency_id, created_by_id, amount, date_from, date_to, active, created_at)
+SELECT c.id, cur.id, emp.id, 85.00, '2006.08.06', null, 1, now()
+FROM country c, currency cur, employee emp
+WHERE c.code = 'CA'
+  AND cur.code = 'USD'
+  AND emp.code = '00001';
+
+INSERT INTO country_wage (country_id, currency_id, created_by_id, amount, date_from, date_to, active, created_at)
+SELECT c.id, cur.id, emp.id, 50.00, '2006.08.06', null, 1, now()
+FROM country c, currency cur, employee emp
+WHERE c.code = 'KZ'
+  AND cur.code = 'USD'
+  AND emp.code = '00001';
+
+INSERT INTO country_wage (country_id, currency_id, created_by_id, amount, date_from, date_to, active, created_at)
+SELECT c.id, cur.id, emp.id, 35.00, '2006.08.06', null, 1, now()
+FROM country c, currency cur, employee emp
+WHERE c.code = 'KE'
+  AND cur.code = 'USD'
+  AND emp.code = '00001';
+
+INSERT INTO country_wage (country_id, currency_id, created_by_id, amount, date_from, date_to, active, created_at)
+SELECT c.id, cur.id, emp.id, 50.00, '2006.08.06', null, 1, now()
+FROM country c, currency cur, employee emp
+WHERE c.code = 'KG'
+  AND cur.code = 'USD'
+  AND emp.code = '00001';
+
+INSERT INTO country_wage (country_id, currency_id, created_by_id, amount, date_from, date_to, active, created_at)
+SELECT c.id, cur.id, emp.id, 40.00, '2006.08.06', null, 1, now()
+FROM country c, currency cur, employee emp
+WHERE c.code = 'CO'
+  AND cur.code = 'USD'
+  AND emp.code = '00001';
+
+INSERT INTO country_wage (country_id, currency_id, created_by_id, amount, date_from, date_to, active, created_at)
+SELECT c.id, cur.id, emp.id, 35.00, '2006.08.06', null, 1, now()
+FROM country c, currency cur, employee emp
+WHERE c.code = 'CG'
+  AND cur.code = 'USD'
+  AND emp.code = '00001';
+
+INSERT INTO country_wage (country_id, currency_id, created_by_id, amount, date_from, date_to, active, created_at)
+SELECT c.id, cur.id, emp.id, 35.00, '2006.08.06', null, 1, now()
+FROM country c, currency cur, employee emp
+WHERE c.code = 'CU'
+  AND cur.code = 'USD'
+  AND emp.code = '00001';
+
+INSERT INTO country_wage (country_id, currency_id, created_by_id, amount, date_from, date_to, active, created_at)
+SELECT c.id, cur.id, emp.id, 70.00, '2006.08.06', null, 1, now()
+FROM country c, currency cur, employee emp
+WHERE c.code = 'KW'
+  AND cur.code = 'USD'
+  AND emp.code = '00001';
+
+INSERT INTO country_wage (country_id, currency_id, created_by_id, amount, date_from, date_to, active, created_at)
+SELECT c.id, cur.id, emp.id, 40.00, '2006.08.06', null, 1, now()
+FROM country c, currency cur, employee emp
+WHERE c.code = 'LV'
+  AND cur.code = 'EUR'
+  AND emp.code = '00001';
+
+INSERT INTO country_wage (country_id, currency_id, created_by_id, amount, date_from, date_to, active, created_at)
+SELECT c.id, cur.id, emp.id, 35.00, '2006.08.06', null, 1, now()
+FROM country c, currency cur, employee emp
+WHERE c.code = 'LB'
+  AND cur.code = 'USD'
+  AND emp.code = '00001';
+
+INSERT INTO country_wage (country_id, currency_id, created_by_id, amount, date_from, date_to, active, created_at)
+SELECT c.id, cur.id, emp.id, 40.00, '2006.08.06', null, 1, now()
+FROM country c, currency cur, employee emp
+WHERE c.code = 'LR'
+  AND cur.code = 'USD'
+  AND emp.code = '00001';
+
+INSERT INTO country_wage (country_id, currency_id, created_by_id, amount, date_from, date_to, active, created_at)
+SELECT c.id, cur.id, emp.id, 40.00, '2006.08.06', null, 1, now()
+FROM country c, currency cur, employee emp
+WHERE c.code = 'LY'
+  AND cur.code = 'USD'
+  AND emp.code = '00001';
+
+INSERT INTO country_wage (country_id, currency_id, created_by_id, amount, date_from, date_to, active, created_at)
+SELECT c.id, cur.id, emp.id, 40.00, '2006.08.06', null, 1, now()
+FROM country c, currency cur, employee emp
+WHERE c.code = 'LT'
+  AND cur.code = 'EUR'
+  AND emp.code = '00001';
+
+INSERT INTO country_wage (country_id, currency_id, created_by_id, amount, date_from, date_to, active, created_at)
+SELECT c.id, cur.id, emp.id, 80.00, '2006.08.06', null, 1, now()
+FROM country c, currency cur, employee emp
+WHERE c.code = 'LU'
+  AND cur.code = 'EUR'
+  AND emp.code = '00001';
+
+INSERT INTO country_wage (country_id, currency_id, created_by_id, amount, date_from, date_to, active, created_at)
+SELECT c.id, cur.id, emp.id, 50.00, '2006.08.06', null, 1, now()
+FROM country c, currency cur, employee emp
+WHERE c.code = 'HU'
+  AND cur.code = 'EUR'
+  AND emp.code = '00001';
+
+INSERT INTO country_wage (country_id, currency_id, created_by_id, amount, date_from, date_to, active, created_at)
+SELECT c.id, cur.id, emp.id, 30.00, '2006.08.06', null, 1, now()
+FROM country c, currency cur, employee emp
+WHERE c.code = 'MK'
+  AND cur.code = 'EUR'
+  AND emp.code = '00001';
+
+INSERT INTO country_wage (country_id, currency_id, created_by_id, amount, date_from, date_to, active, created_at)
+SELECT c.id, cur.id, emp.id, 40.00, '2006.08.06', null, 1, now()
+FROM country c, currency cur, employee emp
+WHERE c.code = 'MY'
+  AND cur.code = 'USD'
+  AND emp.code = '00001';
+
+INSERT INTO country_wage (country_id, currency_id, created_by_id, amount, date_from, date_to, active, created_at)
+SELECT c.id, cur.id, emp.id, 60.00, '2006.08.06', null, 1, now()
+FROM country c, currency cur, employee emp
+WHERE c.code = 'MT'
+  AND cur.code = 'EUR'
+  AND emp.code = '00001';
+
+INSERT INTO country_wage (country_id, currency_id, created_by_id, amount, date_from, date_to, active, created_at)
+SELECT c.id, cur.id, emp.id, 35.00, '2006.08.06', null, 1, now()
+FROM country c, currency cur, employee emp
+WHERE c.code = 'MX'
+  AND cur.code = 'USD'
+  AND emp.code = '00001';
+
+INSERT INTO country_wage (country_id, currency_id, created_by_id, amount, date_from, date_to, active, created_at)
+SELECT c.id, cur.id, emp.id, 40.00, '2006.08.06', null, 1, now()
+FROM country c, currency cur, employee emp
+WHERE c.code = 'MD'
+  AND cur.code = 'USD'
+  AND emp.code = '00001';
+
+INSERT INTO country_wage (country_id, currency_id, created_by_id, amount, date_from, date_to, active, created_at)
+SELECT c.id, cur.id, emp.id, 70.00, '2006.08.06', null, 1, now()
+FROM country c, currency cur, employee emp
+WHERE c.code = 'MC'
+  AND cur.code = 'EUR'
+  AND emp.code = '00001';
+
+INSERT INTO country_wage (country_id, currency_id, created_by_id, amount, date_from, date_to, active, created_at)
+SELECT c.id, cur.id, emp.id, 35.00, '2006.08.06', null, 1, now()
+FROM country c, currency cur, employee emp
+WHERE c.code = 'MZ'
+  AND cur.code = 'USD'
+  AND emp.code = '00001';
+
+INSERT INTO country_wage (country_id, currency_id, created_by_id, amount, date_from, date_to, active, created_at)
+SELECT c.id, cur.id, emp.id, 70.00, '2006.08.06', null, 1, now()
+FROM country c, currency cur, employee emp
+WHERE c.code = 'NL'
+  AND cur.code = 'EUR'
+  AND emp.code = '00001';
+
+INSERT INTO country_wage (country_id, currency_id, created_by_id, amount, date_from, date_to, active, created_at)
+SELECT c.id, cur.id, emp.id, 80.00, '2006.08.06', null, 1, now()
+FROM country c, currency cur, employee emp
+WHERE c.code = 'NO'
+  AND cur.code = 'EUR'
+  AND emp.code = '00001';
+
+INSERT INTO country_wage (country_id, currency_id, created_by_id, amount, date_from, date_to, active, created_at)
+SELECT c.id, cur.id, emp.id, 70.00, '2006.08.06', null, 1, now()
+FROM country c, currency cur, employee emp
+WHERE c.code = 'NZ'
+  AND cur.code = 'USD'
+  AND emp.code = '00001';
+
+INSERT INTO country_wage (country_id, currency_id, created_by_id, amount, date_from, date_to, active, created_at)
+SELECT c.id, cur.id, emp.id, 50.00, '2006.08.06', null, 1, now()
+FROM country c, currency cur, employee emp
+WHERE c.code = 'CN'
+  AND cur.code = 'USD'
+  AND emp.code = '00001';
+
+INSERT INTO country_wage (country_id, currency_id, created_by_id, amount, date_from, date_to, active, created_at)
+SELECT c.id, cur.id, emp.id, 95.00, '2006.08.06', null, 1, now()
+FROM country c, currency cur, employee emp
+WHERE c.code = 'HK'
+  AND cur.code = 'USD'
+  AND emp.code = '00001';
+
+INSERT INTO country_wage (country_id, currency_id, created_by_id, amount, date_from, date_to, active, created_at)
+SELECT c.id, cur.id, emp.id, 70.00, '2006.08.06', null, 1, now()
+FROM country c, currency cur, employee emp
+WHERE c.code = 'DE'
+  AND cur.code = 'EUR'
+  AND emp.code = '00001';
+
+INSERT INTO country_wage (country_id, currency_id, created_by_id, amount, date_from, date_to, active, created_at)
+SELECT c.id, cur.id, emp.id, 40.00, '2006.08.06', null, 1, now()
+FROM country c, currency cur, employee emp
+WHERE c.code = 'PK'
+  AND cur.code = 'USD'
+  AND emp.code = '00001';
+
+INSERT INTO country_wage (country_id, currency_id, created_by_id, amount, date_from, date_to, active, created_at)
+SELECT c.id, cur.id, emp.id, 50.00, '2006.08.06', null, 1, now()
+FROM country c, currency cur, employee emp
+WHERE c.code = 'PA'
+  AND cur.code = 'USD'
+  AND emp.code = '00001';
+
+INSERT INTO country_wage (country_id, currency_id, created_by_id, amount, date_from, date_to, active, created_at)
+SELECT c.id, cur.id, emp.id, 35.00, '2006.08.06', null, 1, now()
+FROM country c, currency cur, employee emp
+WHERE c.code = 'PE'
+  AND cur.code = 'USD'
+  AND emp.code = '00001';
+
+INSERT INTO country_wage (country_id, currency_id, created_by_id, amount, date_from, date_to, active, created_at)
+SELECT c.id, cur.id, emp.id, 40.00, '2006.08.06', null, 1, now()
+FROM country c, currency cur, employee emp
+WHERE c.code = 'PL'
+  AND cur.code = 'EUR'
+  AND emp.code = '00001';
+
+INSERT INTO country_wage (country_id, currency_id, created_by_id, amount, date_from, date_to, active, created_at)
+SELECT c.id, cur.id, emp.id, 60.00, '2006.08.06', null, 1, now()
+FROM country c, currency cur, employee emp
+WHERE c.code = 'PT'
+  AND cur.code = 'EUR'
+  AND emp.code = '00001';
+
+INSERT INTO country_wage (country_id, currency_id, created_by_id, amount, date_from, date_to, active, created_at)
+SELECT c.id, cur.id, emp.id, 70.00, '2006.08.06', null, 1, now()
+FROM country c, currency cur, employee emp
+WHERE c.code = 'KR'
+  AND cur.code = 'USD'
+  AND emp.code = '00001';
+
+INSERT INTO country_wage (country_id, currency_id, created_by_id, amount, date_from, date_to, active, created_at)
+SELECT c.id, cur.id, emp.id, 40.00, '2006.08.06', null, 1, now()
+FROM country c, currency cur, employee emp
+WHERE c.code = 'RO'
+  AND cur.code = 'EUR'
+  AND emp.code = '00001';
+
+INSERT INTO country_wage (country_id, currency_id, created_by_id, amount, date_from, date_to, active, created_at)
+SELECT c.id, cur.id, emp.id, 50.00, '2006.08.06', null, 1, now()
+FROM country c, currency cur, employee emp
+WHERE c.code = 'RU'
+  AND cur.code = 'USD'
+  AND emp.code = '00001';
+
+INSERT INTO country_wage (country_id, currency_id, created_by_id, amount, date_from, date_to, active, created_at)
+SELECT c.id, cur.id, emp.id, 95.00, '2006.08.06', null, 1, now()
+FROM country c, currency cur, employee emp
+WHERE c.code = 'US'
+  AND cur.code = 'USD'
+  AND emp.code = '00001';
+
+INSERT INTO country_wage (country_id, currency_id, created_by_id, amount, date_from, date_to, active, created_at)
+SELECT c.id, cur.id, emp.id, 50.00, '2006.08.06', null, 1, now()
+FROM country c, currency cur, employee emp
+WHERE c.code = 'SA'
+  AND cur.code = 'USD'
+  AND emp.code = '00001';
+
+INSERT INTO country_wage (country_id, currency_id, created_by_id, amount, date_from, date_to, active, created_at)
+SELECT c.id, cur.id, emp.id, 35.00, '2006.08.06', null, 1, now()
+FROM country c, currency cur, employee emp
+WHERE c.code = 'SN'
+  AND cur.code = 'USD'
+  AND emp.code = '00001';
+
+INSERT INTO country_wage (country_id, currency_id, created_by_id, amount, date_from, date_to, active, created_at)
+SELECT c.id, cur.id, emp.id, 85.00, '2006.08.06', null, 1, now()
+FROM country c, currency cur, employee emp
+WHERE c.code = 'SG'
+  AND cur.code = 'USD'
+  AND emp.code = '00001';
+
+INSERT INTO country_wage (country_id, currency_id, created_by_id, amount, date_from, date_to, active, created_at)
+SELECT c.id, cur.id, emp.id, 50.00, '2006.08.06', null, 1, now()
+FROM country c, currency cur, employee emp
+WHERE c.code = 'SY'
+  AND cur.code = 'USD'
+  AND emp.code = '00001';
+
+INSERT INTO country_wage (country_id, currency_id, created_by_id, amount, date_from, date_to, active, created_at)
+SELECT c.id, cur.id, emp.id, 50.00, '2006.08.06', null, 1, now()
+FROM country c, currency cur, employee emp
+WHERE c.code = 'SK'
+  AND cur.code = 'EUR'
+  AND emp.code = '00001';
+
+INSERT INTO country_wage (country_id, currency_id, created_by_id, amount, date_from, date_to, active, created_at)
+SELECT c.id, cur.id, emp.id, 50.00, '2006.08.06', null, 1, now()
+FROM country c, currency cur, employee emp
+WHERE c.code = 'SI'
+  AND cur.code = 'EUR'
+  AND emp.code = '00001';
+
+INSERT INTO country_wage (country_id, currency_id, created_by_id, amount, date_from, date_to, active, created_at)
+SELECT c.id, cur.id, emp.id, 30.00, '2006.08.06', null, 1, now()
+FROM country c, currency cur, employee emp
+WHERE c.code = 'RS'
+  AND cur.code = 'EUR'
+  AND emp.code = '00001';
+
+INSERT INTO country_wage (country_id, currency_id, created_by_id, amount, date_from, date_to, active, created_at)
+SELECT c.id, cur.id, emp.id, 30.00, '2006.08.06', null, 1, now()
+FROM country c, currency cur, employee emp
+WHERE c.code = 'ME'
+  AND cur.code = 'EUR'
+  AND emp.code = '00001';
+
+INSERT INTO country_wage (country_id, currency_id, created_by_id, amount, date_from, date_to, active, created_at)
+SELECT c.id, cur.id, emp.id, 35.00, '2006.08.06', null, 1, now()
+FROM country c, currency cur, employee emp
+WHERE c.code = 'SD'
+  AND cur.code = 'USD'
+  AND emp.code = '00001';
+
+INSERT INTO country_wage (country_id, currency_id, created_by_id, amount, date_from, date_to, active, created_at)
+SELECT c.id, cur.id, emp.id, 60.00, '2006.08.06', null, 1, now()
+FROM country c, currency cur, employee emp
+WHERE c.code = 'ES'
+  AND cur.code = 'EUR'
+  AND emp.code = '00001';
+
+INSERT INTO country_wage (country_id, currency_id, created_by_id, amount, date_from, date_to, active, created_at)
+SELECT c.id, cur.id, emp.id, 80.00, '2006.08.06', null, 1, now()
+FROM country c, currency cur, employee emp
+WHERE c.code = 'SE'
+  AND cur.code = 'EUR'
+  AND emp.code = '00001';
+
+INSERT INTO country_wage (country_id, currency_id, created_by_id, amount, date_from, date_to, active, created_at)
+SELECT c.id, cur.id, emp.id, 80.00, '2006.08.06', null, 1, now()
+FROM country c, currency cur, employee emp
+WHERE c.code = 'CH'
+  AND cur.code = 'EUR'
+  AND emp.code = '00001';
+
+INSERT INTO country_wage (country_id, currency_id, created_by_id, amount, date_from, date_to, active, created_at)
+SELECT c.id, cur.id, emp.id, 50.00, '2006.08.06', null, 1, now()
+FROM country c, currency cur, employee emp
+WHERE c.code = 'TJ'
+  AND cur.code = 'USD'
+  AND emp.code = '00001';
+
+INSERT INTO country_wage (country_id, currency_id, created_by_id, amount, date_from, date_to, active, created_at)
+SELECT c.id, cur.id, emp.id, 35.00, '2006.08.06', null, 1, now()
+FROM country c, currency cur, employee emp
+WHERE c.code = 'TN'
+  AND cur.code = 'USD'
+  AND emp.code = '00001';
+
+INSERT INTO country_wage (country_id, currency_id, created_by_id, amount, date_from, date_to, active, created_at)
+SELECT c.id, cur.id, emp.id, 50.00, '2006.08.06', null, 1, now()
+FROM country c, currency cur, employee emp
+WHERE c.code = 'TM'
+  AND cur.code = 'USD'
+  AND emp.code = '00001';
+
+INSERT INTO country_wage (country_id, currency_id, created_by_id, amount, date_from, date_to, active, created_at)
+SELECT c.id, cur.id, emp.id, 50.00, '2006.08.06', null, 1, now()
+FROM country c, currency cur, employee emp
+WHERE c.code = 'TR'
+  AND cur.code = 'EUR'
+  AND emp.code = '00001';
+
+INSERT INTO country_wage (country_id, currency_id, created_by_id, amount, date_from, date_to, active, created_at)
+SELECT c.id, cur.id, emp.id, 70.00, '2006.08.06', null, 1, now()
+FROM country c, currency cur, employee emp
+WHERE c.code = 'GB'
+  AND cur.code = 'EUR'
+  AND emp.code = '00001';
+
+INSERT INTO country_wage (country_id, currency_id, created_by_id, amount, date_from, date_to, active, created_at)
+SELECT c.id, cur.id, emp.id, 50.00, '2006.08.06', null, 1, now()
+FROM country c, currency cur, employee emp
+WHERE c.code = 'UA'
+  AND cur.code = 'USD'
+  AND emp.code = '00001';
+
+INSERT INTO country_wage (country_id, currency_id, created_by_id, amount, date_from, date_to, active, created_at)
+SELECT c.id, cur.id, emp.id, 50.00, '2006.08.06', null, 1, now()
+FROM country c, currency cur, employee emp
+WHERE c.code = 'UA'
+  AND cur.code = 'USD'
+  AND emp.code = '00001';
+
+INSERT INTO country_wage (country_id, currency_id, created_by_id, amount, date_from, date_to, active, created_at)
+SELECT c.id, cur.id, emp.id, 50.00, '2006.08.06', null, 1, now()
+FROM country c, currency cur, employee emp
+WHERE c.code = 'AE'
+  AND cur.code = 'USD'
+  AND emp.code = '00001';
