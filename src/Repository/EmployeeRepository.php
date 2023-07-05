@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Repository\Codebook;
+namespace App\Repository;
 
-use App\Entity\Codebook\Employee;
+use App\Entity\Employee;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 

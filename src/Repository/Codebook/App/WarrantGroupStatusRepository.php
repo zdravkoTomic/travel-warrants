@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Repository\Codebook;
+namespace App\Repository\Codebook\App;
 
-use App\Entity\Codebook\WarrantGroupStatus;
+use App\Entity\Codebook\App\WarrantGroupStatus;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 

@@ -1,16 +1,16 @@
 <?php
 
-namespace App\Entity\Codebook;
+namespace App\Entity\Codebook\App;
 
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
-use App\Repository\Codebook\WarrantStatusRepository;
+use App\Repository\Codebook\App\WarrantGroupStatusRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: WarrantStatusRepository::class)]
+#[ORM\Entity(repositoryClass: WarrantGroupStatusRepository::class)]
 #[ApiResource(
     operations: [
         new Get(),
@@ -19,14 +19,14 @@ use Doctrine\ORM\Mapping as ORM;
         new Put()
     ]
 )]
-class WarrantStatus
+class WarrantGroupStatus
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 30)]
+    #[ORM\Column(length: 20)]
     private ?string $code = null;
 
     #[ORM\Column(length: 255)]
