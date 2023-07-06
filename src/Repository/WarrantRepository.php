@@ -4,6 +4,8 @@ namespace App\Repository;
 
 use App\Entity\Warrant;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -37,5 +39,19 @@ class WarrantRepository extends ServiceEntityRepository
         if ($flush) {
             $this->getEntityManager()->flush();
         }
+    }
+
+    /**
+     * @throws NonUniqueResultException
+     * @throws NoResultException
+     */
+    public function getNewWarrantOrdinalNumber()
+    {
+        $result = $this->createQueryBuilder('w')
+            ->select('count(w.id)')
+            ->getQuery()
+            ->getSingleScalarResult();
+
+        return $result + 1;
     }
 }

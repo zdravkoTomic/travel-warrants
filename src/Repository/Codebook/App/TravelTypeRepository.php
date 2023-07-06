@@ -3,7 +3,9 @@
 namespace App\Repository\Codebook\App;
 
 use App\Entity\Codebook\App\TravelType;
+use App\Exception\RecordNotFoundException;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -37,5 +39,24 @@ class TravelTypeRepository extends ServiceEntityRepository
         if ($flush) {
             $this->getEntityManager()->flush();
         }
+    }
+
+    /**
+     * @throws NonUniqueResultException
+     * @throws RecordNotFoundException
+     */
+    public function findExistingByCode(string $code)
+    {
+        $result = $this->createQueryBuilder('tt')
+            ->where('tt.code = :code')
+            ->setParameter('code', $code)
+            ->getQuery()
+            ->getOneOrNullResult();
+
+        if (!$result) {
+            throw new RecordNotFoundException($this->getClassName());
+        }
+
+        return $result;
     }
 }

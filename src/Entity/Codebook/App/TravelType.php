@@ -21,6 +21,9 @@ use Doctrine\ORM\Mapping as ORM;
 )]
 class TravelType
 {
+    public const DOMESTIC      = 'DOMESTIC';
+    public const INTERNATIONAL = 'INTERNATIONAL';
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]

@@ -3,7 +3,9 @@
 namespace App\Repository\Codebook;
 
 use App\Entity\Codebook\CountryWage;
+use App\Exception\RecordNotFoundException;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -37,5 +39,25 @@ class CountryWageRepository extends ServiceEntityRepository
         if ($flush) {
             $this->getEntityManager()->flush();
         }
+    }
+
+    /**
+     * @throws NonUniqueResultException
+     * @throws RecordNotFoundException
+     */
+    public function findActiveByCountryId(int $countryId)
+    {
+        $result = $this->createQueryBuilder('cw')
+            ->where('cw.country = :countryId')
+            ->andWhere('cw.active = 1')
+            ->setParameter('countryId', $countryId)
+            ->getQuery()
+            ->getOneOrNullResult();
+
+        if (!$result) {
+            throw new RecordNotFoundException($this->getClassName());
+        }
+
+        return $result;
     }
 }

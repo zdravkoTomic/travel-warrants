@@ -18,7 +18,7 @@ final class WarrantStatusTransition
     public const TO_CLOSED                        = 'to_closed';
     public const TO_CANCELLED                     = 'to_cancelled';
 
-    public static function warrantStatus(WarrantStatus $status)
+    public static function warrantStatus(WarrantStatus $status): string
     {
         $transition = 'to_' . strtolower($status->getCode());
 

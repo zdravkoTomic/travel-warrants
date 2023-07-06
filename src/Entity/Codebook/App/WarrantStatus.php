@@ -22,7 +22,7 @@ use Doctrine\ORM\Mapping as ORM;
 class WarrantStatus
 {
     public const NEW                           = 'NEW';
-    public const APPROVING                     = 'APPROVING ';
+    public const APPROVING                     = 'APPROVING';
     public const APPROVING_ADVANCE_PAYMENT     = 'APPROVING_ADVANCE_PAYMENT';
     public const ADVANCE_IN_PAYMENT            = 'ADVANCE_IN_PAYMENT';
     public const CALCULATION_EDIT              = 'CALCULATION_EDIT';

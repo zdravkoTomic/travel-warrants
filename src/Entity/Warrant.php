@@ -5,6 +5,7 @@ namespace App\Entity;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use App\Entity\Codebook\App\TravelType;
@@ -17,14 +18,22 @@ use App\Entity\Codebook\VehicleType;
 use App\Repository\WarrantRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: WarrantRepository::class)]
 #[ApiResource(
     operations: [
         new Get(),
         new GetCollection(),
-        new Post(),
-        new Put()
+        new Post(denormalizationContext: ['groups' => ['post_warrant']]),
+        new Put(),
+        new Patch(
+            uriTemplate: '/warrants/{id}/change_status',
+            formats: ['json', 'jsonld'],
+            description: 'Change warrant status',
+            denormalizationContext: ['groups' => ['patch_warrant_status']]
+        )
     ]
 )]
 class Warrant
@@ -32,18 +41,26 @@ class Warrant
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups('post_warrant')]
     private ?int $id = null;
+
+    #[ORM\Column]
+    #[Groups('post_warrant')]
+    private ?string $code = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups('post_warrant')]
     private ?Employee $employee = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups('post_warrant')]
     private ?Department $department = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups('patch_warrant_status')]
     private ?WarrantStatus $status = null;
 
     #[ORM\ManyToOne]
@@ -56,9 +73,10 @@ class Warrant
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups('post_warrant')]
     private ?Country $destinationCountry = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: false)]
     private ?float $wageAmount = null;
 
     #[ORM\ManyToOne]
@@ -66,28 +84,40 @@ class Warrant
     private ?Currency $wageCurrency = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups('post_warrant')]
     private ?string $departurePoint = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups('post_warrant')]
     private ?string $destination = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Groups('post_warrant')]
     private ?\DateTimeInterface $departureDate = null;
 
     #[ORM\Column]
+    #[Groups('post_warrant')]
     private ?int $expectedTravelDuration = null;
 
     #[ORM\Column(length: 1000)]
+    #[Groups('post_warrant')]
     private ?string $travelPurposeDescription = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups('post_warrant')]
     private ?VehicleType $vehicleType = null;
 
+    #[ORM\Column(length: 1000)]
+    #[Groups('post_warrant')]
+    private ?string $vehicleDescription = null;
+
     #[ORM\Column]
+    #[Groups('post_warrant')]
     private ?bool $advancesRequired = null;
 
     #[ORM\Column]
+    #[Gedmo\Timestampable(on: 'create')]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\ManyToOne]
@@ -300,5 +330,37 @@ class Warrant
         $this->approvedBy = $approvedBy;
 
         return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getCode(): ?string
+    {
+        return $this->code;
+    }
+
+    /**
+     * @param string|null $code
+     */
+    public function setCode(?string $code): void
+    {
+        $this->code = $code;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getVehicleDescription(): ?string
+    {
+        return $this->vehicleDescription;
+    }
+
+    /**
+     * @param string|null $vehicleDescription
+     */
+    public function setVehicleDescription(?string $vehicleDescription): void
+    {
+        $this->vehicleDescription = $vehicleDescription;
     }
 }

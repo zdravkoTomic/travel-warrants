@@ -21,6 +21,10 @@ use Doctrine\ORM\Mapping as ORM;
 )]
 class WarrantGroupStatus
 {
+    public const INITIAL     = 'INITIAL';
+    public const CALCULATION = 'CALCULATION';
+    public const CLOSED      = 'CLOSED';
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]

@@ -35,6 +35,9 @@ class Country
     #[ORM\Column]
     private ?bool $active = null;
 
+    #[ORM\Column]
+    private ?bool $domicile = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -74,5 +77,21 @@ class Country
         $this->active = $active;
 
         return $this;
+    }
+
+    /**
+     * @return bool|null
+     */
+    public function isDomicile(): ?bool
+    {
+        return $this->domicile;
+    }
+
+    /**
+     * @param bool|null $domicile
+     */
+    public function setDomicile(?bool $domicile): void
+    {
+        $this->domicile = $domicile;
     }
 }

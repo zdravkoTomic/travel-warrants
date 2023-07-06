@@ -3,15 +3,16 @@
 namespace App\Workflow;
 
 use App\Entity\Warrant;
+use App\Exception\RecordNotFoundException;
 use App\Helper\TypeHelper;
 use App\Repository\Codebook\App\WarrantStatusRepository;
+use Doctrine\ORM\NonUniqueResultException;
 use Symfony\Component\Workflow\Marking;
 use LogicException;
 use Symfony\Component\Workflow\MarkingStore\MarkingStoreInterface;
 
 class WarrantWorkflowService implements MarkingStoreInterface
 {
-
     private WarrantStatusRepository $warrantStatusRepository;
 
     public function __construct(WarrantStatusRepository $warrantStatusRepository)
@@ -36,6 +37,10 @@ class WarrantWorkflowService implements MarkingStoreInterface
         return new Marking([$statusCode => 1]);
     }
 
+    /**
+     * @throws RecordNotFoundException
+     * @throws NonUniqueResultException
+     */
     public function setMarking(object $subject, Marking $marking, array $context = [])
     {
         $markingCode = $marking->getPlaces() ? key($marking->getPlaces()) : null;

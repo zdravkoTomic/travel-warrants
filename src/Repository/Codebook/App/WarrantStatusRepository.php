@@ -5,6 +5,7 @@ namespace App\Repository\Codebook\App;
 use App\Entity\Codebook\App\WarrantStatus;
 use App\Exception\RecordNotFoundException;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -40,6 +41,10 @@ class WarrantStatusRepository extends ServiceEntityRepository
         }
     }
 
+    /**
+     * @throws RecordNotFoundException
+     * @throws NonUniqueResultException
+     */
     public function findExistingByCode(string $code)
     {
         $result = $this->createQueryBuilder('ws')
