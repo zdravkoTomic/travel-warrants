@@ -3,6 +3,7 @@
 namespace App\Repository\Codebook\App;
 
 use App\Entity\Codebook\App\WarrantStatus;
+use App\Exception\RecordNotFoundException;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -37,5 +38,20 @@ class WarrantStatusRepository extends ServiceEntityRepository
         if ($flush) {
             $this->getEntityManager()->flush();
         }
+    }
+
+    public function findExistingByCode(string $code)
+    {
+        $result = $this->createQueryBuilder('ws')
+            ->where('ws.code = :code')
+            ->setParameter('code', $code)
+            ->getQuery()
+            ->getOneOrNullResult();
+
+        if (!$result) {
+            throw new RecordNotFoundException($this->getClassName());
+        }
+
+        return $result;
     }
 }

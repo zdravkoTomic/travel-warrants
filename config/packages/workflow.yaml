@@ -1,0 +1,82 @@
+framework:
+    workflows:
+        warrant:
+            type: 'state_machine'
+            marking_store:
+                service: 'App\Workflow\WarrantWorkflowService'
+            supports:
+                - App\Entity\Warrant
+            initial_marking: !php/const App\Entity\Codebook\App\WarrantStatus::NEW
+            places:
+                - !php/const App\Entity\Codebook\App\WarrantStatus::NEW
+                - !php/const App\Entity\Codebook\App\WarrantStatus::APPROVING
+                - !php/const App\Entity\Codebook\App\WarrantStatus::APPROVING_ADVANCE_PAYMENT
+                - !php/const App\Entity\Codebook\App\WarrantStatus::ADVANCE_IN_PAYMENT
+                - !php/const App\Entity\Codebook\App\WarrantStatus::CALCULATION_EDIT
+                - !php/const App\Entity\Codebook\App\WarrantStatus::APPROVING_CALCULATION
+                - !php/const App\Entity\Codebook\App\WarrantStatus::APPROVING_CALCULATION_PAYMENT
+                - !php/const App\Entity\Codebook\App\WarrantStatus::CALCULATION_IN_PAYMENT
+                - !php/const App\Entity\Codebook\App\WarrantStatus::CLOSED
+                - !php/const App\Entity\Codebook\App\WarrantStatus::CANCELLED
+            transitions:
+                !php/const App\Workflow\WarrantStatusTransition::TO_NEW:
+                    from:
+                        - !php/const App\Entity\Codebook\App\WarrantStatus::APPROVING
+                    to: !php/const App\Entity\Codebook\App\WarrantStatus::NEW
+
+                !php/const App\Workflow\WarrantStatusTransition::TO_APPROVING:
+                    from:
+                        - !php/const App\Entity\Codebook\App\WarrantStatus::NEW
+                        - !php/const App\Entity\Codebook\App\WarrantStatus::APPROVING_ADVANCE_PAYMENT
+                    to: !php/const App\Entity\Codebook\App\WarrantStatus::APPROVING
+
+                !php/const App\Workflow\WarrantStatusTransition::TO_APPROVING_ADVANCE_PAYMENT:
+                    from:
+                        - !php/const App\Entity\Codebook\App\WarrantStatus::APPROVING
+                        - !php/const App\Entity\Codebook\App\WarrantStatus::ADVANCE_IN_PAYMENT
+                    to: !php/const App\Entity\Codebook\App\WarrantStatus::APPROVING_ADVANCE_PAYMENT
+
+                !php/const App\Workflow\WarrantStatusTransition::TO_ADVANCE_IN_PAYMENT:
+                    from:
+                        - !php/const App\Entity\Codebook\App\WarrantStatus::APPROVING_ADVANCE_PAYMENT
+                    to: !php/const App\Entity\Codebook\App\WarrantStatus::ADVANCE_IN_PAYMENT
+
+                !php/const App\Workflow\WarrantStatusTransition::TO_CALCULATION_EDIT:
+                    from:
+                        - !php/const App\Entity\Codebook\App\WarrantStatus::APPROVING
+                        - !php/const App\Entity\Codebook\App\WarrantStatus::ADVANCE_IN_PAYMENT
+                    to: !php/const App\Entity\Codebook\App\WarrantStatus::CALCULATION_EDIT
+
+                !php/const App\Workflow\WarrantStatusTransition::TO_APPROVING_CALCULATION:
+                    from:
+                        - !php/const App\Entity\Codebook\App\WarrantStatus::CALCULATION_EDIT
+                        - !php/const App\Entity\Codebook\App\WarrantStatus::APPROVING_CALCULATION_PAYMENT
+                    to: !php/const App\Entity\Codebook\App\WarrantStatus::APPROVING_CALCULATION
+
+                !php/const App\Workflow\WarrantStatusTransition::TO_APPROVING_CALCULATION_PAYMENT:
+                    from:
+                        - !php/const App\Entity\Codebook\App\WarrantStatus::APPROVING_CALCULATION
+                        - !php/const App\Entity\Codebook\App\WarrantStatus::CALCULATION_IN_PAYMENT
+                    to: !php/const App\Entity\Codebook\App\WarrantStatus::APPROVING_CALCULATION_PAYMENT
+
+                !php/const App\Workflow\WarrantStatusTransition::TO_CALCULATION_IN_PAYMENT:
+                    from:
+                        - !php/const App\Entity\Codebook\App\WarrantStatus::APPROVING_CALCULATION_PAYMENT
+                    to: !php/const App\Entity\Codebook\App\WarrantStatus::CALCULATION_IN_PAYMENT
+
+                !php/const App\Workflow\WarrantStatusTransition::TO_CLOSED:
+                    from:
+                        - !php/const App\Entity\Codebook\App\WarrantStatus::CALCULATION_IN_PAYMENT
+                    to: !php/const App\Entity\Codebook\App\WarrantStatus::CLOSED
+
+                !php/const App\Workflow\WarrantStatusTransition::TO_CANCELLED:
+                    from:
+                        - !php/const App\Entity\Codebook\App\WarrantStatus::NEW
+                        - !php/const App\Entity\Codebook\App\WarrantStatus::APPROVING
+                        - !php/const App\Entity\Codebook\App\WarrantStatus::APPROVING_ADVANCE_PAYMENT
+                        - !php/const App\Entity\Codebook\App\WarrantStatus::ADVANCE_IN_PAYMENT
+                        - !php/const App\Entity\Codebook\App\WarrantStatus::CALCULATION_EDIT
+                        - !php/const App\Entity\Codebook\App\WarrantStatus::APPROVING_CALCULATION
+                        - !php/const App\Entity\Codebook\App\WarrantStatus::APPROVING_CALCULATION_PAYMENT
+                        - !php/const App\Entity\Codebook\App\WarrantStatus::CALCULATION_IN_PAYMENT
+                    to: !php/const App\Entity\Codebook\App\WarrantStatus::CLOSED

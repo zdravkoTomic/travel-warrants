@@ -21,6 +21,17 @@ use Doctrine\ORM\Mapping as ORM;
 )]
 class WarrantStatus
 {
+    public const NEW                           = 'NEW';
+    public const APPROVING                     = 'APPROVING ';
+    public const APPROVING_ADVANCE_PAYMENT     = 'APPROVING_ADVANCE_PAYMENT';
+    public const ADVANCE_IN_PAYMENT            = 'ADVANCE_IN_PAYMENT';
+    public const CALCULATION_EDIT              = 'CALCULATION_EDIT';
+    public const APPROVING_CALCULATION         = 'APPROVING_CALCULATION';
+    public const APPROVING_CALCULATION_PAYMENT = 'APPROVING_CALCULATION_PAYMENT';
+    public const CALCULATION_IN_PAYMENT        = 'CALCULATION_IN_PAYMENT';
+    public const CLOSED                        = 'CLOSED';
+    public const CANCELLED                     = 'CANCELLED';
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
