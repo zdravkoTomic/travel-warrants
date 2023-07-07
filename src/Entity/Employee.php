@@ -58,12 +58,12 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['post_employee', 'get_warrant'])]
+    #[Groups(['post_employee', 'get_warrant', 'get_user_warrants_by_status'])]
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'employees')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['post_employee', 'get_warrant'])]
+    #[Groups(['post_employee', 'get_warrant', 'get_user_warrants_by_status'])]
     private ?Department $department = null;
 
     #[ORM\ManyToOne]
@@ -72,15 +72,15 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
     private ?WorkPosition $workPosition = null;
 
     #[ORM\Column(length: 20, nullable: false)]
-    #[Groups('post_employee')]
+    #[Groups(['post_employee', 'get_user_warrants_by_status'])]
     private ?string $code = null;
 
     #[ORM\Column(length: 100, nullable: false)]
-    #[Groups(['post_employee', 'get_warrant'])]
+    #[Groups(['post_employee', 'get_warrant', 'get_user_warrants_by_status'])]
     private ?string $name = null;
 
     #[ORM\Column(length: 100, nullable: false)]
-    #[Groups(['post_employee', 'get_warrant'])]
+    #[Groups(['post_employee', 'get_warrant', 'get_user_warrants_by_status'])]
     private ?string $surname = null;
 
     #[ORM\Column(length: 100, nullable: false)]

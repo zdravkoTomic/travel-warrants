@@ -31,15 +31,15 @@ class Department
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['get_warrant'])]
+    #[Groups(['get_warrant', 'get_user_warrants_by_status'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 20)]
-    #[Groups(['get_warrant'])]
+    #[Groups(['get_warrant', 'get_user_warrants_by_status'])]
     private ?string $code = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['get_warrant'])]
+    #[Groups(['get_warrant', 'get_user_warrants_by_status'])]
     private ?string $name = null;
 
     #[ORM\Column]

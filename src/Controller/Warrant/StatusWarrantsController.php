@@ -7,11 +7,9 @@ use App\Helper\OrmPaginationHelper;
 use App\Repository\WarrantRepository;
 use Doctrine\ORM\Query\QueryException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Serializer\SerializerInterface;
 
-class UserGroupStatusWarrantsController extends AbstractController
+class StatusWarrantsController extends AbstractController
 {
     private WarrantRepository $warrantRepository;
 
@@ -23,14 +21,13 @@ class UserGroupStatusWarrantsController extends AbstractController
     /**
      * @throws QueryException
      */
-    public function __invoke(Request $request, int $employeeId, int $groupStatusId): Paginator
+    public function __invoke(Request $request, int $statusId): Paginator
     {
         $page         = (int)$request->query->get('page', OrmPaginationHelper::PAGE_DEFAULT);
         $itemsPerPage = (int)$request->query->get('itemsPerPage', OrmPaginationHelper::ITEMS_PER_PAGE_DEFAULT);
 
-        return $this->warrantRepository->getWarrantsForUserByGroupStatus(
-            $employeeId,
-            $groupStatusId,
+        return $this->warrantRepository->getWarrantsByStatus(
+            $statusId,
             $page,
             $itemsPerPage
         );

@@ -8,6 +8,7 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
+use App\Controller\Warrant\StatusWarrantsController;
 use App\Controller\Warrant\UserGroupStatusWarrantsController;
 use App\Entity\Codebook\App\TravelType;
 use App\Entity\Codebook\App\WarrantGroupStatus;
@@ -29,9 +30,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
         new Get(
             normalizationContext: ['groups' => ['get_warrant']]
         ),
-        new GetCollection(),
+        new GetCollection(paginationClientItemsPerPage: true),
         new GetCollection(
-            uriTemplate: '/employees/{employeeId}/groups-stasuses/{groupStatusId}/warrants',
+            uriTemplate: '/employees/{employeeId}/warrant-group-statuses/{groupStatusId}/warrants',
             formats: ['json', 'jsonld'],
             controller: UserGroupStatusWarrantsController::class,
             openapiContext: [
@@ -55,8 +56,31 @@ use Symfony\Component\Serializer\Annotation\Groups;
                     ]
                 ],
             ],
+            paginationEnabled: true,
             description: 'Retrieves user warrants in provided group status',
             normalizationContext: ['groups' => ['get_user_group_warrants']],
+            read: false
+        ),
+        new GetCollection(
+            uriTemplate: '/warrant-statuses/{statusId}/warrants',
+            formats: ['json', 'jsonld'],
+            controller: StatusWarrantsController::class,
+            openapiContext: [
+                'summary' => 'Get by warrant status',
+                'parameters' => [
+                    [
+                        'name' => 'statusId',
+                        'in' => 'path',
+                        'required' => true,
+                        'schema' => [
+                            'type' => 'integer',
+                        ],
+                    ]
+                ],
+            ],
+            paginationEnabled: true,
+            description: 'Retrieves user warrants by warrant status',
+            normalizationContext: ['groups' => ['get_user_warrants_by_status']],
             read: false
         ),
         new Post(denormalizationContext: ['groups' => ['post_warrant']]),
@@ -74,16 +98,16 @@ class Warrant implements \JsonSerializable
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['post_warrant', 'get_user_group_warrants', 'get_warrant'])]
+    #[Groups(['post_warrant', 'get_user_group_warrants', 'get_warrant', 'get_user_warrants_by_status'])]
     private ?int $id = null;
 
     #[ORM\Column]
-    #[Groups(['post_warrant', 'get_user_group_warrants', 'get_warrant'])]
+    #[Groups(['post_warrant', 'get_user_group_warrants', 'get_warrant', 'get_user_warrants_by_status'])]
     private ?string $code = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['post_warrant', 'get_warrant'])]
+    #[Groups(['post_warrant', 'get_warrant', 'get_user_warrants_by_status'])]
     private ?Employee $employee = null;
 
     #[ORM\ManyToOne]
@@ -93,7 +117,7 @@ class Warrant implements \JsonSerializable
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['patch_warrant_status', 'get_user_group_warrants', 'get_warrant'])]
+    #[Groups(['patch_warrant_status', 'get_user_group_warrants', 'get_warrant', 'get_user_warrants_by_status'])]
     private ?WarrantStatus $status = null;
 
     #[ORM\ManyToOne]
@@ -102,12 +126,12 @@ class Warrant implements \JsonSerializable
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['get_user_group_warrants', 'get_warrant'])]
+    #[Groups(['get_user_group_warrants', 'get_warrant', 'get_user_warrants_by_status'])]
     private ?TravelType $travelType = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['post_warrant', 'get_user_group_warrants', 'get_warrant'])]
+    #[Groups(['post_warrant', 'get_user_group_warrants', 'get_warrant', 'get_user_warrants_by_status'])]
     private ?Country $destinationCountry = null;
 
     #[ORM\Column(nullable: false)]
@@ -149,11 +173,16 @@ class Warrant implements \JsonSerializable
     private ?string $vehicleDescription = null;
 
     #[ORM\Column]
-    #[Groups(['post_warrant', 'get_warrant'])]
+    #[Groups(['post_warrant', 'get_warrant', 'get_user_warrants_by_status'])]
     private ?bool $advancesRequired = null;
 
     #[ORM\Column]
+    #[Groups(['post_warrant', 'get_warrant', 'get_user_warrants_by_status'])]
+    private ?float $advancesAmount = null;
+
+    #[ORM\Column]
     #[Gedmo\Timestampable(on: 'create')]
+    #[Groups(['get_user_group_warrants', 'get_user_warrants_by_status'])]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\ManyToOne]
@@ -403,5 +432,21 @@ class Warrant implements \JsonSerializable
     public function jsonSerialize(): mixed
     {
         return [];
+    }
+
+    /**
+     * @return float|null
+     */
+    public function getAdvancesAmount(): ?float
+    {
+        return $this->advancesAmount;
+    }
+
+    /**
+     * @param float|null $advancesAmount
+     */
+    public function setAdvancesAmount(?float $advancesAmount): void
+    {
+        $this->advancesAmount = $advancesAmount;
     }
 }

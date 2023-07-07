@@ -2,11 +2,16 @@
 
 namespace App\Repository;
 
+use ApiPlatform\Doctrine\Orm\Paginator;
 use App\Entity\Warrant;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
+use Doctrine\ORM\Query\QueryException;
+use Doctrine\ORM\Tools\Pagination\Paginator as DoctrinePaginator;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 /**
  * @extends ServiceEntityRepository<Warrant>
@@ -18,9 +23,12 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class WarrantRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    private TokenStorageInterface $tokenStorage;
+
+    public function __construct(ManagerRegistry $registry, TokenStorageInterface $tokenStorage)
     {
         parent::__construct($registry, Warrant::class);
+        $this->tokenStorage = $tokenStorage;
     }
 
     public function save(Warrant $entity, bool $flush = false): void
@@ -53,5 +61,49 @@ class WarrantRepository extends ServiceEntityRepository
             ->getSingleScalarResult();
 
         return $result + 1;
+    }
+
+    /**
+     * @throws QueryException
+     */
+    public function getWarrantsForUserByGroupStatus($employeeId, $groupStatusId, int $page = 1, int $itemsPerPage = 30): Paginator
+    {
+        $firstResult = ($page - 1) * $itemsPerPage;
+
+        $queryBuilder = $this->createQueryBuilder('w')
+            ->where('w.employee = :employeeId')
+            ->andWhere('w.groupStatus = :groupStatusId')
+            ->setParameter('employeeId', $employeeId)
+            ->setParameter('groupStatusId', $groupStatusId);
+
+            $criteria = Criteria::create()
+            ->setFirstResult($firstResult)
+            ->setMaxResults($itemsPerPage);
+
+        $queryBuilder->addCriteria($criteria);
+        $doctrinePaginator = new DoctrinePaginator($queryBuilder);
+
+        return new Paginator($doctrinePaginator);
+    }
+
+    /**
+     * @throws QueryException
+     */
+    public function getWarrantsByStatus(int $statusId, int $page = 1, int $itemsPerPage = 30): Paginator
+    {
+        $firstResult = ($page - 1) * $itemsPerPage;
+
+        $queryBuilder = $this->createQueryBuilder('w')
+            ->where('w.status = :statusId')
+            ->setParameter('statusId', $statusId);
+
+        $criteria = Criteria::create()
+            ->setFirstResult($firstResult)
+            ->setMaxResults($itemsPerPage);
+
+        $queryBuilder->addCriteria($criteria);
+        $doctrinePaginator = new DoctrinePaginator($queryBuilder);
+
+        return new Paginator($doctrinePaginator);
     }
 }
