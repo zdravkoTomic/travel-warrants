@@ -70,11 +70,16 @@ class WarrantInitialDataService
             throw new RecordNotFoundException(get_class($countryWage->getCurrency()));
         }
 
+        if (!$warrant->getEmployee()) {
+            throw new RecordNotFoundException(get_class($warrant->getEmployee()));
+        }
+
         $warrant->setStatus($initialWarrantStatus)
             ->setGroupStatus($initialWarrantGroupStatus)
             ->setWageAmount($countryWage->getAmount())
             ->setWageCurrency($countryWage->getCurrency())
             ->setTravelType($travelType)
+            ->setDepartment($warrant->getEmployee()->getDepartment())
             ->setCode($this->generateWarrantCode());
     }
 

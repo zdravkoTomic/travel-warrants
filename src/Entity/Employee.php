@@ -58,17 +58,17 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups('post_employee')]
+    #[Groups(['post_employee', 'get_warrant'])]
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'employees')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups('post_employee')]
+    #[Groups(['post_employee', 'get_warrant'])]
     private ?Department $department = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups('post_employee')]
+    #[Groups(['post_employee', 'get_warrant'])]
     private ?WorkPosition $workPosition = null;
 
     #[ORM\Column(length: 20, nullable: false)]
@@ -76,11 +76,11 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $code = null;
 
     #[ORM\Column(length: 100, nullable: false)]
-    #[Groups('post_employee')]
+    #[Groups(['post_employee', 'get_warrant'])]
     private ?string $name = null;
 
     #[ORM\Column(length: 100, nullable: false)]
-    #[Groups('post_employee')]
+    #[Groups(['post_employee', 'get_warrant'])]
     private ?string $surname = null;
 
     #[ORM\Column(length: 100, nullable: false)]

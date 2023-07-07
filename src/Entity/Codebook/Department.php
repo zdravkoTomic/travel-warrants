@@ -15,6 +15,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\OneToMany;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: DepartmentRepository::class)]
 #[ApiResource(
@@ -30,12 +31,15 @@ class Department
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['get_warrant'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 20)]
+    #[Groups(['get_warrant'])]
     private ?string $code = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['get_warrant'])]
     private ?string $name = null;
 
     #[ORM\Column]

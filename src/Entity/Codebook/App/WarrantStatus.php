@@ -9,6 +9,7 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use App\Repository\Codebook\App\WarrantStatusRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: WarrantStatusRepository::class)]
 #[ApiResource(
@@ -35,12 +36,15 @@ class WarrantStatus
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['get_user_group_warrants', 'get_warrant'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 30)]
+    #[Groups(['get_user_group_warrants', 'get_warrant'])]
     private ?string $code = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['get_user_group_warrants', 'get_warrant'])]
     private ?string $name = null;
 
     #[ORM\Column]

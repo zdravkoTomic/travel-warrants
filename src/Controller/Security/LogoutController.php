@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 
 #[AsController]
-class LogoutController  extends AbstractController
+class LogoutController extends AbstractController
 {
     /**
      * @throws \Exception

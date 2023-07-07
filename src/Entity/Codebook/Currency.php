@@ -9,6 +9,7 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use App\Repository\Codebook\CurrencyRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: CurrencyRepository::class)]
 #[ApiResource(
@@ -24,15 +25,19 @@ class Currency
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['get_warrant'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 20)]
+    #[Groups(['get_warrant'])]
     private ?string $code = null;
 
     #[ORM\Column]
+    #[Groups(['get_warrant'])]
     private ?int $codeNumeric = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['get_warrant'])]
     private ?string $name = null;
 
     #[ORM\Column]
