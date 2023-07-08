@@ -41,10 +41,13 @@ class PasswordHandlerService
     /**
      * @throws \Exception
      */
-    public function generateUserTemporaryPassword(Employee $user): string
+    public function getTemporaryPlainTextPassword(): string
     {
-        $tmpPlainPassword = random_bytes(10);
+        return bin2hex(random_bytes(10));
+    }
 
+    public function generateUserTemporaryHashedPassword(Employee $user, string $tmpPlainPassword): string
+    {
         return $this->passwordHasher->hashPassword(
             $user,
             $tmpPlainPassword
