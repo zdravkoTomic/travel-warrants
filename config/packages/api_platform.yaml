@@ -1,4 +1,8 @@
 api_platform:
+  collection:
+    pagination:
+      enabled: true
+      items_per_page_parameter_name: itemsperpage
   mapping:
     paths: ['%kernel.project_dir%/src/Entity']
   patch_formats:

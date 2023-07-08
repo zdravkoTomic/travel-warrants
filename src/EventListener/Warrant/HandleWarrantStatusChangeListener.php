@@ -36,6 +36,11 @@ class HandleWarrantStatusChangeListener
         }
 
         $oldStatus = $eventArgs->getOldValue('status');
+
+        if (!$warrant->getStatus()) {
+            throw new RecordNotFoundException($warrant->getStatus());
+        }
+
         $newStatusCodeTransition = 'to_' . $warrant->getStatus()->getCode();
 
         $warrant->setStatus($oldStatus);

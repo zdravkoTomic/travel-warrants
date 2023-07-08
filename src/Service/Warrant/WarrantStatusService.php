@@ -2,14 +2,15 @@
 
 namespace App\Service\Warrant;
 
+use ApiPlatform\Validator\Exception\ValidationException;
 use App\Entity\Codebook\App\WarrantGroupStatus;
 use App\Entity\Codebook\App\WarrantStatus;
 use App\Entity\Warrant;
 use App\Exception\RecordNotFoundException;
 use App\Repository\Codebook\App\WarrantGroupStatusRepository;
-use App\Workflow\WarrantStatusTransition;
 use Doctrine\ORM\NonUniqueResultException;
-use http\Exception\InvalidArgumentException;
+use InvalidArgumentException;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Workflow\WorkflowInterface;
 
 class WarrantStatusService
@@ -70,7 +71,17 @@ class WarrantStatusService
 
     public function validateAndSetStatusChange(Warrant $warrant, string $newStatusCodeTransition = null): void
     {
-        $this->warrantStateMachine->can($warrant, strtolower($newStatusCodeTransition));
+        if (!$this->warrantStateMachine->can($warrant, strtolower($newStatusCodeTransition))) {
+            throw new ValidationException(
+                sprintf(
+                    'Invalid status change from %s %s',
+                    $warrant->getStatus()->getCode(),
+                    $newStatusCodeTransition
+                ),
+                Response::HTTP_TEMPORARY_REDIRECT
+            );
+        }
+
         $this->warrantStateMachine->apply($warrant, strtolower($newStatusCodeTransition));
     }
 }

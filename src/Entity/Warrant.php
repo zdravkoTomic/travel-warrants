@@ -2,14 +2,16 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Link;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
-use App\Controller\Warrant\StatusWarrantsController;
-use App\Controller\Warrant\UserGroupStatusWarrantsController;
+use ApiPlatform\Serializer\Filter\PropertyFilter;
 use App\Entity\Codebook\App\TravelType;
 use App\Entity\Codebook\App\WarrantGroupStatus;
 use App\Entity\Codebook\App\WarrantStatus;
@@ -18,7 +20,6 @@ use App\Entity\Codebook\Currency;
 use App\Entity\Codebook\Department;
 use App\Entity\Codebook\VehicleType;
 use App\Repository\WarrantRepository;
-use cebe\openapi\spec\Parameter;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -33,55 +34,25 @@ use Symfony\Component\Serializer\Annotation\Groups;
         new GetCollection(paginationClientItemsPerPage: true),
         new GetCollection(
             uriTemplate: '/employees/{employeeId}/warrant-group-statuses/{groupStatusId}/warrants',
-            formats: ['json', 'jsonld'],
-            controller: UserGroupStatusWarrantsController::class,
-            openapiContext: [
-                'summary' => 'Get by user and groups status',
-                'parameters' => [
-                    [
-                        'name' => 'employeeId',
-                        'in' => 'path',
-                        'required' => true,
-                        'schema' => [
-                            'type' => 'integer',
-                        ],
-                    ],
-                    [
-                        'name' => 'groupStatusId',
-                        'in' => 'path',
-                        'required' => true,
-                        'schema' => [
-                            'type' => 'integer',
-                        ],
-                    ]
-                ],
+            uriVariables: [
+                'employeeId' => 'employee',
+                'groupStatusId' => 'groupStatus',
             ],
             paginationEnabled: true,
+            paginationClientItemsPerPage: true,
             description: 'Retrieves user warrants in provided group status',
-            normalizationContext: ['groups' => ['get_user_group_warrants']],
-            read: false
+            normalizationContext: ['groups' => ['get_user_group_warrants']]
         ),
         new GetCollection(
             uriTemplate: '/warrant-statuses/{statusId}/warrants',
-            formats: ['json', 'jsonld'],
-            controller: StatusWarrantsController::class,
-            openapiContext: [
-                'summary' => 'Get by warrant status',
-                'parameters' => [
-                    [
-                        'name' => 'statusId',
-                        'in' => 'path',
-                        'required' => true,
-                        'schema' => [
-                            'type' => 'integer',
-                        ],
-                    ]
-                ],
+            uriVariables: [
+                'statusId' => new Link(toProperty: 'status', fromClass: WarrantStatus::class),
             ],
             paginationEnabled: true,
+            paginationClientItemsPerPage: true,
             description: 'Retrieves user warrants by warrant status',
             normalizationContext: ['groups' => ['get_user_warrants_by_status']],
-            read: false
+            filters: ['offer.date_filter']
         ),
         new Post(denormalizationContext: ['groups' => ['post_warrant']]),
         new Put(),
@@ -93,11 +64,13 @@ use Symfony\Component\Serializer\Annotation\Groups;
         )
     ]
 )]
-class Warrant implements \JsonSerializable
+#[ApiFilter(PropertyFilter::class)]
+class Warrant
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[ApiProperty(identifier: true)]
     #[Groups(['post_warrant', 'get_user_group_warrants', 'get_warrant', 'get_user_warrants_by_status'])]
     private ?int $id = null;
 
@@ -107,7 +80,7 @@ class Warrant implements \JsonSerializable
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['post_warrant', 'get_warrant', 'get_user_warrants_by_status'])]
+    #[Groups(['post_warrant', 'get_warrant', 'get_user_warrants_by_status', 'get_user_group_warrants'])]
     private ?Employee $employee = null;
 
     #[ORM\ManyToOne]
