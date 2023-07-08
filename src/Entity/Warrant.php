@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
@@ -65,6 +67,13 @@ use Symfony\Component\Serializer\Annotation\Groups;
     ]
 )]
 #[ApiFilter(PropertyFilter::class)]
+#[ApiFilter(SearchFilter::class, properties: [
+    'employee.name' => 'ipartial',
+    'employee.surname' => 'ipartial',
+    'travelType.name' => 'ipartial',
+    'destinationCountry.name' => 'ipartial',
+    'status.name' => 'ipartial'
+])]
 class Warrant
 {
     #[ORM\Id]
@@ -76,11 +85,13 @@ class Warrant
 
     #[ORM\Column]
     #[Groups(['post_warrant', 'get_user_group_warrants', 'get_warrant', 'get_user_warrants_by_status'])]
+    #[ApiFilter(SearchFilter::class, strategy: 'exact')]
     private ?string $code = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
     #[Groups(['post_warrant', 'get_warrant', 'get_user_warrants_by_status', 'get_user_group_warrants'])]
+    #[ApiFilter(SearchFilter::class, strategy: 'exact')]
     private ?Employee $employee = null;
 
     #[ORM\ManyToOne]
@@ -91,6 +102,7 @@ class Warrant
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
     #[Groups(['patch_warrant_status', 'get_user_group_warrants', 'get_warrant', 'get_user_warrants_by_status'])]
+    #[ApiFilter(SearchFilter::class, strategy: 'exact')]
     private ?WarrantStatus $status = null;
 
     #[ORM\ManyToOne]
@@ -99,12 +111,14 @@ class Warrant
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
+    #[ApiFilter(SearchFilter::class, strategy: 'exact')]
     #[Groups(['get_user_group_warrants', 'get_warrant', 'get_user_warrants_by_status'])]
     private ?TravelType $travelType = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
     #[Groups(['post_warrant', 'get_user_group_warrants', 'get_warrant', 'get_user_warrants_by_status'])]
+    #[ApiFilter(SearchFilter::class, strategy: 'exact')]
     private ?Country $destinationCountry = null;
 
     #[ORM\Column(nullable: false)]
@@ -122,6 +136,7 @@ class Warrant
 
     #[ORM\Column(length: 255)]
     #[Groups(['post_warrant', 'get_user_group_warrants', 'get_warrant'])]
+    #[ApiFilter(SearchFilter::class, strategy: 'ipartial')]
     private ?string $destination = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
@@ -156,6 +171,7 @@ class Warrant
     #[ORM\Column]
     #[Gedmo\Timestampable(on: 'create')]
     #[Groups(['get_user_group_warrants', 'get_user_warrants_by_status'])]
+    #[ApiFilter(OrderFilter::class)]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\ManyToOne]
