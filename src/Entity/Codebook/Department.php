@@ -2,6 +2,9 @@
 
 namespace App\Entity\Codebook;
 
+use ApiPlatform\Doctrine\Orm\Filter\BooleanFilter;
+use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
@@ -15,44 +18,69 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\OneToMany;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: DepartmentRepository::class)]
 #[ApiResource(
     operations: [
-        new Get(),
-        new GetCollection(),
-        new Post(),
-        new Put()
+        new Get(
+            normalizationContext: ['groups' => ['get_department']]
+        ),
+        new GetCollection(
+            uriTemplate         : '/catalog/departments',
+            paginationEnabled   : false
+        ),
+        new GetCollection(
+            paginationEnabled: true,
+            paginationClientItemsPerPage: true,
+            normalizationContext: ['groups' => ['get_department']],
+            security: "is_granted('ROLE_ADMIN')"
+        ),
+        new Post(security: "is_granted('ROLE_ADMIN')"),
+        new Put(security: "is_granted('ROLE_ADMIN')")
     ]
 )]
+#[ApiFilter(OrderFilter::class, properties: ['code', 'name', 'active', 'parent.name' => 'ASC', 'ACTIVE'])]
+#[UniqueEntity(
+    fields   : ['code', 'active'],
+    message  : 'This code is already in use on an active record.',
+    errorPath: 'code',
+)]
+#[ApiFilter(BooleanFilter::class, properties: [
+    'active'
+])]
 class Department
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['get_warrant', 'get_user_warrants_by_status'])]
+    #[Groups(['get_employee', 'get_warrant', 'get_user_warrants_by_status', 'get_department'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 20)]
-    #[Groups(['get_warrant', 'get_user_warrants_by_status'])]
+    #[Groups(['get_employee', 'get_warrant', 'get_user_warrants_by_status', 'get_department'])]
     private ?string $code = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['get_warrant', 'get_user_warrants_by_status'])]
+    #[Groups(['get_employee', 'get_warrant', 'get_user_warrants_by_status', 'get_department'])]
     private ?string $name = null;
 
     #[ORM\Column]
+    #[Groups(['get_department'])]
     private ?bool $active = null;
 
     #[OneToMany(mappedBy: 'parent', targetEntity: Department::class)]
+    #[Groups(['get_department'])]
     private Collection $children;
 
     #[ManyToOne(targetEntity: Department::class, inversedBy: 'children')]
     #[JoinColumn(name: 'parent', referencedColumnName: 'id')]
+    #[Groups(['get_department'])]
     private Department|null $parent = null;
 
     #[ORM\OneToMany(mappedBy: 'department', targetEntity: Employee::class)]
+    #[Groups(['get_department'])]
     private Collection $employees;
 
     public function __construct() {

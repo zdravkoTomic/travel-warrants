@@ -2,12 +2,28 @@
 
 namespace App\Entity\Codebook\App;
 
+use ApiPlatform\Doctrine\Orm\Filter\BooleanFilter;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
 use App\Repository\Codebook\App\RoleRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: RoleRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    operations: [
+        new Get(),
+        new GetCollection(
+            uriTemplate: '/catalog/roles',
+            paginationEnabled: false
+        )
+    ]
+)]
+#[ApiFilter(BooleanFilter::class, properties: [
+    'active'
+])]
 class Role
 {
     #[ORM\Id]

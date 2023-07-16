@@ -27,8 +27,20 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: EmployeeRepository::class)]
 #[ApiResource(
     operations: [
-        new Get(security: "is_granted('ROLE_EMPLOYEE')"),
-        new GetCollection(security: "is_granted('ROLE_EMPLOYEE')"),
+        new Get(
+            normalizationContext: ['groups' => ['get_employee']]
+        ),
+        new GetCollection(
+            uriTemplate         : '/catalog/employees',
+            paginationEnabled   : false,
+            normalizationContext: ['groups' => ['get_catalog_employee']]
+        ),
+        new GetCollection(
+            paginationEnabled: true,
+            paginationClientItemsPerPage: true,
+            normalizationContext: ['groups' => ['get_employee']],
+            security: "is_granted('ROLE_ADMIN')"
+        ),
         new Post(denormalizationContext: ['groups' => ['post_employee']]),
         new Post(
             uriTemplate: '/login',
@@ -59,37 +71,37 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['post_employee', 'get_warrant', 'get_user_warrants_by_status'])]
+    #[Groups(['get_employee', 'post_employee', 'get_warrant', 'get_user_warrants_by_status', 'get_department', 'get_catalog_employee'])]
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'employees')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['post_employee', 'get_warrant', 'get_user_warrants_by_status'])]
+    #[Groups(['get_employee', 'post_employee', 'get_warrant', 'get_user_warrants_by_status'])]
     private ?Department $department = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['post_employee', 'get_warrant'])]
+    #[Groups(['get_employee', 'post_employee', 'get_warrant', 'get_department'])]
     private ?WorkPosition $workPosition = null;
 
     #[ORM\Column(length: 20, nullable: false)]
-    #[Groups(['post_employee', 'get_user_warrants_by_status'])]
+    #[Groups(['get_employee', 'post_employee', 'get_user_warrants_by_status', 'get_catalog_employee'])]
     private ?string $code = null;
 
     #[ORM\Column(length: 100, nullable: false)]
-    #[Groups(['post_employee', 'get_warrant', 'get_user_warrants_by_status'])]
+    #[Groups(['get_employee', 'post_employee', 'get_warrant', 'get_user_warrants_by_status', 'get_department', 'get_catalog_employee'])]
     private string $name;
 
     #[ORM\Column(length: 100, nullable: false)]
-    #[Groups(['post_employee', 'get_warrant', 'get_user_warrants_by_status'])]
+    #[Groups(['get_employee', 'post_employee', 'get_warrant', 'get_user_warrants_by_status', 'get_department', 'get_catalog_employee'])]
     private ?string $surname = null;
 
     #[ORM\Column(length: 100, nullable: false)]
-    #[Groups('post_employee')]
+    #[Groups(['get_employee', 'post_employee', 'get_department', 'get_catalog_employee'])]
     private ?string $username = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['post_employee', 'login_employee'])]
+    #[Groups(['get_employee', 'post_employee', 'login_employee', 'get_department'])]
     private ?string $email = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -97,19 +109,20 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[Groups(['get_employee'])]
     private ?\DateTimeInterface $dateOfBirth = null;
 
-    private $roles;
-
     #[ORM\Column]
-    #[Assert\NotBlank]
-    private ?bool $active = null;
+    private ?bool $active = true;
 
     #[ORM\OneToMany(mappedBy: 'employee', targetEntity: EmployeeRoles::class)]
     private Collection $employeeRoles;
 
     #[ORM\Column]
     private ?bool $fullyAuthorized = false;
+
+    #[Groups(['get_employee'])]
+    private ?array $roles;
 
     public function __construct()
     {
@@ -256,7 +269,9 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
         $roles = [];
 
         foreach ($this->getEmployeeRoles() as $employeeRole) {
-            $roles[] = $employeeRole->getRole();
+            if ($employeeRole->getRole()) {
+                $roles[] = $employeeRole->getRole()->getName();
+            }
         }
 
         $roles[] = self::DEFAULT_USER_ROLE;

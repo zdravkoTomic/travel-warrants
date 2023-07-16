@@ -2,6 +2,8 @@
 
 namespace App\Entity\Codebook;
 
+use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
@@ -11,49 +13,54 @@ use App\Entity\Employee;
 use App\Repository\Codebook\PredefinedExpenseRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: PredefinedExpenseRepository::class)]
 #[ApiResource(
     operations: [
         new Get(),
-        new GetCollection(),
-        new Post(),
-        new Put()
+        new GetCollection(
+            paginationEnabled: true,
+            paginationClientItemsPerPage: true,
+            normalizationContext: ['groups' => ['get_predefined_expense']],
+            security: "is_granted('ROLE_ADMIN')"
+        ),
+        new Post(security: "is_granted('ROLE_ADMIN')"),
+        new Put(security: "is_granted('ROLE_ADMIN')")
     ]
+)]
+#[ApiFilter(OrderFilter::class, properties: ['expense.name', 'amount', 'currency.name' => 'ASC', 'ACTIVE'])]
+#[UniqueEntity(
+    fields   : ['expense', 'active'],
+    message  : 'This code is already in use on an active record.',
+    errorPath: 'code',
 )]
 class PredefinedExpense
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['get_predefined_expense'])]
     private ?int $id = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['get_predefined_expense'])]
     private ?ExpenseType $expense = null;
 
     #[ORM\Column]
+    #[Groups(['get_predefined_expense'])]
     private ?float $amount = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['get_predefined_expense'])]
     private ?Currency $currency = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $dateFrom = null;
-
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $dateTo = null;
-
     #[ORM\Column]
+    #[Groups(['get_predefined_expense'])]
     private ?bool $active = null;
-
-    #[ORM\ManyToOne]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Employee $createdBy = null;
-
-    #[ORM\Column]
-    private ?\DateTimeImmutable $createdAt = null;
 
     public function getId(): ?int
     {
@@ -96,30 +103,6 @@ class PredefinedExpense
         return $this;
     }
 
-    public function getDateFrom(): ?\DateTimeInterface
-    {
-        return $this->dateFrom;
-    }
-
-    public function setDateFrom(\DateTimeInterface $dateFrom): static
-    {
-        $this->dateFrom = $dateFrom;
-
-        return $this;
-    }
-
-    public function getDateTo(): ?\DateTimeInterface
-    {
-        return $this->dateTo;
-    }
-
-    public function setDateTo(?\DateTimeInterface $dateTo): static
-    {
-        $this->dateTo = $dateTo;
-
-        return $this;
-    }
-
     public function isActive(): ?bool
     {
         return $this->active;
@@ -128,30 +111,6 @@ class PredefinedExpense
     public function setActive(bool $active): static
     {
         $this->active = $active;
-
-        return $this;
-    }
-
-    public function getCreatedBy(): ?Employee
-    {
-        return $this->createdBy;
-    }
-
-    public function setCreatedBy(?Employee $createdBy): static
-    {
-        $this->createdBy = $createdBy;
-
-        return $this;
-    }
-
-    public function getCreatedAt(): ?\DateTimeImmutable
-    {
-        return $this->createdAt;
-    }
-
-    public function setCreatedAt(\DateTimeImmutable $createdAt): static
-    {
-        $this->createdAt = $createdAt;
 
         return $this;
     }

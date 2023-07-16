@@ -25,9 +25,17 @@ class LoginController extends AbstractController
             new JsonResponse(['error' => 'Invalid email or password'], 401);
         }
 
-        $cookie = new Cookie('user_auth', bin2hex(random_bytes(10)), time() + 3600, '/', "localhost");
+        $cookie = new Cookie('user_auth', bin2hex(random_bytes(10)), time() + 14400, '/', "localhost");
 
-        $userData = $serializer->normalize($user, null, [AbstractNormalizer::ATTRIBUTES => ['id', 'username', 'email']]);
+        $userData = $serializer->normalize(
+            $user,
+            null,
+            [AbstractNormalizer::ATTRIBUTES =>
+                [
+                'id', 'username', 'name', 'surname', 'roles'
+                ]
+            ]
+        );
 
         $response = new JsonResponse(['user' => $userData], 201);
         $response->headers->setCookie($cookie);
@@ -35,4 +43,5 @@ class LoginController extends AbstractController
 
         return $response;
     }
+
 }

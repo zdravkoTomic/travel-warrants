@@ -8,7 +8,7 @@ INSERT INTO role (name, active)
 VALUES ('ROLE_PROCURATOR', 1);
 
 INSERT INTO role (name, active)
-VALUES ('ROLE_IT_ADMINISTRATOR', 1);
+VALUES ('ROLE_IT_ADMIN', 1);
 
 INSERT INTO role (name, active)
-VALUES ('ROLE_ADMINISTRATOR', 1);
+VALUES ('ROLE_ADMIN', 1);

@@ -2,6 +2,9 @@
 
 namespace App\Entity\Codebook;
 
+use ApiPlatform\Doctrine\Orm\Filter\BooleanFilter;
+use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
@@ -9,17 +12,37 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use App\Repository\Codebook\VehicleTypeRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: VehicleTypeRepository::class)]
 #[ApiResource(
     operations: [
-        new Get(),
-        new GetCollection(),
-        new Post(),
-        new Put()
+        new Get(
+
+        ),
+        new GetCollection(
+            uriTemplate         : '/catalog/vehicle-types',
+            paginationEnabled   : false
+        ),
+        new GetCollection(
+            paginationEnabled: true,
+            paginationClientItemsPerPage: true,
+            security: "is_granted('ROLE_ADMIN')"
+        ),
+        new Post(security: "is_granted('ROLE_ADMIN')"),
+        new Put(security: "is_granted('ROLE_ADMIN')")
     ]
 )]
+#[ApiFilter(OrderFilter::class, properties: ['code', 'name', 'active' => 'ASC', 'ACTIVE'])]
+#[UniqueEntity(
+    fields   : ['code', 'active'],
+    message  : 'This code is already in use on an active record.',
+    errorPath: 'code',
+)]
+#[ApiFilter(BooleanFilter::class, properties: [
+    'active'
+])]
 class VehicleType
 {
     #[ORM\Id]

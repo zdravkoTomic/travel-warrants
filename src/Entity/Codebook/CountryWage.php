@@ -2,6 +2,8 @@
 
 namespace App\Entity\Codebook;
 
+use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
@@ -11,49 +13,61 @@ use App\Entity\Employee;
 use App\Repository\Codebook\CountryWageRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: CountryWageRepository::class)]
 #[ApiResource(
     operations: [
-        new Get(),
-        new GetCollection(),
-        new Post(),
-        new Put()
+        new Get(
+            normalizationContext: ['groups' => ['get_country_wages']]
+        ),
+        new GetCollection(
+            paginationEnabled           : true,
+            paginationClientItemsPerPage: true,
+            normalizationContext        : ['groups' => ['get_country_wages']],
+            security                    : "is_granted('ROLE_ADMIN')"
+        ),
+        new Post(security: "is_granted('ROLE_ADMIN')"),
+        new Put(security: "is_granted('ROLE_ADMIN')")
     ]
+)]
+#[ApiFilter(
+    OrderFilter::class,
+    properties: [
+        'country.code', 'country.name',  'currency.code', 'currency.name', 'active' => 'ASC', 'ACTIVE'
+    ]
+)]
+#[UniqueEntity(
+    fields   : ['country', 'active'],
+    message  : 'Only one active record per country.',
+    errorPath: 'country',
 )]
 class CountryWage
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['get_country_item', 'get_country_wages'])]
     private ?int $id = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['get_country_wages', 'post_country_wage'])]
     private ?Country $country = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['get_country_item', 'get_country_wages'])]
     private ?Currency $currency = null;
 
     #[ORM\Column]
+    #[Groups(['get_country_item', 'get_country_wages'])]
     private ?float $amount = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $dateFrom = null;
-
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $dateTo = null;
-
     #[ORM\Column]
+    #[Groups(['get_country_item', 'get_country_wages'])]
     private ?bool $active = null;
-
-    #[ORM\ManyToOne]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Employee $createdBy = null;
-
-    #[ORM\Column]
-    private ?\DateTimeImmutable $createdAt = null;
 
     public function getId(): ?int
     {
@@ -96,30 +110,6 @@ class CountryWage
         return $this;
     }
 
-    public function getDateFrom(): ?\DateTimeInterface
-    {
-        return $this->dateFrom;
-    }
-
-    public function setDateFrom(\DateTimeInterface $dateFrom): static
-    {
-        $this->dateFrom = $dateFrom;
-
-        return $this;
-    }
-
-    public function getDateTo(): ?\DateTimeInterface
-    {
-        return $this->dateTo;
-    }
-
-    public function setDateTo(?\DateTimeInterface $dateTo): static
-    {
-        $this->dateTo = $dateTo;
-
-        return $this;
-    }
-
     public function isActive(): ?bool
     {
         return $this->active;
@@ -128,30 +118,6 @@ class CountryWage
     public function setActive(bool $active): static
     {
         $this->active = $active;
-
-        return $this;
-    }
-
-    public function getCreatedBy(): ?Employee
-    {
-        return $this->createdBy;
-    }
-
-    public function setCreatedBy(?Employee $createdBy): static
-    {
-        $this->createdBy = $createdBy;
-
-        return $this;
-    }
-
-    public function getCreatedAt(): ?\DateTimeImmutable
-    {
-        return $this->createdAt;
-    }
-
-    public function setCreatedAt(\DateTimeImmutable $createdAt): static
-    {
-        $this->createdAt = $createdAt;
 
         return $this;
     }

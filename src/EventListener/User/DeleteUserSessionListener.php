@@ -11,7 +11,7 @@ class DeleteUserSessionListener
     public function onLogout(LogoutEvent $event): void
     {
         $response = new Response();
-        $cookie = new Cookie('user_auth', '', time() - 3600, '/', 'localhost');
+        $cookie = new Cookie('user_auth', '', time() - 14400, '/', 'localhost');
         $response->headers->setCookie($cookie);
         $event->setResponse($response);
     }
