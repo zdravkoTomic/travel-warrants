@@ -4,8 +4,8 @@ namespace App\Controller\Security;
 
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
+use App\ApiResource\Dto\UserPasswordDto;
 use App\Entity\Employee;
-use App\Service\Dto\UserPasswordDto;
 use App\Service\User\PasswordHandlerService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpKernel\Attribute\AsController;

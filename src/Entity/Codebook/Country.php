@@ -2,6 +2,8 @@
 
 namespace App\Entity\Codebook;
 
+use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
@@ -9,16 +11,28 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use App\Repository\Codebook\CountryRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: CountryRepository::class)]
 #[ApiResource(
     operations: [
         new Get(),
-        new GetCollection(),
+        new GetCollection(
+            paginationEnabled: true,
+            paginationClientItemsPerPage: true
+        ),
         new Post(),
         new Put()
     ]
+)]
+#[ApiFilter(OrderFilter::class, properties: ['code', 'name' => 'ASC', 'ACTIVE'])]
+#[UniqueEntity(
+    fields   : ['code', 'active'],
+    message  : 'This code is already in use on an active record.',
+    errorPath: 'code',
 )]
 class Country
 {
@@ -30,13 +44,16 @@ class Country
 
     #[ORM\Column(length: 20)]
     #[Groups(['get_warrant', 'get_user_group_warrants', 'get_user_warrants_by_status'])]
+    #[Assert\NotBlank]
     private ?string $code = null;
 
     #[ORM\Column(length: 255)]
     #[Groups(['get_warrant', 'get_user_group_warrants', 'get_user_warrants_by_status'])]
+    #[Assert\NotBlank]
     private ?string $name = null;
 
     #[ORM\Column]
+    #[Assert\NotBlank]
     private ?bool $active = null;
 
     #[ORM\Column]

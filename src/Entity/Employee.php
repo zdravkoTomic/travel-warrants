@@ -8,13 +8,13 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
+use App\ApiResource\Dto\UserPasswordDto;
 use App\Controller\Security\ChangePasswordProcessor;
 use App\Controller\Security\LoginController;
 use App\Controller\Security\LogoutController;
 use App\Entity\Codebook\Department;
 use App\Entity\Codebook\WorkPosition;
 use App\Repository\EmployeeRepository;
-use App\Service\Dto\UserPasswordDto;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -77,7 +77,7 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 100, nullable: false)]
     #[Groups(['post_employee', 'get_warrant', 'get_user_warrants_by_status'])]
-    private ?string $name = null;
+    private string $name;
 
     #[ORM\Column(length: 100, nullable: false)]
     #[Groups(['post_employee', 'get_warrant', 'get_user_warrants_by_status'])]
@@ -102,6 +102,9 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\OneToMany(mappedBy: 'employee', targetEntity: EmployeeRoles::class)]
     private Collection $employeeRoles;
+
+    #[ORM\Column]
+    private ?bool $fullyAuthorized = false;
 
     public function __construct()
     {
@@ -149,7 +152,7 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getName(): ?string
+    public function getName(): string
     {
         return $this->name;
     }
@@ -273,4 +276,21 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
     {
         return (string)$this->email;
     }
+
+    /**
+     * @return bool|null
+     */
+    public function isFullyAuthorized(): ?bool
+    {
+        return $this->fullyAuthorized;
+    }
+
+    /**
+     * @param bool|null $fullyAuthorized
+     */
+    public function setFullyAuthorized(?bool $fullyAuthorized): void
+    {
+        $this->fullyAuthorized = $fullyAuthorized;
+    }
+
 }

@@ -2,13 +2,11 @@
 
 namespace App\Service\User;
 
+use App\ApiResource\Dto\UserPasswordDto;
 use App\Entity\Employee;
-use App\Repository\EmployeeRepository;
-use App\Service\Dto\UserPasswordDto;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 class PasswordHandlerService
 {
@@ -32,7 +30,8 @@ class PasswordHandlerService
             $userPasswordDto->password
         );
 
-        $user->setPassword($hashedPassword);
+        $user->setPassword($hashedPassword)
+            ->setFullyAuthorized(true);
 
         $this->entityManager->persist($user);
         $this->entityManager->flush();

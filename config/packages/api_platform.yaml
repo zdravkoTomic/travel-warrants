@@ -23,3 +23,6 @@ api_platform:
     jsonhal:
       mime_types:
         - application/hal+json
+    pdf:
+      mime_types:
+        - application/pdf

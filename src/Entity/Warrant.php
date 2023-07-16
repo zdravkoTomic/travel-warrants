@@ -14,6 +14,7 @@ use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\Serializer\Filter\PropertyFilter;
+use App\Controller\Warrant\DownloadWarrantPdfReportAction;
 use App\Entity\Codebook\App\TravelType;
 use App\Entity\Codebook\App\WarrantGroupStatus;
 use App\Entity\Codebook\App\WarrantStatus;
@@ -32,6 +33,12 @@ use Symfony\Component\Serializer\Annotation\Groups;
     operations: [
         new Get(
             normalizationContext: ['groups' => ['get_warrant']]
+        ),
+        new Get(
+            uriTemplate: '/warrants/{id}/report',
+            formats    : ['pdf'],
+            controller : DownloadWarrantPdfReportAction::class,
+            read       : false
         ),
         new GetCollection(paginationClientItemsPerPage: true),
         new GetCollection(
@@ -92,7 +99,7 @@ class Warrant
     #[ORM\JoinColumn(nullable: false)]
     #[Groups(['post_warrant', 'get_warrant', 'get_user_warrants_by_status', 'get_user_group_warrants'])]
     #[ApiFilter(SearchFilter::class, strategy: 'exact')]
-    private ?Employee $employee = null;
+    private Employee $employee;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
@@ -182,7 +189,7 @@ class Warrant
         return $this->id;
     }
 
-    public function getEmployee(): ?Employee
+    public function getEmployee(): Employee
     {
         return $this->employee;
     }
