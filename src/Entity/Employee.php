@@ -22,12 +22,13 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: EmployeeRepository::class)]
 #[ApiResource(
     operations: [
-        new Get(security: "is_granted('ROLE_USER')"),
-        new GetCollection(security: "is_granted('ROLE_USER')"),
+        new Get(security: "is_granted('ROLE_EMPLOYEE')"),
+        new GetCollection(security: "is_granted('ROLE_EMPLOYEE')"),
         new Post(denormalizationContext: ['groups' => ['post_employee']]),
         new Post(
             uriTemplate: '/login',
@@ -53,7 +54,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 )]
 class Employee implements UserInterface, PasswordAuthenticatedUserInterface
 {
-    private const DEFAULT_USER_ROLE = 'ROLE_USER';
+    private const DEFAULT_USER_ROLE = 'ROLE_EMPLOYEE';
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -99,6 +100,10 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
     private ?\DateTimeInterface $dateOfBirth = null;
 
     private $roles;
+
+    #[ORM\Column]
+    #[Assert\NotBlank]
+    private ?bool $active = null;
 
     #[ORM\OneToMany(mappedBy: 'employee', targetEntity: EmployeeRoles::class)]
     private Collection $employeeRoles;
@@ -291,6 +296,18 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
     public function setFullyAuthorized(?bool $fullyAuthorized): void
     {
         $this->fullyAuthorized = $fullyAuthorized;
+    }
+
+    public function isActive(): ?bool
+    {
+        return $this->active;
+    }
+
+    public function setActive(bool $active): static
+    {
+        $this->active = $active;
+
+        return $this;
     }
 
 }
