@@ -18,20 +18,19 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\Entity(repositoryClass: VehicleTypeRepository::class)]
 #[ApiResource(
     operations: [
-        new Get(
-
+        new Get(security: "is_granted('ROLE_EMPLOYEE')"),
+        new GetCollection(
+            uriTemplate      : '/catalog/vehicle-types',
+            paginationEnabled: false,
+            security         : "is_granted('ROLE_EMPLOYEE')"
         ),
         new GetCollection(
-            uriTemplate         : '/catalog/vehicle-types',
-            paginationEnabled   : false
-        ),
-        new GetCollection(
-            paginationEnabled: true,
+            paginationEnabled           : true,
             paginationClientItemsPerPage: true,
-            security: "is_granted('ROLE_ADMIN')"
+            security                    : "is_granted('ROLE_ADMIN') or is_granted('ROLE_PROCURATOR')"
         ),
-        new Post(security: "is_granted('ROLE_ADMIN')"),
-        new Put(security: "is_granted('ROLE_ADMIN')")
+        new Post(security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_PROCURATOR')"),
+        new Put(security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_PROCURATOR')")
     ]
 )]
 #[ApiFilter(OrderFilter::class, properties: ['code', 'name', 'active' => 'ASC', 'ACTIVE'])]

@@ -25,20 +25,28 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ApiResource(
     operations: [
         new Get(
-            normalizationContext: ['groups' => ['get_department']]
-        ),
-        new GetCollection(
-            uriTemplate         : '/catalog/departments',
-            paginationEnabled   : false
-        ),
-        new GetCollection(
-            paginationEnabled: true,
-            paginationClientItemsPerPage: true,
             normalizationContext: ['groups' => ['get_department']],
-            security: "is_granted('ROLE_ADMIN')"
+            security            : "is_granted('ROLE_EMPLOYEE')"
         ),
-        new Post(security: "is_granted('ROLE_ADMIN')"),
-        new Put(security: "is_granted('ROLE_ADMIN')")
+        new GetCollection(
+            uriTemplate      : '/catalog/departments',
+            paginationEnabled: false,
+            security         : "is_granted('ROLE_EMPLOYEE')"
+        ),
+        new GetCollection(
+            paginationEnabled           : true,
+            paginationClientItemsPerPage: true,
+            normalizationContext        : ['groups' => ['get_department']],
+            security                    : "is_granted('ROLE_ADMIN')"
+        ),
+        new Post(
+            denormalizationContext: ['groups' => ['post_department']],
+            security              : "is_granted('ROLE_ADMIN')",
+        ),
+        new Put(
+            denormalizationContext: ['groups' => ['put_department']],
+            security              : "is_granted('ROLE_ADMIN')"
+        )
     ]
 )]
 #[ApiFilter(OrderFilter::class, properties: ['code', 'name', 'active', 'parent.name' => 'ASC', 'ACTIVE'])]
@@ -55,36 +63,60 @@ class Department
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['get_employee', 'get_warrant', 'get_user_warrants_by_status', 'get_department'])]
+    #[Groups([
+        'get_employee',
+        'get_warrant',
+        'get_user_warrants_by_status',
+        'get_department',
+        'post_department',
+        'put_department',
+        'get_employee_role'
+    ])]
     private ?int $id = null;
 
     #[ORM\Column(length: 20)]
-    #[Groups(['get_employee', 'get_warrant', 'get_user_warrants_by_status', 'get_department'])]
+    #[Groups([
+        'get_employee',
+        'get_warrant',
+        'get_user_warrants_by_status',
+        'get_department',
+        'post_department',
+        'put_department',
+        'get_employee_role'
+    ])]
     private ?string $code = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['get_employee', 'get_warrant', 'get_user_warrants_by_status', 'get_department'])]
+    #[Groups([
+        'get_employee',
+        'get_warrant',
+        'get_user_warrants_by_status',
+        'get_department',
+        'post_department',
+        'put_department',
+        'get_employee_role'
+    ])]
     private ?string $name = null;
 
     #[ORM\Column]
-    #[Groups(['get_department'])]
+    #[Groups(['get_department', 'post_department', 'put_department'])]
     private ?bool $active = null;
 
     #[OneToMany(mappedBy: 'parent', targetEntity: Department::class)]
-    #[Groups(['get_department'])]
     private Collection $children;
 
     #[ManyToOne(targetEntity: Department::class, inversedBy: 'children')]
-    #[JoinColumn(name: 'parent', referencedColumnName: 'id')]
-    #[Groups(['get_department'])]
+    #[JoinColumn(name: 'parent', referencedColumnName: 'id', nullable: true)]
+    #[Groups(['get_department', 'post_department', 'put_department'])]
     private Department|null $parent = null;
 
     #[ORM\OneToMany(mappedBy: 'department', targetEntity: Employee::class)]
     #[Groups(['get_department'])]
     private Collection $employees;
 
-    public function __construct() {
-        $this->children = new ArrayCollection();
+    public function __construct()
+    {
+        $this->children  = new ArrayCollection();
         $this->employees = new ArrayCollection();
     }
 

@@ -7,16 +7,16 @@ use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
-use ApiPlatform\Metadata\Post;
 use App\Repository\Codebook\App\RoleRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: RoleRepository::class)]
 #[ApiResource(
     operations: [
         new Get(),
         new GetCollection(
-            uriTemplate: '/catalog/roles',
+            uriTemplate      : '/catalog/roles',
             paginationEnabled: false
         )
     ]
@@ -29,9 +29,11 @@ class Role
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['get_employee_role'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['get_employee_role'])]
     private ?string $name = null;
 
     #[ORM\Column]

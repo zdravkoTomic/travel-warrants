@@ -42,33 +42,36 @@ use Symfony\Component\Serializer\Annotation\Groups;
         ),
         new GetCollection(paginationClientItemsPerPage: true),
         new GetCollection(
-            uriTemplate: '/employees/{employeeId}/warrant-group-statuses/{groupStatusId}/warrants',
-            uriVariables: [
-                'employeeId' => 'employee',
-                'groupStatusId' => 'groupStatus',
-            ],
-            paginationEnabled: true,
+            uriTemplate                 : '/employees/{employeeId}/warrant-group-statuses/{groupStatusId}/warrants',
+            uriVariables                : [
+                                              'employeeId' => 'employee',
+                                              'groupStatusId' => 'groupStatus',
+                                          ],
+            paginationEnabled           : true,
             paginationClientItemsPerPage: true,
-            description: 'Retrieves user warrants in provided group status',
-            normalizationContext: ['groups' => ['get_user_group_warrants']]
+            description                 : 'Retrieves user warrants in provided group status',
+            normalizationContext        : ['groups' => ['get_user_group_warrants']]
         ),
         new GetCollection(
-            uriTemplate: '/warrant-statuses/{statusId}/warrants',
-            uriVariables: [
-                'statusId' => new Link(toProperty: 'status', fromClass: WarrantStatus::class),
-            ],
-            paginationEnabled: true,
+            uriTemplate                 : '/warrant-statuses/{statusId}/warrants',
+            uriVariables                : [
+                                              'statusId' => new Link(
+                                                  toProperty: 'status',
+                                                  fromClass : WarrantStatus::class
+                                              ),
+                                          ],
+            paginationEnabled           : true,
             paginationClientItemsPerPage: true,
-            description: 'Retrieves user warrants by warrant status',
-            normalizationContext: ['groups' => ['get_user_warrants_by_status']],
-            filters: ['offer.date_filter']
+            description                 : 'Retrieves user warrants by warrant status',
+            normalizationContext        : ['groups' => ['get_user_warrants_by_status']],
+            filters                     : ['offer.date_filter']
         ),
         new Post(denormalizationContext: ['groups' => ['post_warrant']]),
         new Put(),
         new Patch(
-            uriTemplate: '/warrants/{id}/change_status',
-            formats: ['json', 'jsonld'],
-            description: 'Change warrant status',
+            uriTemplate           : '/warrants/{id}/change_status',
+            formats               : ['json', 'jsonld'],
+            description           : 'Change warrant status',
             denormalizationContext: ['groups' => ['patch_warrant_status']]
         )
     ]

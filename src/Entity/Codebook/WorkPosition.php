@@ -18,15 +18,16 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\Entity(repositoryClass: WorkPositionRepository::class)]
 #[ApiResource(
     operations: [
-        new Get(),
+        new Get(security: "is_granted('ROLE_EMPLOYEE')"),
         new GetCollection(
-            uriTemplate         : '/catalog/work-positions',
-            paginationEnabled   : false
+            uriTemplate      : '/catalog/work-positions',
+            paginationEnabled: false,
+            security         : "is_granted('ROLE_EMPLOYEE')"
         ),
         new GetCollection(
-            paginationEnabled: true,
+            paginationEnabled           : true,
             paginationClientItemsPerPage: true,
-            security: "is_granted('ROLE_ADMIN')"
+            security                    : "is_granted('ROLE_ADMIN')"
         ),
         new Post(security: "is_granted('ROLE_ADMIN')"),
         new Put(security: "is_granted('ROLE_ADMIN')")
@@ -46,7 +47,7 @@ class WorkPosition
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['get_employee', 'get_warrant', 'get_department'])]
+    #[Groups(['get_employee', 'get_warrant', 'get_department', 'get_employee_role'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 20)]
@@ -54,7 +55,7 @@ class WorkPosition
     private ?string $code = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['get_employee', 'get_warrant', 'get_department'])]
+    #[Groups(['get_employee', 'get_warrant', 'get_department', 'get_employee_role'])]
     private ?string $name = null;
 
     #[ORM\Column]

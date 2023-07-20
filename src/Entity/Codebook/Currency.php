@@ -14,24 +14,24 @@ use App\Repository\Codebook\CurrencyRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: CurrencyRepository::class)]
 #[ApiResource(
     operations: [
-        new Get(
-
+        new Get(security: "is_granted('ROLE_EMPLOYEE')"),
+        new GetCollection(
+            uriTemplate      : '/catalog/currencies',
+            paginationEnabled: false,
+            security         : "is_granted('ROLE_EMPLOYEE')"
         ),
         new GetCollection(
-            uriTemplate         : '/catalog/currencies',
-            paginationEnabled   : false
-        ),
-        new GetCollection(
-            paginationEnabled: true,
+            paginationEnabled           : true,
             paginationClientItemsPerPage: true,
-            security: "is_granted('ROLE_ADMIN')"
+            security                    : "is_granted('ROLE_ADMIN') or is_granted('ROLE_PROCURATOR')"
         ),
-        new Post(security: "is_granted('ROLE_ADMIN')"),
-        new Put(security: "is_granted('ROLE_ADMIN')")
+        new Post(security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_PROCURATOR')"),
+        new Put(security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_PROCURATOR')")
     ]
 )]
 #[ApiFilter(OrderFilter::class, properties: ['code', 'codeNumeric', 'name', 'active' => 'ASC', 'ACTIVE'])]
@@ -53,14 +53,17 @@ class Currency
 
     #[ORM\Column(length: 20)]
     #[Groups(['get_warrant', 'get_country_item', 'get_country_wages', 'get_predefined_expense'])]
+    #[Assert\NotBlank]
     private ?string $code = null;
 
     #[ORM\Column]
     #[Groups(['get_warrant', 'get_country_item', 'get_country_wages', 'get_predefined_expense'])]
-    private ?int $codeNumeric = null;
+    #[Assert\NotBlank]
+    private ?string $codeNumeric = null;
 
     #[ORM\Column(length: 255)]
     #[Groups(['get_warrant', 'get_country_item', 'get_country_wages', 'get_predefined_expense'])]
+    #[Assert\NotBlank]
     private ?string $name = null;
 
     #[ORM\Column]
@@ -85,17 +88,17 @@ class Currency
     }
 
     /**
-     * @return int|null
+     * @return string|null
      */
-    public function getCodeNumeric(): ?int
+    public function getCodeNumeric(): ?string
     {
         return $this->codeNumeric;
     }
 
     /**
-     * @param int|null $codeNumeric
+     * @param string|null $codeNumeric
      */
-    public function setCodeNumeric(?int $codeNumeric): void
+    public function setCodeNumeric(?string $codeNumeric): void
     {
         $this->codeNumeric = $codeNumeric;
     }

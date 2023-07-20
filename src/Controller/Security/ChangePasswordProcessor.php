@@ -23,7 +23,7 @@ class ChangePasswordProcessor extends AbstractController implements ProcessorInt
     /**
      * @param UserPasswordDto $data
      */
-    public function process($data, Operation $operation, array $uriVariables = [], array $context = [])
+    public function process($data, Operation $operation, array $uriVariables = [], array $context = []): void
     {
         /** @var Employee $user */
         $user = $this->getUser();

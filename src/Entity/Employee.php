@@ -19,50 +19,73 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
-use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: EmployeeRepository::class)]
 #[ApiResource(
     operations: [
         new Get(
-            normalizationContext: ['groups' => ['get_employee']]
+            normalizationContext: ['groups' => ['get_employee']],
+            security            : "is_granted('ROLE_EMPLOYEE')"
         ),
         new GetCollection(
             uriTemplate         : '/catalog/employees',
             paginationEnabled   : false,
-            normalizationContext: ['groups' => ['get_catalog_employee']]
+            normalizationContext: ['groups' => ['get_catalog_employee']],
+            security            : "is_granted('ROLE_EMPLOYEE')"
         ),
         new GetCollection(
-            paginationEnabled: true,
+            paginationEnabled           : true,
             paginationClientItemsPerPage: true,
-            normalizationContext: ['groups' => ['get_employee']],
-            security: "is_granted('ROLE_ADMIN')"
+            normalizationContext        : ['groups' => ['get_employee']],
+            security                    : "is_granted('ROLE_ADMIN')"
         ),
-        new Post(denormalizationContext: ['groups' => ['post_employee']]),
         new Post(
-            uriTemplate: '/login',
-            controller: LoginController::class,
-            description: 'Log in employee',
+            denormalizationContext: ['groups' => ['post_employee']],
+            security              : "is_granted('ROLE_ADMIN')"
+        ),
+        new Post(
+            uriTemplate           : '/login',
+            controller            : LoginController::class,
+            description           : 'Log in employee',
             denormalizationContext: ['groups' => ['login_employee']],
-            name: 'app_login'
+            name                  : 'app_login'
         ),
         new Post(
-            uriTemplate: '/logout',
-            controller: LogoutController::class,
-            description: 'Logout employee',
+            uriTemplate           : '/logout',
+            controller            : LogoutController::class,
+            description           : 'Logout em ployee',
             denormalizationContext: ['groups' => ['logout_employee']],
-            name: 'app_logout'
+            name                  : 'app_logout'
         ),
-        new Put(),
+        new Put(
+            denormalizationContext: ['groups' => ['put_employee']],
+            security              : "is_granted('ROLE_ADMIN')"
+        ),
         new Patch(
             uriTemplate: '/employees/{id}/change_password',
-            input: UserPasswordDto::class,
-            processor: ChangePasswordProcessor::class
+            input      : UserPasswordDto::class,
+            processor  : ChangePasswordProcessor::class
         )
     ]
+)]
+#[UniqueEntity(
+    fields   : ['code'],
+    message  : 'This code is already in use on an employee.',
+    errorPath: 'code',
+)]
+#[UniqueEntity(
+    fields   : ['username'],
+    message  : 'This username is already in use on an employee.',
+    errorPath: 'username',
+)]
+#[UniqueEntity(
+    fields   : ['email'],
+    message  : 'This email is already in use on an employee.',
+    errorPath: 'email',
 )]
 class Employee implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -71,37 +94,92 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['get_employee', 'post_employee', 'get_warrant', 'get_user_warrants_by_status', 'get_department', 'get_catalog_employee'])]
+    #[Groups([
+        'get_employee',
+        'post_employee',
+        'get_warrant',
+        'get_user_warrants_by_status',
+        'get_department',
+        'get_catalog_employee',
+        'put_employee',
+        'get_employee_role'
+    ])]
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'employees')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['get_employee', 'post_employee', 'get_warrant', 'get_user_warrants_by_status'])]
+    #[Groups([
+        'get_employee',
+        'post_employee',
+        'get_warrant',
+        'get_user_warrants_by_status',
+        'get_employee_role',
+        'put_employee'
+    ])]
     private ?Department $department = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['get_employee', 'post_employee', 'get_warrant', 'get_department'])]
+    #[Groups([
+        'get_employee',
+        'post_employee',
+        'get_warrant',
+        'get_department',
+        'get_employee_role',
+        'put_employee'
+    ])]
     private ?WorkPosition $workPosition = null;
 
     #[ORM\Column(length: 20, nullable: false)]
-    #[Groups(['get_employee', 'post_employee', 'get_user_warrants_by_status', 'get_catalog_employee'])]
+    #[Groups([
+        'get_employee',
+        'post_employee',
+        'get_user_warrants_by_status',
+        'get_catalog_employee',
+        'get_employee_role',
+        'put_employee'
+    ])]
     private ?string $code = null;
 
     #[ORM\Column(length: 100, nullable: false)]
-    #[Groups(['get_employee', 'post_employee', 'get_warrant', 'get_user_warrants_by_status', 'get_department', 'get_catalog_employee'])]
+    #[Groups([
+        'get_employee',
+        'post_employee',
+        'get_warrant',
+        'get_user_warrants_by_status',
+        'get_department',
+        'get_catalog_employee',
+        'put_employee',
+        'get_employee_role'
+    ])]
     private string $name;
 
     #[ORM\Column(length: 100, nullable: false)]
-    #[Groups(['get_employee', 'post_employee', 'get_warrant', 'get_user_warrants_by_status', 'get_department', 'get_catalog_employee'])]
+    #[Groups([
+        'get_employee',
+        'post_employee',
+        'get_warrant',
+        'get_user_warrants_by_status',
+        'get_department',
+        'get_catalog_employee',
+        'put_employee',
+        'get_employee_role'
+    ])]
     private ?string $surname = null;
 
     #[ORM\Column(length: 100, nullable: false)]
-    #[Groups(['get_employee', 'post_employee', 'get_department', 'get_catalog_employee'])]
+    #[Groups([
+        'get_employee',
+        'post_employee',
+        'get_department',
+        'get_catalog_employee',
+        'put_employee',
+        'get_employee_role'
+    ])]
     private ?string $username = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['get_employee', 'post_employee', 'login_employee', 'get_department'])]
+    #[Groups(['get_employee', 'post_employee', 'login_employee', 'get_department', 'put_employee'])]
     private ?string $email = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -109,16 +187,18 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    #[Groups(['get_employee'])]
+    #[Groups(['get_employee', 'post_employee', 'put_employee'])]
     private ?\DateTimeInterface $dateOfBirth = null;
 
     #[ORM\Column]
+    #[Groups(['get_employee', 'post_employee', 'put_employee', 'get_employee_role'])]
     private ?bool $active = true;
 
     #[ORM\OneToMany(mappedBy: 'employee', targetEntity: EmployeeRoles::class)]
     private Collection $employeeRoles;
 
     #[ORM\Column]
+    #[Groups(['get_employee'])]
     private ?bool $fullyAuthorized = false;
 
     #[Groups(['get_employee'])]
@@ -166,18 +246,6 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
     public function setCode(string $code): static
     {
         $this->code = $code;
-
-        return $this;
-    }
-
-    public function getName(): string
-    {
-        return $this->name;
-    }
-
-    public function setName(string $name): static
-    {
-        $this->name = $name;
 
         return $this;
     }
@@ -285,6 +353,18 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
     public function getEmployeeRoles(): Collection
     {
         return $this->employeeRoles;
+    }
+
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): static
+    {
+        $this->name = $name;
+
+        return $this;
     }
 
     public function eraseCredentials()

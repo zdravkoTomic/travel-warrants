@@ -9,33 +9,33 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
-use App\Entity\Employee;
 use App\Repository\Codebook\CountryWageRepository;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: CountryWageRepository::class)]
 #[ApiResource(
     operations: [
         new Get(
-            normalizationContext: ['groups' => ['get_country_wages']]
+            normalizationContext: ['groups' => ['get_country_wages']],
+            security            : "is_granted('ROLE_EMPLOYEE')"
         ),
         new GetCollection(
             paginationEnabled           : true,
             paginationClientItemsPerPage: true,
             normalizationContext        : ['groups' => ['get_country_wages']],
-            security                    : "is_granted('ROLE_ADMIN')"
+            security                    : "is_granted('ROLE_ADMIN') or is_granted('ROLE_PROCURATOR')"
         ),
-        new Post(security: "is_granted('ROLE_ADMIN')"),
-        new Put(security: "is_granted('ROLE_ADMIN')")
+        new Post(security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_PROCURATOR')"),
+        new Put(security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_PROCURATOR')")
     ]
 )]
 #[ApiFilter(
     OrderFilter::class,
     properties: [
-        'country.code', 'country.name',  'currency.code', 'currency.name', 'active' => 'ASC', 'ACTIVE'
+        'country.code', 'country.name', 'currency.code', 'currency.name', 'active' => 'ASC', 'ACTIVE'
     ]
 )]
 #[UniqueEntity(
@@ -63,6 +63,8 @@ class CountryWage
 
     #[ORM\Column]
     #[Groups(['get_country_item', 'get_country_wages'])]
+    #[Assert\NotBlank]
+    #[Assert\Positive]
     private ?float $amount = null;
 
     #[ORM\Column]

@@ -2,12 +2,10 @@
 
 namespace App\Controller\Security;
 
-use ApiPlatform\Api\IriConverterInterface;
 use App\Entity\Employee;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
@@ -21,8 +19,8 @@ class LoginController extends AbstractController
      */
     public function __invoke(SerializerInterface $serializer, #[CurrentUser] Employee $user = null)
     {
-        if (!$user) {
-            new JsonResponse(['error' => 'Invalid email or password'], 401);
+        if (!$user || !$user->isActive()) {
+            new JsonResponse(['error' => 'Invalid credentials'], 401);
         }
 
         $cookie = new Cookie('user_auth', bin2hex(random_bytes(10)), time() + 14400, '/', "localhost");
@@ -31,9 +29,7 @@ class LoginController extends AbstractController
             $user,
             null,
             [AbstractNormalizer::ATTRIBUTES =>
-                [
-                'id', 'username', 'name', 'surname', 'roles'
-                ]
+                ['id', 'email', 'username', 'name', 'surname', 'roles', 'fullyAuthorized']
             ]
         );
 

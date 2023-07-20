@@ -9,9 +9,7 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
-use App\Entity\Employee;
 use App\Repository\Codebook\PredefinedExpenseRepository;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -21,10 +19,10 @@ use Symfony\Component\Serializer\Annotation\Groups;
     operations: [
         new Get(),
         new GetCollection(
-            paginationEnabled: true,
+            paginationEnabled           : true,
             paginationClientItemsPerPage: true,
-            normalizationContext: ['groups' => ['get_predefined_expense']],
-            security: "is_granted('ROLE_ADMIN')"
+            normalizationContext        : ['groups' => ['get_predefined_expense']],
+            security                    : "is_granted('ROLE_ADMIN')"
         ),
         new Post(security: "is_granted('ROLE_ADMIN')"),
         new Put(security: "is_granted('ROLE_ADMIN')")

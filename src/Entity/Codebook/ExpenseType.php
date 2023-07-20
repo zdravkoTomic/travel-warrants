@@ -18,18 +18,19 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\Entity(repositoryClass: ExpenseTypeRepository::class)]
 #[ApiResource(
     operations: [
-        new Get(),
+        new Get(security: "is_granted('ROLE_EMPLOYEE')"),
         new GetCollection(
-            uriTemplate         : '/catalog/expense-types',
-            paginationEnabled   : false
+            uriTemplate      : '/catalog/expense-types',
+            paginationEnabled: false,
+            security         : "is_granted('ROLE_EMPLOYEE')"
         ),
         new GetCollection(
-            paginationEnabled: true,
+            paginationEnabled           : true,
             paginationClientItemsPerPage: true,
-            security: "is_granted('ROLE_ADMIN')"
+            security                    : "is_granted('ROLE_ADMIN') or is_granted('ROLE_PROCURATOR')"
         ),
-        new Post(security: "is_granted('ROLE_ADMIN')"),
-        new Put(security: "is_granted('ROLE_ADMIN')")
+        new Post(security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_PROCURATOR')"),
+        new Put(security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_PROCURATOR')")
     ]
 )]
 #[ApiFilter(OrderFilter::class, properties: ['code', 'name', 'active' => 'ASC', 'ACTIVE'])]

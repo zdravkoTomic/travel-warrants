@@ -21,7 +21,7 @@ security:
                 password_path: password
             logout:
                 path: app_logout
-                target: '/'
+                target: app_login
                 clear_site_data:
                     - cache
                     - storage

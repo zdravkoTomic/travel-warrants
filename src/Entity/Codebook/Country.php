@@ -10,7 +10,6 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
-use App\Entity\EmployeeRoles;
 use App\Repository\Codebook\CountryRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -22,18 +21,19 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: CountryRepository::class)]
 #[ApiResource(
     operations: [
-        new Get(),
+        new Get(security: "is_granted('ROLE_EMPLOYEE')"),
         new GetCollection(
-            uriTemplate         : '/catalog/countries',
-            paginationEnabled   : false
+            uriTemplate      : '/catalog/countries',
+            paginationEnabled: false,
+            security         : "is_granted('ROLE_EMPLOYEE')"
         ),
         new GetCollection(
-            paginationEnabled: true,
+            paginationEnabled           : true,
             paginationClientItemsPerPage: true,
-            security: "is_granted('ROLE_ADMIN')"
+            security                    : "is_granted('ROLE_ADMIN') or is_granted('ROLE_PROCURATOR')"
         ),
-        new Post(security: "is_granted('ROLE_ADMIN')"),
-        new Put(security: "is_granted('ROLE_ADMIN')")
+        new Post(security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_PROCURATOR')"),
+        new Put(security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_PROCURATOR')")
     ]
 )]
 #[ApiFilter(OrderFilter::class, properties: ['code', 'name', 'domicile', 'active' => 'ASC', 'ACTIVE'])]
@@ -50,21 +50,40 @@ class Country
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['get_warrant', 'get_user_group_warrants', 'get_user_warrants_by_status', 'get_country_item'])]
+    #[Groups([
+        'get_warrant',
+        'get_user_group_warrants',
+        'get_user_warrants_by_status',
+        'get_country_item',
+        'get_country_wages'
+    ])]
     private ?int $id = null;
 
     #[ORM\Column(length: 20)]
-    #[Groups(['get_warrant', 'get_user_group_warrants', 'get_user_warrants_by_status', 'get_country_item'])]
+    #[Groups([
+        'get_warrant',
+        'get_user_group_warrants',
+        'get_user_warrants_by_status',
+        'get_country_item',
+        'get_country_wages'
+    ])]
     #[Assert\NotBlank]
     private ?string $code = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['get_warrant', 'get_user_group_warrants', 'get_user_warrants_by_status', 'get_country_item'])]
+    #[Groups([
+        'get_warrant',
+        'get_user_group_warrants',
+        'get_user_warrants_by_status',
+        'get_country_item',
+        'get_country_wages'
+    ])]
     #[Assert\NotBlank]
     private ?string $name = null;
 
     #[ORM\Column]
     #[Assert\NotBlank]
+    #[Groups(['get_country_wages'])]
     private ?bool $active = null;
 
     #[ORM\Column]
@@ -111,11 +130,6 @@ class Country
         return $this;
     }
 
-    public function isActive(): ?bool
-    {
-        return $this->active;
-    }
-
     public function setActive(bool $active): static
     {
         $this->active = $active;
@@ -142,14 +156,6 @@ class Country
     }
 
     /**
-     * @return Collection<int, CountryWage>
-     */
-    public function getCountryWages(): Collection
-    {
-        return $this->countryWages;
-    }
-
-    /**
      * @return bool|null
      */
     public function getDefinedWage(): ?bool
@@ -171,5 +177,18 @@ class Country
         }
 
         return $this;
+    }
+
+    /**
+     * @return Collection<int, CountryWage>
+     */
+    public function getCountryWages(): Collection
+    {
+        return $this->countryWages;
+    }
+
+    public function isActive(): ?bool
+    {
+        return $this->active;
     }
 }
