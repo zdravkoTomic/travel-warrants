@@ -82,7 +82,6 @@ class Country
     private ?string $name = null;
 
     #[ORM\Column]
-    #[Assert\NotBlank]
     #[Groups(['get_country_wages'])]
     private ?bool $active = null;
 

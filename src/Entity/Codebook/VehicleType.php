@@ -33,7 +33,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
         new Put(security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_PROCURATOR')")
     ]
 )]
-#[ApiFilter(OrderFilter::class, properties: ['code', 'name', 'active' => 'ASC', 'ACTIVE'])]
+#[ApiFilter(OrderFilter::class, properties: ['id', 'code', 'name', 'active' => 'ASC', 'ACTIVE'])]
 #[UniqueEntity(
     fields   : ['code', 'active'],
     message  : 'This code is already in use on an active record.',
@@ -47,15 +47,15 @@ class VehicleType
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['get_warrant'])]
+    #[Groups(['get_warrant', 'get_user_group_warrants'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 20)]
-    #[Groups(['get_warrant'])]
+    #[Groups(['get_warrant', 'get_user_group_warrants'])]
     private ?string $code = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['get_warrant'])]
+    #[Groups(['get_warrant', 'get_user_group_warrants'])]
     private ?string $name = null;
 
     #[ORM\Column]

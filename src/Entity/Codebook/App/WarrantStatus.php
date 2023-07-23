@@ -15,6 +15,13 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ApiResource(
     operations: [
         new Get(),
+        new Get(
+            uriTemplate         : '/warrant-statuses/code/{code}',
+            uriVariables        : ['code' => 'code'],
+            paginationEnabled   : false,
+            normalizationContext: ['groups' => ['get_warrant_status_by_code']],
+            security            : "is_granted('ROLE_EMPLOYEE')"
+        ),
         new GetCollection(),
         new Post(),
         new Put()
@@ -36,15 +43,15 @@ class WarrantStatus
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['get_user_group_warrants', 'get_warrant', 'get_user_warrants_by_status'])]
+    #[Groups(['get_user_group_warrants', 'get_warrant', 'get_user_warrants_by_status', 'get_warrant_status_by_code'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 30)]
-    #[Groups(['get_user_group_warrants', 'get_warrant', 'get_user_warrants_by_status'])]
+    #[Groups(['get_user_group_warrants', 'get_warrant', 'get_user_warrants_by_status', 'get_warrant_status_by_code'])]
     private ?string $code = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['get_user_group_warrants', 'get_warrant', 'get_user_warrants_by_status'])]
+    #[Groups(['get_user_group_warrants', 'get_warrant', 'get_user_warrants_by_status', 'get_warrant_status_by_code'])]
     private ?string $name = null;
 
     #[ORM\Column]

@@ -37,8 +37,10 @@ class WarrantStatusService
     private WarrantGroupStatusRepository $warrantGroupStatusRepository;
     private WorkflowInterface $warrantStateMachine;
 
-    public function __construct(WarrantGroupStatusRepository $warrantGroupStatusRepository, WorkflowInterface $warrantStateMachine)
-    {
+    public function __construct(
+        WarrantGroupStatusRepository $warrantGroupStatusRepository,
+        WorkflowInterface            $warrantStateMachine
+    ) {
         $this->warrantGroupStatusRepository = $warrantGroupStatusRepository;
         $this->warrantStateMachine          = $warrantStateMachine;
     }

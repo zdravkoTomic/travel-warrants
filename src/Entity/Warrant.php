@@ -23,10 +23,13 @@ use App\Entity\Codebook\Currency;
 use App\Entity\Codebook\Department;
 use App\Entity\Codebook\VehicleType;
 use App\Repository\WarrantRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: WarrantRepository::class)]
 #[ApiResource(
@@ -66,8 +69,14 @@ use Symfony\Component\Serializer\Annotation\Groups;
             normalizationContext        : ['groups' => ['get_user_warrants_by_status']],
             filters                     : ['offer.date_filter']
         ),
-        new Post(denormalizationContext: ['groups' => ['post_warrant']]),
-        new Put(),
+        new Post(
+            denormalizationContext: ['groups' => ['post_warrant']],
+            validationContext     : ['groups' => ['Default', 'post_warrant']]
+        ),
+        new Put(
+            denormalizationContext: ['groups' => ['put_warrant']],
+            validationContext     : ['groups' => ['Default', 'put_warrant']]
+        ),
         new Patch(
             uriTemplate           : '/warrants/{id}/change_status',
             formats               : ['json', 'jsonld'],
@@ -84,23 +93,34 @@ use Symfony\Component\Serializer\Annotation\Groups;
     'destinationCountry.name' => 'ipartial',
     'status.name' => 'ipartial'
 ])]
+#[ApiFilter(
+    OrderFilter::class,
+    properties: [
+        'createdAt',
+        'destination',
+        'status.name',
+        'destinationCountry.name',
+        'departureDate',
+        'active' => 'ASC', 'ACTIVE'
+    ]
+)]
 class Warrant
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     #[ApiProperty(identifier: true)]
-    #[Groups(['post_warrant', 'get_user_group_warrants', 'get_warrant', 'get_user_warrants_by_status'])]
+    #[Groups(['post_warrant', 'put_warrant', 'get_user_group_warrants', 'get_warrant', 'get_user_warrants_by_status'])]
     private ?int $id = null;
 
     #[ORM\Column]
-    #[Groups(['post_warrant', 'get_user_group_warrants', 'get_warrant', 'get_user_warrants_by_status'])]
+    #[Groups(['post_warrant', 'put_warrant', 'get_user_group_warrants', 'get_warrant', 'get_user_warrants_by_status'])]
     #[ApiFilter(SearchFilter::class, strategy: 'exact')]
     private ?string $code = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['post_warrant', 'get_warrant', 'get_user_warrants_by_status', 'get_user_group_warrants'])]
+    #[Groups(['post_warrant', 'put_warrant', 'get_warrant', 'get_user_warrants_by_status', 'get_user_group_warrants'])]
     #[ApiFilter(SearchFilter::class, strategy: 'exact')]
     private Employee $employee;
 
@@ -127,7 +147,8 @@ class Warrant
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['post_warrant', 'get_user_group_warrants', 'get_warrant', 'get_user_warrants_by_status'])]
+    #[Groups(['post_warrant', 'put_warrant', 'get_user_group_warrants', 'get_warrant', 'get_user_warrants_by_status'])]
+    #[Assert\NotBlank(groups: ['post_warrant', 'put_warrant'])]
     #[ApiFilter(SearchFilter::class, strategy: 'exact')]
     private ?Country $destinationCountry = null;
 
@@ -141,51 +162,63 @@ class Warrant
     private ?Currency $wageCurrency = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['post_warrant', 'get_warrant'])]
+    #[Groups(['post_warrant', 'put_warrant', 'get_warrant', 'get_user_group_warrants'])]
+    #[Assert\NotBlank(groups: ['post_warrant', 'put_warrant'])]
     private ?string $departurePoint = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['post_warrant', 'get_user_group_warrants', 'get_warrant'])]
+    #[Groups(['post_warrant', 'put_warrant', 'get_user_group_warrants', 'get_warrant'])]
+    #[Assert\NotBlank(groups: ['post_warrant', 'put_warrant'])]
     #[ApiFilter(SearchFilter::class, strategy: 'ipartial')]
     private ?string $destination = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    #[Groups(['post_warrant', 'get_warrant'])]
+    #[Assert\GreaterThanOrEqual('today', message: 'Not allowed dates in past', groups: ['post_warrant', 'put_warrant'])]
+    #[Assert\NotBlank(groups: ['post_warrant', 'put_warrant'])]
+    #[Groups(['post_warrant', 'put_warrant', 'get_warrant', 'get_user_group_warrants'])]
     private ?\DateTimeInterface $departureDate = null;
 
     #[ORM\Column]
-    #[Groups(['post_warrant', 'get_warrant'])]
+    #[Groups(['post_warrant', 'put_warrant', 'get_warrant'])]
+    #[Assert\NotBlank(groups: ['post_warrant', 'put_warrant'])]
     private ?int $expectedTravelDuration = null;
 
     #[ORM\Column(length: 1000)]
-    #[Groups(['post_warrant', 'get_user_group_warrants', 'get_warrant'])]
+    #[Groups(['post_warrant', 'put_warrant', 'get_user_group_warrants', 'get_warrant'])]
+    #[Assert\NotBlank(groups: ['post_warrant', 'put_warrant'])]
     private ?string $travelPurposeDescription = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['post_warrant', 'get_warrant'])]
+    #[Groups(['post_warrant', 'put_warrant', 'get_warrant', 'get_user_group_warrants'])]
+    #[Assert\NotBlank(groups: ['post_warrant', 'put_warrant'])]
     private ?VehicleType $vehicleType = null;
 
     #[ORM\Column(length: 1000)]
-    #[Groups(['post_warrant', 'get_warrant'])]
+    #[Groups(['post_warrant', 'put_warrant', 'get_warrant'])]
     private ?string $vehicleDescription = null;
 
     #[ORM\Column]
-    #[Groups(['post_warrant', 'get_warrant', 'get_user_warrants_by_status'])]
+    #[Groups(['get_warrant', 'get_user_warrants_by_status'])]
     private ?bool $advancesRequired = null;
 
     #[ORM\Column]
-    #[Groups(['post_warrant', 'get_warrant', 'get_user_warrants_by_status'])]
+    #[Groups(['post_warrant', 'put_warrant', 'get_warrant', 'get_user_warrants_by_status'])]
     private ?float $advancesAmount = null;
 
     #[ORM\Column]
     #[Gedmo\Timestampable(on: 'create')]
-    #[Groups(['get_user_group_warrants', 'get_user_warrants_by_status'])]
+    #[Groups(['get_user_group_warrants', 'get_user_warrants_by_status', 'get_warrant'])]
     #[ApiFilter(OrderFilter::class)]
     private ?\DateTimeImmutable $createdAt = null;
 
-    #[ORM\ManyToOne]
-    private ?Employee $approvedBy = null;
+    #[ORM\OneToMany(mappedBy: 'warrant', targetEntity: WarrantStatusFlow::class, cascade: ['persist'])]
+    private Collection $warrantStatusFlows;
+
+    public function __construct()
+    {
+        $this->warrantStatusFlows = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -384,18 +417,6 @@ class Warrant
         return $this;
     }
 
-    public function getApprovedBy(): ?Employee
-    {
-        return $this->approvedBy;
-    }
-
-    public function setApprovedBy(?Employee $approvedBy): static
-    {
-        $this->approvedBy = $approvedBy;
-
-        return $this;
-    }
-
     /**
      * @return string|null
      */
@@ -447,5 +468,34 @@ class Warrant
     public function setAdvancesAmount(?float $advancesAmount): void
     {
         $this->advancesAmount = $advancesAmount;
+    }
+
+    /**
+     * @return Collection<int, WarrantStatusFlow>
+     */
+    public function getWarrantStatusFlows(): Collection
+    {
+        return $this->warrantStatusFlows;
+    }
+
+    public function addWarrantStatusFlow(WarrantStatusFlow $warrantStatusFlow): static
+    {
+        if (!$this->warrantStatusFlows->contains($warrantStatusFlow)) {
+            $this->warrantStatusFlows->add($warrantStatusFlow);
+            $warrantStatusFlow->setWarrant($this);
+        }
+
+        return $this;
+    }
+
+    public function removeWarrantStatusFlow(WarrantStatusFlow $warrantStatusFlow): static
+    {
+        if ($this->warrantStatusFlows->removeElement($warrantStatusFlow)) {
+            if ($warrantStatusFlow->getWarrant() === $this) {
+                $warrantStatusFlow->setWarrant(null);
+            }
+        }
+
+        return $this;
     }
 }

@@ -30,8 +30,7 @@ class WarrantInitialDataService
         CountryWageRepository        $countryWageRepository,
         TravelTypeRepository         $travelTypeRepository,
         WarrantRepository            $warrantRepository
-    )
-    {
+    ) {
         $this->warrantStatusRepository      = $warrantStatusRepository;
         $this->warrantGroupStatusRepository = $warrantGroupStatusRepository;
         $this->countryWageRepository        = $countryWageRepository;
@@ -74,11 +73,14 @@ class WarrantInitialDataService
             throw new RecordNotFoundException(get_class($warrant->getEmployee()));
         }
 
+        $advanceRequired = (bool)$warrant->getAdvancesAmount();
+
         $warrant->setStatus($initialWarrantStatus)
             ->setGroupStatus($initialWarrantGroupStatus)
             ->setWageAmount($countryWage->getAmount())
             ->setWageCurrency($countryWage->getCurrency())
             ->setTravelType($travelType)
+            ->setAdvancesRequired($advanceRequired)
             ->setDepartment($warrant->getEmployee()->getDepartment())
             ->setCode($this->generateWarrantCode());
     }
@@ -87,7 +89,8 @@ class WarrantInitialDataService
     {
         return sprintf(
             '%s%d',
-            self::WARRANT_CODE_PREFIX, $this->warrantRepository->getNewWarrantOrdinalNumber()
+            self::WARRANT_CODE_PREFIX,
+            $this->warrantRepository->getNewWarrantOrdinalNumber()
         );
     }
 }

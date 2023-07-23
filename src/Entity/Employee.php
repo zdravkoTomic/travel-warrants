@@ -29,7 +29,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
     operations: [
         new Get(
             normalizationContext: ['groups' => ['get_employee']],
-            security            : "is_granted('ROLE_EMPLOYEE')"
+            security            : "is_granted('ROLE_EMPLOYEE')",
+            name                : "get_employee"
         ),
         new GetCollection(
             uriTemplate         : '/catalog/employees',

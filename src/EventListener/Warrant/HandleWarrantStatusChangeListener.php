@@ -9,7 +9,6 @@ use Doctrine\Bundle\DoctrineBundle\Attribute\AsEntityListener;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Doctrine\ORM\Events;
 use Doctrine\ORM\NonUniqueResultException;
-use Doctrine\Persistence\Event\LifecycleEventArgs;
 
 #[AsEntityListener(event: Events::preUpdate, entity: Warrant::class)]
 class HandleWarrantStatusChangeListener
