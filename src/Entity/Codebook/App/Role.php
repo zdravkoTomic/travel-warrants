@@ -26,6 +26,10 @@ use Symfony\Component\Serializer\Annotation\Groups;
 ])]
 class Role
 {
+    public const ROLE_APPROVER   = 'ROLE_APPROVER';
+    public const ROLE_PROCURATOR = 'ROLE_PROCURATOR';
+    public const ROLE_ADMIN      = 'ROLE_ADMIN';
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]

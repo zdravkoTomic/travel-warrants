@@ -7,6 +7,7 @@ use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Link;
@@ -53,7 +54,8 @@ use Symfony\Component\Validator\Constraints as Assert;
             paginationEnabled           : true,
             paginationClientItemsPerPage: true,
             description                 : 'Retrieves user warrants in provided group status',
-            normalizationContext        : ['groups' => ['get_user_group_warrants']]
+            normalizationContext        : ['groups' => ['get_user_group_warrants']],
+            security                    : "is_granted('ROLE_EMPLOYEE')"
         ),
         new GetCollection(
             uriTemplate                 : '/warrant-statuses/{statusId}/warrants',
@@ -67,22 +69,42 @@ use Symfony\Component\Validator\Constraints as Assert;
             paginationClientItemsPerPage: true,
             description                 : 'Retrieves user warrants by warrant status',
             normalizationContext        : ['groups' => ['get_user_warrants_by_status']],
-            filters                     : ['offer.date_filter']
+            security                    : "is_granted('ROLE_APPROVER')",
+            name                        : 'get_approving_warrants'
+        ),
+        new GetCollection(
+            uriTemplate                 : '/warrant-statuses/{statusId}/crediting/warrants',
+            uriVariables                : [
+                                              'statusId' => new Link(
+                                                  toProperty: 'status',
+                                                  fromClass : WarrantStatus::class
+                                              ),
+                                          ],
+            paginationEnabled           : true,
+            paginationClientItemsPerPage: true,
+            description                 : 'Retrieves user warrants by warrant status',
+            normalizationContext        : ['groups' => ['get_user_warrants_by_status']],
+            security                    : "is_granted('ROLE_PROCURATOR')",
+            name                        : 'get_crediting_warrants'
         ),
         new Post(
             denormalizationContext: ['groups' => ['post_warrant']],
+            security              : "is_granted('ROLE_EMPLOYEE')",
             validationContext     : ['groups' => ['Default', 'post_warrant']]
         ),
         new Put(
             denormalizationContext: ['groups' => ['put_warrant']],
+            security              : "is_granted('ROLE_EMPLOYEE')",
             validationContext     : ['groups' => ['Default', 'put_warrant']]
         ),
         new Patch(
             uriTemplate           : '/warrants/{id}/change_status',
             formats               : ['json', 'jsonld'],
             description           : 'Change warrant status',
-            denormalizationContext: ['groups' => ['patch_warrant_status']]
-        )
+            denormalizationContext: ['groups' => ['patch_warrant_status']],
+            security              : "is_granted('ROLE_EMPLOYEE')"
+        ),
+        new Delete(security: "is_granted('ROLE_EMPLOYEE')")
     ]
 )]
 #[ApiFilter(PropertyFilter::class)]
@@ -162,12 +184,12 @@ class Warrant
     private ?Currency $wageCurrency = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['post_warrant', 'put_warrant', 'get_warrant', 'get_user_group_warrants'])]
+    #[Groups(['post_warrant', 'put_warrant', 'get_warrant', 'get_user_group_warrants', 'get_user_warrants_by_status'])]
     #[Assert\NotBlank(groups: ['post_warrant', 'put_warrant'])]
     private ?string $departurePoint = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['post_warrant', 'put_warrant', 'get_user_group_warrants', 'get_warrant'])]
+    #[Groups(['post_warrant', 'put_warrant', 'get_user_group_warrants', 'get_warrant', 'get_user_warrants_by_status'])]
     #[Assert\NotBlank(groups: ['post_warrant', 'put_warrant'])]
     #[ApiFilter(SearchFilter::class, strategy: 'ipartial')]
     private ?string $destination = null;
@@ -175,7 +197,7 @@ class Warrant
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     #[Assert\GreaterThanOrEqual('today', message: 'Not allowed dates in past', groups: ['post_warrant', 'put_warrant'])]
     #[Assert\NotBlank(groups: ['post_warrant', 'put_warrant'])]
-    #[Groups(['post_warrant', 'put_warrant', 'get_warrant', 'get_user_group_warrants'])]
+    #[Groups(['post_warrant', 'put_warrant', 'get_warrant', 'get_user_group_warrants', 'get_user_warrants_by_status'])]
     private ?\DateTimeInterface $departureDate = null;
 
     #[ORM\Column]
@@ -212,7 +234,8 @@ class Warrant
     #[ApiFilter(OrderFilter::class)]
     private ?\DateTimeImmutable $createdAt = null;
 
-    #[ORM\OneToMany(mappedBy: 'warrant', targetEntity: WarrantStatusFlow::class, cascade: ['persist'])]
+    #[ORM\OneToMany(mappedBy: 'warrant', targetEntity: WarrantStatusFlow::class, cascade: ['persist', 'remove'])]
+    #[Groups(['get_user_group_warrants'])]
     private Collection $warrantStatusFlows;
 
     public function __construct()

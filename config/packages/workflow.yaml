@@ -45,6 +45,7 @@ framework:
                     from:
                         - !php/const App\Entity\Codebook\App\WarrantStatus::APPROVING
                         - !php/const App\Entity\Codebook\App\WarrantStatus::ADVANCE_IN_PAYMENT
+                        - !php/const App\Entity\Codebook\App\WarrantStatus::APPROVING_CALCULATION
                     to: !php/const App\Entity\Codebook\App\WarrantStatus::CALCULATION_EDIT
 
                 !php/const App\Workflow\WarrantStatusTransition::TO_APPROVING_CALCULATION:
@@ -79,4 +80,4 @@ framework:
                         - !php/const App\Entity\Codebook\App\WarrantStatus::APPROVING_CALCULATION
                         - !php/const App\Entity\Codebook\App\WarrantStatus::APPROVING_CALCULATION_PAYMENT
                         - !php/const App\Entity\Codebook\App\WarrantStatus::CALCULATION_IN_PAYMENT
-                    to: !php/const App\Entity\Codebook\App\WarrantStatus::CLOSED
+                    to: !php/const App\Entity\Codebook\App\WarrantStatus::CANCELLED

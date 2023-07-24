@@ -44,7 +44,7 @@ class EmployeeRoles
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['get_employee_role'])]
+    #[Groups(['get_employee_role', 'get_employee'])]
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'employeeRoles')]
@@ -54,12 +54,12 @@ class EmployeeRoles
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['get_employee_role'])]
+    #[Groups(['get_employee_role', 'get_employee'])]
     private ?Role $role = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['get_employee_role'])]
+    #[Groups(['get_employee_role', 'get_employee'])]
     private ?Department $department = null;
 
     public function getId(): ?int

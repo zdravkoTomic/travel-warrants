@@ -56,7 +56,7 @@ class WarrantRepository extends ServiceEntityRepository
     public function getNewWarrantOrdinalNumber()
     {
         $result = $this->createQueryBuilder('w')
-            ->select('count(w.id)')
+            ->select('max(w.id)')
             ->getQuery()
             ->getSingleScalarResult();
 

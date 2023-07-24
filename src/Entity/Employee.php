@@ -196,6 +196,7 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
     private ?bool $active = true;
 
     #[ORM\OneToMany(mappedBy: 'employee', targetEntity: EmployeeRoles::class)]
+    #[Groups(['get_employee'])]
     private Collection $employeeRoles;
 
     #[ORM\Column]

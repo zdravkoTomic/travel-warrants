@@ -28,3 +28,13 @@ services:
     App\EventListener\User\DeleteUserSessionListener:
         tags:
             - { name: kernel.event_listener, event: security.logout }
+
+    'App\Extension\Warrant\ApprovingWarrantExtension':
+        tags:
+            - { name: api_platform.doctrine.orm.query_extension.collection }
+            - { name: api_platform.doctrine.orm.query_extension.item }
+
+    'App\Extension\Warrant\CreditingWarrantExtension':
+        tags:
+            - { name: api_platform.doctrine.orm.query_extension.collection }
+            - { name: api_platform.doctrine.orm.query_extension.item }
