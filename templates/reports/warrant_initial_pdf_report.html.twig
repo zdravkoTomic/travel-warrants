@@ -2,20 +2,81 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title>Resume</title>
+    <title>Putni nalog</title>
+    <style>
+        .pdf_title {
+            text-align: center;
+        }
+
+        .pdf_paragraph_text {
+            text-align: justify;
+        }
+
+        #pdf_signature_right, #pdf_signature_left {
+            position: fixed;
+            bottom: 0;
+            padding: 20px;
+            font-size: 1.5em;
+            margin-bottom: 150px;
+        }
+
+        #pdf_signature_right {
+            right: 0;
+            text-align: right;
+            margin-right: 90px;
+        }
+
+        #pdf_signature_left {
+            left: 0;
+            text-align: left;
+            margin-left: 90px;
+        }
+
+        .signature_text {
+            text-align: center;
+            width: 100%;
+            font-size: 0.6em;
+        }
+    </style>
 </head>
 <body>
 <div style="margin: 0 auto;display: block;width: 500px;">
-    <table width="100%" border="1">
-        <tr>
-            <td>Name:</td>
-            <td>{{employeeName}}</td>
-        </tr>
-        <tr>
-            <td>surname:</td>
-            <td>{{employeeSurname}}</td>
-        </tr>
-    </table>
+    <div style="display: block; width: 100px;">
+        <p>{{ barcode | raw }}
+            {{ code }}
+        </p>
+    </div>
+    <div>
+        <p>
+            Organizacijski dio: {{ warrantDepartment }}
+        </p>
+        <p>
+            Datum izdavanja: {{ createdAt }}
+        </p>
+    </div>
+    <div>
+        <br>
+        <h2 class="pdf_title">Nalog za službeno putovanje</h2>
+        <p class="pdf_paragraph_text">
+            {{ employeeSurname }} {{ employeeName }} na radnom mjestu {{ employeeWorkPosition }} otputovati će na
+            službeno putovanje {{ departureDate }} iz mjesta {{ departurePoint }}
+            u mjesto {{ destination }}, {{ destinationCountry }}, u svrhu: {{ travelPurposeDescription }}.
+        </p>
+        <p>
+            Očekivano trajanje putovanja: {{ expectedTravelDuration }} dana <br>
+            Iznos dnevnice putovanja: {{ wageAmount | number_format(2, '.', ',') }} {{ wageCurrency }} <br>
+            Odobrava se akontacija u iznosu od: {{ getAdvancesAmount | number_format(2, '.', ',') }} EUR <br>
+            Odobrava se upotreba prijevoznog sredstva: {{ vehicleType }} {{ vehicleTypeDescription ? '(' ~ vehicleTypeDescription ~ ')' : '' }}
+        </p>
+    </div>
+    <div id="pdf_signature_right">
+        ________________<br>
+        <div class="signature_text">Odobravatelj</div>
+    </div>
+    <div id="pdf_signature_left">
+        ________________<br>
+        <div class="signature_text">Nalogodavatelj</div>
+    </div>
 </div>
 </body>
 </html>

@@ -18,8 +18,7 @@ class DownloadWarrantPdfReportAction extends AbstractController
 
     public function __invoke(Warrant $warrant): Response
     {
-        // Generate the PDF file based on entity data
-        $data = $this->pdfReportService->getInitialReporData($warrant);
+        $data = $this->pdfReportService->getInitialReportData($warrant);
 
         $html = $this->renderView('reports/warrant_initial_pdf_report.html.twig', $data);
 

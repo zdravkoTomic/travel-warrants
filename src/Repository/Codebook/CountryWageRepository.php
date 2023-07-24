@@ -60,4 +60,24 @@ class CountryWageRepository extends ServiceEntityRepository
 
         return $result;
     }
+
+    /**
+     * @throws RecordNotFoundException
+     * @throws NonUniqueResultException
+     */
+    public function getDomicileWageCurrency(): CountryWage
+    {
+        $result = $this->createQueryBuilder('cw')
+            ->innerJoin('cw.country', 'c')
+            ->where('c.domicile = 1')
+            ->andWhere('cw.active = 1')
+            ->getQuery()
+            ->getOneOrNullResult();
+
+        if (!$result) {
+            throw new RecordNotFoundException($this->getClassName());
+        }
+
+        return $result;
+    }
 }

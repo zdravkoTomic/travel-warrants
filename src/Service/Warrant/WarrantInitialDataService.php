@@ -74,6 +74,7 @@ class WarrantInitialDataService
         }
 
         $advanceRequired = (bool)$warrant->getAdvancesAmount();
+        $domicileCurrency = $this->countryWageRepository->getDomicileWageCurrency()->getCurrency();
 
         $warrant->setStatus($initialWarrantStatus)
             ->setGroupStatus($initialWarrantGroupStatus)
@@ -81,6 +82,7 @@ class WarrantInitialDataService
             ->setWageCurrency($countryWage->getCurrency())
             ->setTravelType($travelType)
             ->setAdvancesRequired($advanceRequired)
+            ->setAdvancesCurrency($domicileCurrency)
             ->setDepartment($warrant->getEmployee()->getDepartment())
             ->setCode($this->generateWarrantCode());
     }

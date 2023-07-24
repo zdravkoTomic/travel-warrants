@@ -69,7 +69,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             paginationClientItemsPerPage: true,
             description                 : 'Retrieves user warrants by warrant status',
             normalizationContext        : ['groups' => ['get_user_warrants_by_status']],
-            security                    : "is_granted('ROLE_APPROVER')",
+            security                    : "is_granted('ROLE_APPROVER') or is_granted('ROLE_ADMIN')",
             name                        : 'get_approving_warrants'
         ),
         new GetCollection(
@@ -84,7 +84,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             paginationClientItemsPerPage: true,
             description                 : 'Retrieves user warrants by warrant status',
             normalizationContext        : ['groups' => ['get_user_warrants_by_status']],
-            security                    : "is_granted('ROLE_PROCURATOR')",
+            security                    : "is_granted('ROLE_PROCURATOR') or is_granted('ROLE_ADMIN')",
             name                        : 'get_crediting_warrants'
         ),
         new Post(
@@ -227,6 +227,11 @@ class Warrant
     #[ORM\Column]
     #[Groups(['post_warrant', 'put_warrant', 'get_warrant', 'get_user_warrants_by_status'])]
     private ?float $advancesAmount = null;
+
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false)]
+    #[Groups('get_warrant')]
+    private ?Currency $advancesCurrency = null;
 
     #[ORM\Column]
     #[Gedmo\Timestampable(on: 'create')]
@@ -518,6 +523,24 @@ class Warrant
                 $warrantStatusFlow->setWarrant(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Currency|null
+     */
+    public function getAdvancesCurrency(): ?Currency
+    {
+        return $this->advancesCurrency;
+    }
+
+    /**
+     * @param Currency|null $advancesCurrency
+     */
+    public function setAdvancesCurrency(?Currency $advancesCurrency): static
+    {
+        $this->advancesCurrency = $advancesCurrency;
 
         return $this;
     }
