@@ -3,6 +3,11 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
 use App\Entity\Codebook\VehicleType;
 use App\Repository\WarrantCalculationRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -12,64 +17,84 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: WarrantCalculationRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    operations: [
+        new Get(),
+        new GetCollection(
+            normalizationContext: ['groups' => ['get_warrant_calculation']],
+            security            : "is_granted('ROLE_EMPLOYEE')"
+        ),
+        new Post(
+            normalizationContext: ['groups' => ['post_warrant_calculation']],
+            security            : "is_granted('ROLE_EMPLOYEE')"
+        ),
+        new Put(security: "is_granted('ROLE_EMPLOYEE')"),
+        new Delete(security: "is_granted('ROLE_EMPLOYEE')")
+    ]
+)]
 class WarrantCalculation
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['post_warrant_calculation'])]
     private ?int $id = null;
 
     #[ORM\OneToOne(inversedBy: 'warrantCalculation', cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['post_warrant_calculation'])]
     private ?Warrant $warrant = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Groups(['post_warrant_calculation'])]
     private ?\DateTimeInterface $departureDate = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Groups(['post_warrant_calculation'])]
     private ?\DateTimeInterface $returningDate = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[Groups(['post_warrant_calculation'])]
     private ?\DateTimeInterface $domicileCountryLeavingDate = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[Groups(['post_warrant_calculation'])]
     private ?\DateTimeInterface $domicileCountryReturningDate = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['post_warrant_calculation'])]
     private ?VehicleType $travelVehicleType = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['post_warrant_calculation'])]
     private ?string $travelVehicleDescription = null;
 
     #[ORM\Column]
     private ?int $travelDuration = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['post_warrant_calculation'])]
     private ?string $travelVehicleRegistration = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['post_warrant_calculation'])]
     private ?string $travelVehicleBrand = null;
 
     #[ORM\Column(length: 1000)]
+    #[Groups(['post_warrant_calculation'])]
     private ?string $travelReport = null;
 
     #[ORM\Column]
+    #[Groups(['post_warrant_calculation'])]
     private ?int $odometerStart = null;
 
-    /**
-     * @return int|null
-     */
-    public function getOdometerStart(): ?int
-    {
-        return $this->odometerStart;
-    }
-
     #[ORM\Column]
+    #[Groups(['post_warrant_calculation'])]
     private ?int $odometerEnd = null;
 
     #[ORM\OneToMany(mappedBy: 'warrantCalculation', targetEntity: WarrantTravelItinerary::class, orphanRemoval: true)]
+    #[Groups(['post_warrant_calculation'])]
     private Collection $warrantTravelItineraries;
 
     #[ORM\OneToMany(mappedBy: 'warrantCalculation', targetEntity: WarrantCalculationExpense::class, orphanRemoval: true)]
@@ -80,13 +105,14 @@ class WarrantCalculation
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['post_warrant_calculation'])]
     private ?WageType $wageType = null;
 
     public function __construct()
     {
-        $this->warrantTravelItineraries = new ArrayCollection();
+        $this->warrantTravelItineraries   = new ArrayCollection();
         $this->warrantCalculationExpenses = new ArrayCollection();
-        $this->travelCalculationWages = new ArrayCollection();
+        $this->travelCalculationWages     = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -224,6 +250,14 @@ class WarrantCalculation
         $this->travelReport = $travelReport;
 
         return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getOdometerStart(): ?int
+    {
+        return $this->odometerStart;
     }
 
     /**
