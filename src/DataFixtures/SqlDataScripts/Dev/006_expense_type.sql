@@ -3,7 +3,9 @@ VALUES('PARKING', 'Parking', 1);
 INSERT INTO expense_type (code,  name, active)
 VALUES('TAXI', 'Taxi', 1);
 INSERT INTO expense_type (code,  name, active)
-VALUES('WAGE', 'Dnevnice', 1);
+VALUES('DOMICILE_WAGE', 'DnevnicA', 1);
+INSERT INTO expense_type (code,  name, active)
+VALUES('INTERNATIONAL_WAGE', 'Inozemna dnevnica', 1);
 INSERT INTO expense_type (code,  name, active)
 VALUES('RENT_A_CAR', 'Korištenje rent-a-car usluge', 1);
 INSERT INTO expense_type (code,  name, active)
@@ -27,6 +29,10 @@ VALUES('TOLL', 'Cestarina', 1);
 INSERT INTO expense_type (code,  name, active)
 VALUES('PERSONAL_VEHICLE', 'Vlastito vozilo u službene svrhe', 1);
 INSERT INTO expense_type (code,  name, active)
+VALUES('OFFICAL_PERSONAL_VEHICLE', 'Službeno vozilo s pravom korištenja 24h', 1);
+INSERT INTO expense_type (code,  name, active)
 VALUES('ACCOMMODATION TAX', 'Boravišna pristojba', 1);
 INSERT INTO expense_type (code,  name, active)
 VALUES('VISA', 'Viza', 1);
+INSERT INTO expense_type (code,  name, active)
+VALUES('OTHER', 'Ostalo', 1);

@@ -61,8 +61,8 @@ class SetUserTemporaryPasswordListener
                     ->text(
                         sprintf(
                             'An account has been created in your name for travel warrants application by an administrator. 
-                    Your temporary password is: %s, you will be prompted to change password on your first login.
-                    You can access application via this link: %s',
+Your temporary password is: %s, you will be prompted to change password on your first login.
+You can access application via this link: %s',
                             $tmpPlainPassword,
                             $this->request->getCurrentRequest()->server->get('HTTP_REFERER')
                         )

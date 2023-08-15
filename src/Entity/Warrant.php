@@ -63,6 +63,7 @@ use Symfony\Component\Validator\Constraints as Assert;
                                               'statusId' => new Link(
                                                   toProperty: 'status',
                                                   fromClass : WarrantStatus::class
+
                                               ),
                                           ],
             paginationEnabled           : true,
@@ -242,6 +243,9 @@ class Warrant
     #[ORM\OneToMany(mappedBy: 'warrant', targetEntity: WarrantStatusFlow::class, cascade: ['persist', 'remove'])]
     #[Groups(['get_user_group_warrants'])]
     private Collection $warrantStatusFlows;
+
+    #[ORM\OneToOne(mappedBy: 'warrant', cascade: ['persist', 'remove'])]
+    private ?WarrantCalculation $warrantCalculation = null;
 
     public function __construct()
     {
@@ -541,6 +545,23 @@ class Warrant
     public function setAdvancesCurrency(?Currency $advancesCurrency): static
     {
         $this->advancesCurrency = $advancesCurrency;
+
+        return $this;
+    }
+
+    public function getWarrantCalculation(): ?WarrantCalculation
+    {
+        return $this->warrantCalculation;
+    }
+
+    public function setWarrantCalculation(WarrantCalculation $warrantCalculation): static
+    {
+        // set the owning side of the relation if necessary
+        if ($warrantCalculation->getWarrant() !== $this) {
+            $warrantCalculation->setWarrant($this);
+        }
+
+        $this->warrantCalculation = $warrantCalculation;
 
         return $this;
     }
