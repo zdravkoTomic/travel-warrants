@@ -3,7 +3,9 @@
 namespace App\Repository\Codebook;
 
 use App\Entity\Codebook\Currency;
+use App\Exception\RecordNotFoundException;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**

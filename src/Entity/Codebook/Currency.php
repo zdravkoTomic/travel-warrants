@@ -5,6 +5,7 @@ namespace App\Entity\Codebook;
 use ApiPlatform\Doctrine\Orm\Filter\BooleanFilter;
 use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
@@ -48,10 +49,11 @@ class Currency
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[ApiProperty(identifier: true)]
     #[Groups(['get_warrant', 'get_country_item', 'get_country_wages', 'get_predefined_expense'])]
     private ?int $id = null;
 
-    #[ORM\Column(length: 20)]
+    #[ORM\Column(length: 50)]
     #[Groups(['get_warrant', 'get_country_item', 'get_country_wages', 'get_predefined_expense'])]
     #[Assert\NotBlank]
     private ?string $code = null;

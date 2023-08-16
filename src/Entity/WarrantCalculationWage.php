@@ -2,26 +2,28 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use App\Entity\Codebook\Country;
 use App\Entity\Codebook\Currency;
-use App\Repository\TravelCalculationWageRepository;
+use App\Repository\WarrantCalculationWageRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: TravelCalculationWageRepository::class)]
+#[ORM\Entity(repositoryClass: WarrantCalculationWageRepository::class)]
 #[ApiResource]
-class TravelCalculationWage
+class WarrantCalculationWage
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[ApiProperty(identifier: true)]
     private ?int $id = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
     private ?Country $country = null;
 
-    #[ORM\ManyToOne(inversedBy: 'travelCalculationWages')]
+    #[ORM\ManyToOne(inversedBy: 'warrantCalculationWages')]
     #[ORM\JoinColumn(nullable: false)]
     private ?WarrantCalculation $warrantCalculation = null;
 
@@ -31,6 +33,9 @@ class TravelCalculationWage
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
     private ?Currency $currency = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?float $numberOfWages = null;
 
     public function getId(): ?int
     {
@@ -81,6 +86,18 @@ class TravelCalculationWage
     public function setCurrency(?Currency $currency): static
     {
         $this->currency = $currency;
+
+        return $this;
+    }
+
+    public function getNumberOfWages(): ?float
+    {
+        return $this->numberOfWages;
+    }
+
+    public function setNumberOfWages(?float $numberOfWages): static
+    {
+        $this->numberOfWages = $numberOfWages;
 
         return $this;
     }

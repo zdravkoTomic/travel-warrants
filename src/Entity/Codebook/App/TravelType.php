@@ -2,6 +2,7 @@
 
 namespace App\Entity\Codebook\App;
 
+use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
@@ -28,10 +29,11 @@ class TravelType
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[ApiProperty(identifier: true)]
     #[Groups(['get_user_group_warrants', 'get_warrant', 'get_user_warrants_by_status'])]
     private ?int $id = null;
 
-    #[ORM\Column(length: 20)]
+    #[ORM\Column(length: 50)]
     #[Groups(['get_user_group_warrants', 'get_warrant', 'get_user_warrants_by_status'])]
     private ?string $code = null;
 

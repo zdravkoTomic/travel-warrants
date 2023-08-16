@@ -65,12 +65,34 @@ class CountryWageRepository extends ServiceEntityRepository
      * @throws RecordNotFoundException
      * @throws NonUniqueResultException
      */
-    public function getDomicileWageCurrency(): CountryWage
+    public function getDomesticCountryWage(): CountryWage
     {
         $result = $this->createQueryBuilder('cw')
             ->innerJoin('cw.country', 'c')
             ->where('c.domicile = 1')
             ->andWhere('cw.active = 1')
+            ->getQuery()
+            ->getOneOrNullResult();
+
+        if (!$result) {
+            throw new RecordNotFoundException($this->getClassName());
+        }
+
+        return $result;
+    }
+
+    /**
+     * @throws RecordNotFoundException
+     * @throws NonUniqueResultException
+     */
+    public function getCountryWageByCountryId(int $countryId): CountryWage
+    {
+        $result = $this->createQueryBuilder('cw')
+            ->innerJoin('cw.country', 'c')
+            ->where('c.id = :countryId')
+            ->andWhere('cw.active = 1')
+            ->andWhere('c.active = 1')
+            ->setParameter('countryId', $countryId)
             ->getQuery()
             ->getOneOrNullResult();
 

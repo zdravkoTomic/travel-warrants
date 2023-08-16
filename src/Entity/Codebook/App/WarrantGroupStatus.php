@@ -2,6 +2,7 @@
 
 namespace App\Entity\Codebook\App;
 
+use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
@@ -36,10 +37,11 @@ class WarrantGroupStatus
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[ApiProperty(identifier: true)]
     #[Groups(['get_warrant_group_status_by_code'])]
     private ?int $id = null;
 
-    #[ORM\Column(length: 20)]
+    #[ORM\Column(length: 50)]
     #[Groups(['get_warrant_group_status_by_code'])]
     private ?string $code = null;
 

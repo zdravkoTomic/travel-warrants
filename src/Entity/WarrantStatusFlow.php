@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use App\Entity\Codebook\App\WarrantStatus;
 use App\Repository\WarrantStatusFlowRepository;
@@ -15,6 +16,7 @@ class WarrantStatusFlow
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[ApiProperty(identifier: true)]
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'warrantStatusFlows')]

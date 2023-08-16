@@ -74,7 +74,7 @@ class WarrantInitialDataService
         }
 
         $advanceRequired = (bool)$warrant->getAdvancesAmount();
-        $domicileCurrency = $this->countryWageRepository->getDomicileWageCurrency()->getCurrency();
+        $domicileCurrency = $this->countryWageRepository->getDomesticCountryWage()->getCurrency();
 
         $warrant->setStatus($initialWarrantStatus)
             ->setGroupStatus($initialWarrantGroupStatus)

@@ -3,7 +3,9 @@
 namespace App\Repository\Codebook;
 
 use App\Entity\Codebook\PredefinedExpense;
+use App\Exception\RecordNotFoundException;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -37,5 +39,26 @@ class PredefinedExpenseRepository extends ServiceEntityRepository
         if ($flush) {
             $this->getEntityManager()->flush();
         }
+    }
+
+    /**
+     * @throws RecordNotFoundException
+     * @throws NonUniqueResultException
+     */
+    public function getActiveByExpenseCode(string $expenseCode): PredefinedExpense
+    {
+        $result = $this->createQueryBuilder('pe')
+            ->innerJoin('pe.expense', 'e')
+            ->where('e.code = :expenseCode')
+            ->andWhere('pe.active = 1')
+            ->setParameter('expenseCode', $expenseCode)
+            ->getQuery()
+            ->getOneOrNullResult();
+
+        if (!$result) {
+            throw new RecordNotFoundException($this->getClassName());
+        }
+
+        return $result;
     }
 }

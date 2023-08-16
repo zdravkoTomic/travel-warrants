@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
@@ -25,10 +26,13 @@ use Symfony\Component\Serializer\Annotation\Groups;
             security            : "is_granted('ROLE_EMPLOYEE')"
         ),
         new Post(
-            normalizationContext: ['groups' => ['post_warrant_calculation']],
-            security            : "is_granted('ROLE_EMPLOYEE')"
+            denormalizationContext: ['groups' => ['post_warrant_calculation']],
+            security              : "is_granted('ROLE_EMPLOYEE')"
         ),
-        new Put(security: "is_granted('ROLE_EMPLOYEE')"),
+        new Put(
+            denormalizationContext: ['groups' => ['put_warrant_calculation']],
+            security              : "is_granted('ROLE_EMPLOYEE')"
+        ),
         new Delete(security: "is_granted('ROLE_EMPLOYEE')")
     ]
 )]
@@ -37,82 +41,99 @@ class WarrantCalculation
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['post_warrant_calculation'])]
+    #[ApiProperty(identifier: true)]
+    #[Groups(['post_warrant_calculation', 'put_warrant_calculation'])]
     private ?int $id = null;
 
     #[ORM\OneToOne(inversedBy: 'warrantCalculation', cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['post_warrant_calculation'])]
+    #[Groups(['post_warrant_calculation', 'put_warrant_calculation'])]
     private ?Warrant $warrant = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    #[Groups(['post_warrant_calculation'])]
+    #[Groups(['post_warrant_calculation', 'put_warrant_calculation'])]
     private ?\DateTimeInterface $departureDate = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    #[Groups(['post_warrant_calculation'])]
+    #[Groups(['post_warrant_calculation', 'put_warrant_calculation'])]
     private ?\DateTimeInterface $returningDate = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    #[Groups(['post_warrant_calculation'])]
+    #[Groups(['post_warrant_calculation', 'put_warrant_calculation'])]
     private ?\DateTimeInterface $domicileCountryLeavingDate = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    #[Groups(['post_warrant_calculation'])]
+    #[Groups(['post_warrant_calculation', 'put_warrant_calculation'])]
     private ?\DateTimeInterface $domicileCountryReturningDate = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['post_warrant_calculation'])]
+    #[Groups(['post_warrant_calculation', 'put_warrant_calculation'])]
     private ?VehicleType $travelVehicleType = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['post_warrant_calculation'])]
+    #[Groups(['post_warrant_calculation', 'put_warrant_calculation'])]
     private ?string $travelVehicleDescription = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?int $travelDuration = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['post_warrant_calculation'])]
+    #[Groups(['post_warrant_calculation', 'put_warrant_calculation'])]
     private ?string $travelVehicleRegistration = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['post_warrant_calculation'])]
+    #[Groups(['post_warrant_calculation', 'put_warrant_calculation'])]
     private ?string $travelVehicleBrand = null;
 
     #[ORM\Column(length: 1000)]
-    #[Groups(['post_warrant_calculation'])]
+    #[Groups(['post_warrant_calculation', 'put_warrant_calculation'])]
     private ?string $travelReport = null;
 
     #[ORM\Column]
-    #[Groups(['post_warrant_calculation'])]
+    #[Groups(['post_warrant_calculation', 'put_warrant_calculation'])]
     private ?int $odometerStart = null;
 
     #[ORM\Column]
-    #[Groups(['post_warrant_calculation'])]
+    #[Groups(['post_warrant_calculation', 'put_warrant_calculation'])]
     private ?int $odometerEnd = null;
 
-    #[ORM\OneToMany(mappedBy: 'warrantCalculation', targetEntity: WarrantTravelItinerary::class, orphanRemoval: true)]
-    #[Groups(['post_warrant_calculation'])]
+    #[ORM\OneToMany(
+        mappedBy: 'warrantCalculation',
+        targetEntity: WarrantTravelItinerary::class,
+        cascade: ['persist', 'remove'],
+        orphanRemoval: true
+    )]
+    #[Groups(['post_warrant_calculation', 'put_warrant_calculation'])]
     private Collection $warrantTravelItineraries;
 
-    #[ORM\OneToMany(mappedBy: 'warrantCalculation', targetEntity: WarrantCalculationExpense::class, orphanRemoval: true)]
+    #[ORM\OneToMany(
+        mappedBy     : 'warrantCalculation',
+        targetEntity : WarrantCalculationExpense::class,
+        cascade      : ['persist', 'remove'],
+        orphanRemoval: true
+    )]
+    #[Groups(['post_warrant_calculation', 'put_warrant_calculation'])]
     private Collection $warrantCalculationExpenses;
 
-    #[ORM\OneToMany(mappedBy: 'warrantCalculation', targetEntity: TravelCalculationWage::class, orphanRemoval: true)]
-    private Collection $travelCalculationWages;
+    #[ORM\OneToMany(
+        mappedBy     : 'warrantCalculation',
+        targetEntity : WarrantCalculationWage::class,
+        cascade      : ['persist', 'remove'],
+        orphanRemoval: true
+    )]
+    private Collection $warrantCalculationWages;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['post_warrant_calculation'])]
+    #[Groups(['post_warrant_calculation', 'put_warrant_calculation'])]
     private ?WageType $wageType = null;
 
     public function __construct()
     {
         $this->warrantTravelItineraries   = new ArrayCollection();
         $this->warrantCalculationExpenses = new ArrayCollection();
-        $this->travelCalculationWages     = new ArrayCollection();
+        $this->warrantCalculationWages     = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -349,29 +370,29 @@ class WarrantCalculation
     }
 
     /**
-     * @return Collection<int, TravelCalculationWage>
+     * @return Collection<int, WarrantCalculationWage>
      */
-    public function getTravelCalculationWages(): Collection
+    public function getWarrantCalculationWages(): Collection
     {
-        return $this->travelCalculationWages;
+        return $this->warrantCalculationWages;
     }
 
-    public function addTravelCalculationWage(TravelCalculationWage $travelCalculationWage): static
+    public function addWarrantCalculationWage(WarrantCalculationWage $warrantCalculationWage): static
     {
-        if (!$this->travelCalculationWages->contains($travelCalculationWage)) {
-            $this->travelCalculationWages->add($travelCalculationWage);
-            $travelCalculationWage->setWarrantCalculation($this);
+        if (!$this->warrantCalculationWages->contains($warrantCalculationWage)) {
+            $this->warrantCalculationWages->add($warrantCalculationWage);
+            $warrantCalculationWage->setWarrantCalculation($this);
         }
 
         return $this;
     }
 
-    public function removeTravelCalculationWage(TravelCalculationWage $travelCalculationWage): static
+    public function removeWarrantCalculationWage(WarrantCalculationWage $warrantCalculationWage): static
     {
-        if ($this->travelCalculationWages->removeElement($travelCalculationWage)) {
+        if ($this->warrantCalculationWages->removeElement($warrantCalculationWage)) {
             // set the owning side to null (unless already changed)
-            if ($travelCalculationWage->getWarrantCalculation() === $this) {
-                $travelCalculationWage->setWarrantCalculation(null);
+            if ($warrantCalculationWage->getWarrantCalculation() === $this) {
+                $warrantCalculationWage->setWarrantCalculation(null);
             }
         }
 

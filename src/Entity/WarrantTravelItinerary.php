@@ -2,11 +2,13 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use App\Entity\Codebook\Country;
 use App\Repository\WarrantTravelItineraryRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: WarrantTravelItineraryRepository::class)]
 #[ApiResource]
@@ -15,23 +17,30 @@ class WarrantTravelItinerary
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[ApiProperty(identifier: true)]
+    #[Groups(['post_warrant_calculation', 'put_warrant_calculation'])]
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'warrantTravelItineraries')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['post_warrant_calculation', 'put_warrant_calculation'])]
     private ?WarrantCalculation $warrantCalculation = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['post_warrant_calculation', 'put_warrant_calculation'])]
     private ?Country $country = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $EnteredDate = null;
+    #[Groups(['post_warrant_calculation', 'put_warrant_calculation'])]
+    private ?\DateTimeInterface $enteredDate = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Groups(['post_warrant_calculation', 'put_warrant_calculation'])]
     private ?\DateTimeInterface $exitedDate = null;
 
     #[ORM\Column]
+    #[Groups(['post_warrant_calculation', 'put_warrant_calculation'])]
     private ?bool $returningData = null;
 
     #[ORM\Column(nullable: true)]
@@ -68,12 +77,12 @@ class WarrantTravelItinerary
 
     public function getEnteredDate(): ?\DateTimeInterface
     {
-        return $this->EnteredDate;
+        return $this->enteredDate;
     }
 
-    public function setEnteredDate(\DateTimeInterface $EnteredDate): static
+    public function setEnteredDate(\DateTimeInterface $enteredDate): static
     {
-        $this->EnteredDate = $EnteredDate;
+        $this->enteredDate = $enteredDate;
 
         return $this;
     }

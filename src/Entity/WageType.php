@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\WageTypeRepository;
 use Doctrine\ORM\Mapping as ORM;
@@ -10,9 +11,15 @@ use Doctrine\ORM\Mapping as ORM;
 #[ApiResource]
 class WageType
 {
+    public const FULL_WAGE        = 'FULL_WAGE';
+    public const ONE_MEAL_COVERED = 'ONE_MEAL_COVERED';
+    public const TWO_MEAL_COVERED = 'TWO_MEAL_COVERED';
+    public const NO_WAGE          = 'NO_WAGE';
+    
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[ApiProperty(identifier: true)]
     private ?int $id = null;
 
     #[ORM\Column(length: 50)]
