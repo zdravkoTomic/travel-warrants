@@ -36,8 +36,8 @@ class ExchangeRateService
 
         $content = $response->toArray();
 
-        $middleExchangeRate = (float) str_replace(',', '.', $content[0]['srednji_tecaj']);
+        $middleExchangeRate = (float)str_replace(',', '.', $content[0]['srednji_tecaj']);
 
-        return $originalAmount * $middleExchangeRate;
+        return round($originalAmount * $middleExchangeRate, 2);
     }
 }

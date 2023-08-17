@@ -49,6 +49,10 @@ class VehicleType
 
     public const OFFICAL_PERSONAL_VEHICLE = 'OFFICAL_PERSONAL_VEHICLE';
 
+    public const OFFICAL_VEHICLE = 'OFFICAL_VEHICLE';
+
+    public const OTHER_VEHICLE = 'OTHER_VEHICLE';
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]

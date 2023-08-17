@@ -11,11 +11,13 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use App\Entity\Codebook\VehicleType;
 use App\Repository\WarrantCalculationRepository;
+use App\Validator as AppAssert;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: WarrantCalculationRepository::class)]
 #[ApiResource(
@@ -36,6 +38,10 @@ use Symfony\Component\Serializer\Annotation\Groups;
         new Delete(security: "is_granted('ROLE_EMPLOYEE')")
     ]
 )]
+#[AppAssert\TravelItineraryOverlap]
+#[AppAssert\TravelItinerary]
+#[AppAssert\WarrantCalculationPersonalVehicleType]
+#[AppAssert\WarrantCalculationOtherVehicleType]
 class WarrantCalculation
 {
     #[ORM\Id]
@@ -52,10 +58,12 @@ class WarrantCalculation
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     #[Groups(['post_warrant_calculation', 'put_warrant_calculation'])]
+    #[Assert\NotBlank]
     private ?\DateTimeInterface $departureDate = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     #[Groups(['post_warrant_calculation', 'put_warrant_calculation'])]
+    #[Assert\NotBlank]
     private ?\DateTimeInterface $returningDate = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
@@ -69,6 +77,7 @@ class WarrantCalculation
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
     #[Groups(['post_warrant_calculation', 'put_warrant_calculation'])]
+    #[Assert\NotBlank]
     private ?VehicleType $travelVehicleType = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -99,9 +108,9 @@ class WarrantCalculation
     private ?int $odometerEnd = null;
 
     #[ORM\OneToMany(
-        mappedBy: 'warrantCalculation',
-        targetEntity: WarrantTravelItinerary::class,
-        cascade: ['persist', 'remove'],
+        mappedBy     : 'warrantCalculation',
+        targetEntity : WarrantTravelItinerary::class,
+        cascade      : ['persist', 'remove'],
         orphanRemoval: true
     )]
     #[Groups(['post_warrant_calculation', 'put_warrant_calculation'])]
@@ -133,7 +142,7 @@ class WarrantCalculation
     {
         $this->warrantTravelItineraries   = new ArrayCollection();
         $this->warrantCalculationExpenses = new ArrayCollection();
-        $this->warrantCalculationWages     = new ArrayCollection();
+        $this->warrantCalculationWages    = new ArrayCollection();
     }
 
     public function getId(): ?int

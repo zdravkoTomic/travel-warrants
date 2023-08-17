@@ -112,7 +112,7 @@ class WarrantCalculationService
             $wageAmount = $fullWageAmount - (($wageType->getWagePercentageDeduction() / 100) * $fullWageAmount);
         }
 
-        return $wageAmount;
+        return round($wageAmount, 2);
     }
 
     /**
@@ -196,7 +196,8 @@ class WarrantCalculationService
             $travelCountryWage      = new WarrantCalculationWage();
             $countryWage            = $this->countryWageRepository->getCountryWageByCountryId($key);
             $totalCountryWageAmount = $numberOfCountryWages * $countryWage->getAmount();
-            $deductedWageAmount     = $this->getDeductedWageAmount($totalCountryWageAmount, $warrantCalculation->getWageType());
+            $deductedWageAmount     =
+                $this->getDeductedWageAmount($totalCountryWageAmount, $warrantCalculation->getWageType());
 
             $travelCountryWage->setWarrantCalculation($warrantCalculation)
                 ->setCountry($countryWage->getCountry())

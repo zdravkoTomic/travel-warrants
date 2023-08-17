@@ -9,6 +9,7 @@ use App\Repository\WarrantTravelItineraryRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: WarrantTravelItineraryRepository::class)]
 #[ApiResource]
@@ -29,14 +30,17 @@ class WarrantTravelItinerary
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
     #[Groups(['post_warrant_calculation', 'put_warrant_calculation'])]
+    #[Assert\NotBlank]
     private ?Country $country = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     #[Groups(['post_warrant_calculation', 'put_warrant_calculation'])]
+    #[Assert\NotBlank]
     private ?\DateTimeInterface $enteredDate = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     #[Groups(['post_warrant_calculation', 'put_warrant_calculation'])]
+    #[Assert\NotBlank]
     private ?\DateTimeInterface $exitedDate = null;
 
     #[ORM\Column]
