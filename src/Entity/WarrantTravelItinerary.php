@@ -29,22 +29,22 @@ class WarrantTravelItinerary
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['post_warrant_calculation', 'put_warrant_calculation'])]
+    #[Groups(['post_warrant_calculation', 'put_warrant_calculation', 'get_warrant_calculation'])]
     #[Assert\NotBlank]
     private ?Country $country = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    #[Groups(['post_warrant_calculation', 'put_warrant_calculation'])]
+    #[Groups(['post_warrant_calculation', 'put_warrant_calculation', 'get_warrant_calculation'])]
     #[Assert\NotBlank]
     private ?\DateTimeInterface $enteredDate = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    #[Groups(['post_warrant_calculation', 'put_warrant_calculation'])]
+    #[Groups(['post_warrant_calculation', 'put_warrant_calculation', 'get_warrant_calculation'])]
     #[Assert\NotBlank]
     private ?\DateTimeInterface $exitedDate = null;
 
     #[ORM\Column]
-    #[Groups(['post_warrant_calculation', 'put_warrant_calculation'])]
+    #[Groups(['post_warrant_calculation', 'put_warrant_calculation', 'get_warrant_calculation'])]
     private ?bool $returningData = null;
 
     #[ORM\Column(nullable: true)]

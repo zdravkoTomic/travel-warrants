@@ -223,6 +223,14 @@ class WarrantCalculationService
             }
         }
 
+        if (!$destinationEntry) {
+            $destinationEntry = $warrantCalculation->getDomicileCountryLeavingDate();
+        }
+
+        if (!$destinationExit) {
+            $destinationExit = $warrantCalculation->getDomicileCountryReturningDate();
+        }
+
         if ($destinationEntry && $destinationExit) {
             $interval         = $destinationExit->diff($destinationEntry);
             $destinationHours = ($interval->days * 24) + $interval->h;
@@ -337,7 +345,15 @@ class WarrantCalculationService
                 ->setWarrantCalculation($warrantCalculationExpense->getWarrantCalculation())
                 ->setOriginalCurrency($warrantCalculationExpense->getOriginalCurrency())
                 ->setOriginalAmount($warrantCalculationExpense->getOriginalAmount())
-                ->setDescription($warrantCalculationExpense->getDescription());;
+                ->setDescription($warrantCalculationExpense->getDescription());
+        } else {
+            $warrantCalculationExpense->setAmount($warrantCalculationExpense->getOriginalAmount())
+                ->setCurrency($warrantCalculationExpense->getOriginalCurrency())
+                ->setExpenseType($warrantCalculationExpense->getExpenseType())
+                ->setWarrantCalculation($warrantCalculationExpense->getWarrantCalculation())
+                ->setOriginalCurrency($warrantCalculationExpense->getOriginalCurrency())
+                ->setOriginalAmount($warrantCalculationExpense->getOriginalAmount())
+                ->setDescription($warrantCalculationExpense->getDescription());
         }
     }
 }

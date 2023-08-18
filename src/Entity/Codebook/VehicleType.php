@@ -57,15 +57,15 @@ class VehicleType
     #[ORM\GeneratedValue]
     #[ORM\Column]
     #[ApiProperty(identifier: true)]
-    #[Groups(['get_warrant', 'get_user_group_warrants'])]
+    #[Groups(['get_warrant', 'get_user_group_warrants', 'get_warrant_calculation'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 50)]
-    #[Groups(['get_warrant', 'get_user_group_warrants'])]
+    #[Groups(['get_warrant', 'get_user_group_warrants', 'get_warrant_calculation'])]
     private ?string $code = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['get_warrant', 'get_user_group_warrants'])]
+    #[Groups(['get_warrant', 'get_user_group_warrants', 'get_warrant_calculation'])]
     private ?string $name = null;
 
     #[ORM\Column]

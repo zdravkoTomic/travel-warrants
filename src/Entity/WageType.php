@@ -4,31 +4,50 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
 use App\Repository\WageTypeRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: WageTypeRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    operations: [
+        new Get(security: "is_granted('ROLE_EMPLOYEE')"),
+        new GetCollection(
+            uriTemplate      : '/catalog/wage-types',
+            paginationEnabled: false,
+            security         : "is_granted('ROLE_EMPLOYEE')"
+        )
+    ]
+)]
 class WageType
 {
     public const FULL_WAGE        = 'FULL_WAGE';
+
     public const ONE_MEAL_COVERED = 'ONE_MEAL_COVERED';
+
     public const TWO_MEAL_COVERED = 'TWO_MEAL_COVERED';
-    public const NO_WAGE          = 'NO_WAGE';
-    
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     #[ApiProperty(identifier: true)]
+    #[Groups(['get_warrant', 'get_user_group_warrants', 'get_warrant_calculation'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 50)]
+    #[Groups(['get_warrant', 'get_user_group_warrants', 'get_warrant_calculation'])]
     private ?string $code = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['get_warrant', 'get_user_group_warrants', 'get_warrant_calculation'])]
     private ?string $name = null;
 
     #[ORM\Column]
+    #[Groups(['get_warrant', 'get_user_group_warrants', 'get_warrant_calculation'])]
     private ?int $wagePercentageDeduction = null;
 
     #[ORM\Column]

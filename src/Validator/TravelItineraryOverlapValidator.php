@@ -29,7 +29,7 @@ class TravelItineraryOverlapValidator extends ConstraintValidator
         ) {
             $this->context
                 ->buildViolation($constraint->message)
-                ->atPath('returningDate')
+                ->atPath('domicileCountryReturningDate')
                 ->addViolation();
             return;
         }
@@ -50,7 +50,7 @@ class TravelItineraryOverlapValidator extends ConstraintValidator
                 if ($this->rangesOverlap($iValue, $ranges[$j])) {
                     $this->context
                         ->buildViolation($constraint->message)
-                        ->atPath('returningDate')
+                        ->atPath('domicileCountryReturningDate')
                         ->addViolation();
                     return;
                 }

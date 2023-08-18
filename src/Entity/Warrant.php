@@ -48,7 +48,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         new GetCollection(
             uriTemplate                 : '/employees/{employeeId}/warrant-group-statuses/{groupStatusId}/warrants',
             uriVariables                : [
-                                              'employeeId' => 'employee',
+                                              'employeeId'    => 'employee',
                                               'groupStatusId' => 'groupStatus',
                                           ],
             paginationEnabled           : true,
@@ -110,11 +110,11 @@ use Symfony\Component\Validator\Constraints as Assert;
 )]
 #[ApiFilter(PropertyFilter::class)]
 #[ApiFilter(SearchFilter::class, properties: [
-    'employee.name' => 'ipartial',
-    'employee.surname' => 'ipartial',
-    'travelType.name' => 'ipartial',
+    'employee.name'           => 'ipartial',
+    'employee.surname'        => 'ipartial',
+    'travelType.name'         => 'ipartial',
     'destinationCountry.name' => 'ipartial',
-    'status.name' => 'ipartial'
+    'status.name'             => 'ipartial'
 ])]
 #[ApiFilter(
     OrderFilter::class,
@@ -245,6 +245,7 @@ class Warrant
     private Collection $warrantStatusFlows;
 
     #[ORM\OneToOne(mappedBy: 'warrant', cascade: ['persist', 'remove'])]
+    #[Groups(['get_user_group_warrants'])]
     private ?WarrantCalculation $warrantCalculation = null;
 
     public function __construct()

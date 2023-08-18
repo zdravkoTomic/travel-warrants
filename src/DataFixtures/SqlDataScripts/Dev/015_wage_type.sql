@@ -8,4 +8,4 @@ INSERT INTO wage_type (code, name, wage_percentage_deduction, active)
 VALUES('TWO_MEAL_COVERED', 'Osigurana dva obroka', 60, 1);
 
 INSERT INTO wage_type (code, name, wage_percentage_deduction, active)
-VALUES('NO_WAGE', 'Osigurana dva obroka', 100, 1);
+VALUES('NO_WAGE', 'Ne isplačuje se dnevnica', 100, 1);
