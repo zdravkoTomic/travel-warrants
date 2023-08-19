@@ -105,7 +105,9 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
         'get_department',
         'get_catalog_employee',
         'put_employee',
-        'get_employee_role'
+        'get_employee_role',
+        'get_payments_by_payment_status',
+        'get_payment_catalog'
     ])]
     private ?int $id = null;
 
@@ -117,7 +119,8 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
         'get_warrant',
         'get_user_warrants_by_status',
         'get_employee_role',
-        'put_employee'
+        'put_employee',
+        'get_payments_by_payment_status'
     ])]
     private ?Department $department = null;
 
@@ -140,7 +143,8 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
         'get_user_warrants_by_status',
         'get_catalog_employee',
         'get_employee_role',
-        'put_employee'
+        'put_employee',
+        'get_payments_by_payment_status'
     ])]
     private ?string $code = null;
 
@@ -153,7 +157,9 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
         'get_department',
         'get_catalog_employee',
         'put_employee',
-        'get_employee_role'
+        'get_employee_role',
+        'get_payments_by_payment_status',
+        'get_payment_catalog'
     ])]
     private string $name;
 
@@ -166,7 +172,9 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
         'get_department',
         'get_catalog_employee',
         'put_employee',
-        'get_employee_role'
+        'get_employee_role',
+        'get_payments_by_payment_status',
+        'get_payment_catalog'
     ])]
     private ?string $surname = null;
 

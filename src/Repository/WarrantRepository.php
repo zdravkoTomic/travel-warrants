@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use ApiPlatform\Doctrine\Orm\Paginator;
+use App\Entity\Codebook\App\WarrantStatus;
 use App\Entity\Warrant;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\Criteria;
@@ -66,8 +67,12 @@ class WarrantRepository extends ServiceEntityRepository
     /**
      * @throws QueryException
      */
-    public function getWarrantsForUserByGroupStatus($employeeId, $groupStatusId, int $page = 1, int $itemsPerPage = 30): Paginator
-    {
+    public function getWarrantsForUserByGroupStatus(
+        $employeeId,
+        $groupStatusId,
+        int $page = 1,
+        int $itemsPerPage = 30
+    ): Paginator {
         $firstResult = ($page - 1) * $itemsPerPage;
 
         $queryBuilder = $this->createQueryBuilder('w')
@@ -76,7 +81,7 @@ class WarrantRepository extends ServiceEntityRepository
             ->setParameter('employeeId', $employeeId)
             ->setParameter('groupStatusId', $groupStatusId);
 
-            $criteria = Criteria::create()
+        $criteria = Criteria::create()
             ->setFirstResult($firstResult)
             ->setMaxResults($itemsPerPage);
 
@@ -105,5 +110,12 @@ class WarrantRepository extends ServiceEntityRepository
         $doctrinePaginator = new DoctrinePaginator($queryBuilder);
 
         return new Paginator($doctrinePaginator);
+    }
+
+    public function updateWarrantStatus(Warrant $warrant, WarrantStatus $warrantStatus): void
+    {
+        $warrant->setStatus($warrantStatus);
+        $this->getEntityManager()->persist($warrant);
+        $this->getEntityManager()->flush();
     }
 }

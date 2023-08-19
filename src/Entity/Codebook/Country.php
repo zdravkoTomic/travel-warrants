@@ -58,7 +58,8 @@ class Country
         'get_user_warrants_by_status',
         'get_country_item',
         'get_country_wages',
-        'get_warrant_calculation_preview'
+        'get_warrant_calculation_preview',
+        'get_payments_by_payment_status'
     ])]
     private ?int $id = null;
 
@@ -81,7 +82,8 @@ class Country
         'get_user_warrants_by_status',
         'get_country_item',
         'get_country_wages',
-        'get_warrant_calculation_preview'
+        'get_warrant_calculation_preview',
+        'get_payments_by_payment_status'
     ])]
     #[Assert\NotBlank]
     private ?string $name = null;

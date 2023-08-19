@@ -72,7 +72,8 @@ class Department
         'get_department',
         'post_department',
         'put_department',
-        'get_employee_role'
+        'get_employee_role',
+        'get_payments_by_payment_status'
     ])]
     private ?int $id = null;
 
@@ -84,7 +85,8 @@ class Department
         'get_department',
         'post_department',
         'put_department',
-        'get_employee_role'
+        'get_employee_role',
+        'get_payments_by_payment_status'
     ])]
     private ?string $code = null;
 
@@ -96,7 +98,8 @@ class Department
         'get_department',
         'post_department',
         'put_department',
-        'get_employee_role'
+        'get_employee_role',
+        'get_payments_by_payment_status'
     ])]
     private ?string $name = null;
 

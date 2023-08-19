@@ -1,55 +1,32 @@
 <?php
 
-namespace App\Entity\Codebook\App;
+namespace App\Entity;
 
-use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
-use ApiPlatform\Metadata\Get;
-use ApiPlatform\Metadata\GetCollection;
-use ApiPlatform\Metadata\Post;
-use ApiPlatform\Metadata\Put;
-use App\Repository\Codebook\App\TravelTypeRepository;
+use App\Repository\PaymentTypeRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
-#[ORM\Entity(repositoryClass: TravelTypeRepository::class)]
-#[ApiResource(
-    operations: [
-        new Get(),
-        new GetCollection(),
-        new Post(),
-        new Put()
-    ]
-)]
-class TravelType
+#[ORM\Entity(repositoryClass: PaymentTypeRepository::class)]
+#[ApiResource]
+class PaymentType
 {
-    public const DOMESTIC      = 'DOMESTIC';
-    public const INTERNATIONAL = 'INTERNATIONAL';
+    public const ADVANCE = 'ADVANCE';
+
+    public const CALCULATION = 'CALCULATION';
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[ApiProperty(identifier: true)]
-    #[Groups(['get_user_group_warrants', 'get_warrant', 'get_user_warrants_by_status'])]
+    #[Groups(['get_payments_by_payment_status'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 50)]
-    #[Groups([
-        'get_user_group_warrants',
-        'get_warrant',
-        'get_user_warrants_by_status',
-        'get_warrant_calculation_preview'
-    ])]
+    #[Groups(['get_payments_by_payment_status'])]
     private ?string $code = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups([
-        'get_user_group_warrants',
-        'get_warrant',
-        'get_user_warrants_by_status',
-        'get_warrant_calculation_preview',
-        'get_payments_by_payment_status'
-    ])]
+    #[Groups(['get_payments_by_payment_status'])]
     private ?string $name = null;
 
     #[ORM\Column]

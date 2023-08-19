@@ -138,7 +138,8 @@ class Warrant
         'put_warrant',
         'get_user_group_warrants',
         'get_warrant',
-        'get_user_warrants_by_status'
+        'get_user_warrants_by_status',
+        'get_payments_by_payment_status'
     ])]
     private ?int $id = null;
 
@@ -149,7 +150,8 @@ class Warrant
         'get_user_group_warrants',
         'get_warrant',
         'get_user_warrants_by_status',
-        'get_warrant_calculation_preview'
+        'get_warrant_calculation_preview',
+        'get_payments_by_payment_status'
     ])]
     #[ApiFilter(SearchFilter::class, strategy: 'exact')]
     private ?string $code = null;
@@ -161,7 +163,8 @@ class Warrant
         'put_warrant',
         'get_warrant',
         'get_user_warrants_by_status',
-        'get_user_group_warrants'
+        'get_user_group_warrants',
+        'get_payments_by_payment_status'
     ])]
     #[ApiFilter(SearchFilter::class, strategy: 'exact')]
     private Employee $employee;
@@ -177,7 +180,8 @@ class Warrant
         'patch_warrant_status',
         'get_user_group_warrants',
         'get_warrant',
-        'get_user_warrants_by_status'
+        'get_user_warrants_by_status',
+        'get_payments_by_payment_status'
     ])]
     #[ApiFilter(SearchFilter::class, strategy: 'exact')]
     private ?WarrantStatus $status = null;
@@ -193,7 +197,8 @@ class Warrant
         'get_user_group_warrants',
         'get_warrant',
         'get_user_warrants_by_status',
-        'get_warrant_calculation_preview'
+        'get_warrant_calculation_preview',
+        'get_payments_by_payment_status'
     ])]
     private ?TravelType $travelType = null;
 
@@ -205,7 +210,8 @@ class Warrant
         'get_user_group_warrants',
         'get_warrant',
         'get_user_warrants_by_status',
-        'get_warrant_calculation'
+        'get_warrant_calculation',
+        'get_payments_by_payment_status'
     ])]
     #[Assert\NotBlank(groups: ['post_warrant', 'put_warrant'])]
     #[ApiFilter(SearchFilter::class, strategy: 'exact')]
@@ -237,9 +243,11 @@ class Warrant
         'put_warrant',
         'get_user_group_warrants',
         'get_warrant',
-        'get_user_warrants_by_status'
+        'get_user_warrants_by_status',
+        'get_warrant_calculation',
+        'get_payments_by_payment_status'
     ])]
-    #[Assert\NotBlank(groups: ['post_warrant', 'put_warrant'])]
+    #[Assert\NotBlank(groups: ['post_warrant', 'put_warrant', 'get_payments_by_payment_status'])]
     #[ApiFilter(SearchFilter::class, strategy: 'ipartial')]
     private ?string $destination = null;
 
@@ -294,7 +302,7 @@ class Warrant
     private ?string $vehicleDescription = null;
 
     #[ORM\Column]
-    #[Groups(['get_warrant', 'get_user_warrants_by_status'])]
+    #[Groups(['get_warrant', 'get_user_warrants_by_status', 'get_payments_by_payment_status'])]
     private ?bool $advancesRequired = null;
 
     #[ORM\Column]
@@ -317,7 +325,7 @@ class Warrant
     private Collection $warrantStatusFlows;
 
     #[ORM\OneToOne(mappedBy: 'warrant', cascade: ['persist', 'remove'])]
-    #[Groups(['get_user_group_warrants', 'get_approving_warrants', 'get_user_warrants_by_status'])]
+    #[Groups(['get_user_group_warrants', 'get_approving_warrants', 'get_user_warrants_by_status', 'get_payments_by_payment_status'])]
     private ?WarrantCalculation $warrantCalculation = null;
 
     public function __construct()

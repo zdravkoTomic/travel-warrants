@@ -93,9 +93,7 @@ class Currency
     private ?string $name = null;
 
     #[ORM\Column]
-    #[Groups([
-        'get_country_item',
-        'get_predefined_expense'])]
+    #[Groups(['get_country_item', 'get_predefined_expense'])]
     private ?bool $active = null;
 
     public function getId(): ?int

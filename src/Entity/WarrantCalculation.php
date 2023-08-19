@@ -26,7 +26,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             normalizationContext: ['groups' => ['get_warrant_calculation']]
         ),
         new Get(
-            uriTemplate          : '/preview-warrant-calculations/{id}',
+            uriTemplate         : '/preview-warrant-calculations/{id}',
             normalizationContext: ['groups' => ['get_warrant_calculation_preview']]
         ),
         new GetCollection(
@@ -61,7 +61,8 @@ class WarrantCalculation
         'get_warrant_calculation',
         'get_warrant_calculation_preview',
         'get_approving_warrants',
-        'get_user_warrants_by_status'
+        'get_user_warrants_by_status',
+        'get_payments_by_payment_status'
     ])]
     private ?int $id = null;
 
@@ -71,7 +72,8 @@ class WarrantCalculation
         'post_warrant_calculation',
         'put_warrant_calculation',
         'get_warrant_calculation',
-        'get_warrant_calculation_preview'
+        'get_warrant_calculation_preview',
+        'get_payments_by_payment_status'
     ])]
     private ?Warrant $warrant = null;
 
@@ -80,7 +82,8 @@ class WarrantCalculation
         'post_warrant_calculation',
         'put_warrant_calculation',
         'get_warrant_calculation',
-        'get_warrant_calculation_preview'
+        'get_warrant_calculation_preview',
+        'get_payments_by_payment_status'
     ])]
     #[Assert\NotBlank]
     private ?\DateTimeInterface $departureDate = null;
@@ -160,7 +163,7 @@ class WarrantCalculation
         'put_warrant_calculation',
         'get_warrant_calculation',
         'get_warrant_calculation_preview'
-        ])]
+    ])]
     #[Assert\NotBlank]
     private ?string $travelReport = null;
 
@@ -170,7 +173,7 @@ class WarrantCalculation
         'put_warrant_calculation',
         'get_warrant_calculation',
         'get_warrant_calculation_preview'
-        ])]
+    ])]
     private ?int $odometerStart = null;
 
     #[ORM\Column(length: 255, nullable: true)]

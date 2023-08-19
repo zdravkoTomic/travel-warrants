@@ -8,6 +8,7 @@ use App\Entity\Codebook\App\WarrantStatus;
 use App\Entity\Warrant;
 use App\Exception\RecordNotFoundException;
 use App\Repository\Codebook\App\WarrantGroupStatusRepository;
+use App\Repository\WarrantRepository;
 use Doctrine\ORM\NonUniqueResultException;
 use InvalidArgumentException;
 use Symfony\Component\HttpFoundation\Response;
@@ -36,13 +37,16 @@ class WarrantStatusService
 
     private WarrantGroupStatusRepository $warrantGroupStatusRepository;
     private WorkflowInterface $warrantStateMachine;
+    private WarrantRepository $warrantRepository;
 
     public function __construct(
         WarrantGroupStatusRepository $warrantGroupStatusRepository,
-        WorkflowInterface            $warrantStateMachine
+        WorkflowInterface            $warrantStateMachine,
+        WarrantRepository            $warrantRepository
     ) {
         $this->warrantGroupStatusRepository = $warrantGroupStatusRepository;
         $this->warrantStateMachine          = $warrantStateMachine;
+        $this->warrantRepository            = $warrantRepository;
     }
 
     /**
@@ -85,5 +89,10 @@ class WarrantStatusService
         }
 
         $this->warrantStateMachine->apply($warrant, strtolower($newStatusCodeTransition));
+    }
+
+    public function updateWarrantStatus(Warrant $warrant, WarrantStatus $warrantStatus): void
+    {
+        $this->warrantRepository->updateWarrantStatus($warrant, $warrantStatus);
     }
 }
