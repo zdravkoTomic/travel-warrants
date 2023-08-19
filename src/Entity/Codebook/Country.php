@@ -57,7 +57,8 @@ class Country
         'get_user_group_warrants',
         'get_user_warrants_by_status',
         'get_country_item',
-        'get_country_wages'
+        'get_country_wages',
+        'get_warrant_calculation_preview'
     ])]
     private ?int $id = null;
 
@@ -67,7 +68,8 @@ class Country
         'get_user_group_warrants',
         'get_user_warrants_by_status',
         'get_country_item',
-        'get_country_wages'
+        'get_country_wages',
+        'get_warrant_calculation_preview'
     ])]
     #[Assert\NotBlank]
     private ?string $code = null;
@@ -78,7 +80,8 @@ class Country
         'get_user_group_warrants',
         'get_user_warrants_by_status',
         'get_country_item',
-        'get_country_wages'
+        'get_country_wages',
+        'get_warrant_calculation_preview'
     ])]
     #[Assert\NotBlank]
     private ?string $name = null;

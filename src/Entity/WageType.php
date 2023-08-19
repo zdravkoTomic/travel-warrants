@@ -43,7 +43,7 @@ class WageType
     private ?string $code = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['get_warrant', 'get_user_group_warrants', 'get_warrant_calculation'])]
+    #[Groups(['get_warrant', 'get_user_group_warrants', 'get_warrant_calculation', 'get_warrant_calculation_preview'])]
     private ?string $name = null;
 
     #[ORM\Column]

@@ -133,17 +133,36 @@ class Warrant
     #[ORM\GeneratedValue]
     #[ORM\Column]
     #[ApiProperty(identifier: true)]
-    #[Groups(['post_warrant', 'put_warrant', 'get_user_group_warrants', 'get_warrant', 'get_user_warrants_by_status'])]
+    #[Groups([
+        'post_warrant',
+        'put_warrant',
+        'get_user_group_warrants',
+        'get_warrant',
+        'get_user_warrants_by_status'
+    ])]
     private ?int $id = null;
 
     #[ORM\Column]
-    #[Groups(['post_warrant', 'put_warrant', 'get_user_group_warrants', 'get_warrant', 'get_user_warrants_by_status'])]
+    #[Groups([
+        'post_warrant',
+        'put_warrant',
+        'get_user_group_warrants',
+        'get_warrant',
+        'get_user_warrants_by_status',
+        'get_warrant_calculation_preview'
+    ])]
     #[ApiFilter(SearchFilter::class, strategy: 'exact')]
     private ?string $code = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['post_warrant', 'put_warrant', 'get_warrant', 'get_user_warrants_by_status', 'get_user_group_warrants'])]
+    #[Groups([
+        'post_warrant',
+        'put_warrant',
+        'get_warrant',
+        'get_user_warrants_by_status',
+        'get_user_group_warrants'
+    ])]
     #[ApiFilter(SearchFilter::class, strategy: 'exact')]
     private Employee $employee;
 
@@ -154,7 +173,12 @@ class Warrant
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['patch_warrant_status', 'get_user_group_warrants', 'get_warrant', 'get_user_warrants_by_status'])]
+    #[Groups([
+        'patch_warrant_status',
+        'get_user_group_warrants',
+        'get_warrant',
+        'get_user_warrants_by_status'
+    ])]
     #[ApiFilter(SearchFilter::class, strategy: 'exact')]
     private ?WarrantStatus $status = null;
 
@@ -165,12 +189,24 @@ class Warrant
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
     #[ApiFilter(SearchFilter::class, strategy: 'exact')]
-    #[Groups(['get_user_group_warrants', 'get_warrant', 'get_user_warrants_by_status'])]
+    #[Groups([
+        'get_user_group_warrants',
+        'get_warrant',
+        'get_user_warrants_by_status',
+        'get_warrant_calculation_preview'
+    ])]
     private ?TravelType $travelType = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['post_warrant', 'put_warrant', 'get_user_group_warrants', 'get_warrant', 'get_user_warrants_by_status'])]
+    #[Groups([
+        'post_warrant',
+        'put_warrant',
+        'get_user_group_warrants',
+        'get_warrant',
+        'get_user_warrants_by_status',
+        'get_warrant_calculation'
+    ])]
     #[Assert\NotBlank(groups: ['post_warrant', 'put_warrant'])]
     #[ApiFilter(SearchFilter::class, strategy: 'exact')]
     private ?Country $destinationCountry = null;
@@ -185,12 +221,24 @@ class Warrant
     private ?Currency $wageCurrency = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['post_warrant', 'put_warrant', 'get_warrant', 'get_user_group_warrants', 'get_user_warrants_by_status'])]
+    #[Groups([
+        'post_warrant',
+        'put_warrant',
+        'get_warrant',
+        'get_user_group_warrants',
+        'get_user_warrants_by_status'
+    ])]
     #[Assert\NotBlank(groups: ['post_warrant', 'put_warrant'])]
     private ?string $departurePoint = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['post_warrant', 'put_warrant', 'get_user_group_warrants', 'get_warrant', 'get_user_warrants_by_status'])]
+    #[Groups([
+        'post_warrant',
+        'put_warrant',
+        'get_user_group_warrants',
+        'get_warrant',
+        'get_user_warrants_by_status'
+    ])]
     #[Assert\NotBlank(groups: ['post_warrant', 'put_warrant'])]
     #[ApiFilter(SearchFilter::class, strategy: 'ipartial')]
     private ?string $destination = null;
@@ -198,27 +246,51 @@ class Warrant
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     #[Assert\GreaterThanOrEqual('today', message: 'Not allowed dates in past', groups: ['post_warrant', 'put_warrant'])]
     #[Assert\NotBlank(groups: ['post_warrant', 'put_warrant'])]
-    #[Groups(['post_warrant', 'put_warrant', 'get_warrant', 'get_user_group_warrants', 'get_user_warrants_by_status'])]
+    #[Groups([
+        'post_warrant',
+        'put_warrant',
+        'get_warrant',
+        'get_user_group_warrants',
+        'get_user_warrants_by_status'
+    ])]
     private ?\DateTimeInterface $departureDate = null;
 
     #[ORM\Column]
-    #[Groups(['post_warrant', 'put_warrant', 'get_warrant'])]
+    #[Groups([
+        'post_warrant',
+        'put_warrant',
+        'get_warrant'
+    ])]
     #[Assert\NotBlank(groups: ['post_warrant', 'put_warrant'])]
     private ?int $expectedTravelDuration = null;
 
     #[ORM\Column(length: 1000)]
-    #[Groups(['post_warrant', 'put_warrant', 'get_user_group_warrants', 'get_warrant'])]
+    #[Groups([
+        'post_warrant',
+        'put_warrant',
+        'get_user_group_warrants',
+        'get_warrant'
+    ])]
     #[Assert\NotBlank(groups: ['post_warrant', 'put_warrant'])]
     private ?string $travelPurposeDescription = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['post_warrant', 'put_warrant', 'get_warrant', 'get_user_group_warrants'])]
+    #[Groups([
+        'post_warrant',
+        'put_warrant',
+        'get_warrant',
+        'get_user_group_warrants'
+    ])]
     #[Assert\NotBlank(groups: ['post_warrant', 'put_warrant'])]
     private ?VehicleType $vehicleType = null;
 
     #[ORM\Column(length: 1000)]
-    #[Groups(['post_warrant', 'put_warrant', 'get_warrant'])]
+    #[Groups([
+        'post_warrant',
+        'put_warrant',
+        'get_warrant'
+    ])]
     private ?string $vehicleDescription = null;
 
     #[ORM\Column]
@@ -245,7 +317,7 @@ class Warrant
     private Collection $warrantStatusFlows;
 
     #[ORM\OneToOne(mappedBy: 'warrant', cascade: ['persist', 'remove'])]
-    #[Groups(['get_user_group_warrants'])]
+    #[Groups(['get_user_group_warrants', 'get_approving_warrants', 'get_user_warrants_by_status'])]
     private ?WarrantCalculation $warrantCalculation = null;
 
     public function __construct()

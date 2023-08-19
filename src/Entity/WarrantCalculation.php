@@ -22,7 +22,13 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: WarrantCalculationRepository::class)]
 #[ApiResource(
     operations: [
-        new Get(normalizationContext: ['groups' => ['get_warrant_calculation']],),
+        new Get(
+            normalizationContext: ['groups' => ['get_warrant_calculation']]
+        ),
+        new Get(
+            uriTemplate          : '/preview-warrant-calculations/{id}',
+            normalizationContext: ['groups' => ['get_warrant_calculation_preview']]
+        ),
         new GetCollection(
             normalizationContext: ['groups' => ['get_warrant_calculation']],
             security            : "is_granted('ROLE_EMPLOYEE')"
@@ -48,64 +54,132 @@ class WarrantCalculation
     #[ORM\GeneratedValue]
     #[ORM\Column]
     #[ApiProperty(identifier: true)]
-    #[Groups(['post_warrant_calculation', 'put_warrant_calculation', 'get_user_group_warrants', 'get_warrant_calculation'])]
+    #[Groups([
+        'post_warrant_calculation',
+        'put_warrant_calculation',
+        'get_user_group_warrants',
+        'get_warrant_calculation',
+        'get_warrant_calculation_preview',
+        'get_approving_warrants',
+        'get_user_warrants_by_status'
+    ])]
     private ?int $id = null;
 
     #[ORM\OneToOne(inversedBy: 'warrantCalculation', cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['post_warrant_calculation', 'put_warrant_calculation', 'get_warrant_calculation'])]
+    #[Groups([
+        'post_warrant_calculation',
+        'put_warrant_calculation',
+        'get_warrant_calculation',
+        'get_warrant_calculation_preview'
+    ])]
     private ?Warrant $warrant = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    #[Groups(['post_warrant_calculation', 'put_warrant_calculation', 'get_warrant_calculation'])]
+    #[Groups([
+        'post_warrant_calculation',
+        'put_warrant_calculation',
+        'get_warrant_calculation',
+        'get_warrant_calculation_preview'
+    ])]
     #[Assert\NotBlank]
     private ?\DateTimeInterface $departureDate = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    #[Groups(['post_warrant_calculation', 'put_warrant_calculation', 'get_warrant_calculation'])]
+    #[Groups([
+        'post_warrant_calculation',
+        'put_warrant_calculation',
+        'get_warrant_calculation',
+        'get_warrant_calculation_preview'
+    ])]
     #[Assert\NotBlank]
     private ?\DateTimeInterface $returningDate = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    #[Groups(['post_warrant_calculation', 'put_warrant_calculation', 'get_warrant_calculation'])]
+    #[Groups([
+        'post_warrant_calculation',
+        'put_warrant_calculation',
+        'get_warrant_calculation',
+        'get_warrant_calculation_preview'
+    ])]
     private ?\DateTimeInterface $domicileCountryLeavingDate = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    #[Groups(['post_warrant_calculation', 'put_warrant_calculation', 'get_warrant_calculation'])]
+    #[Groups([
+        'post_warrant_calculation',
+        'put_warrant_calculation',
+        'get_warrant_calculation',
+        'get_warrant_calculation_preview'
+    ])]
     private ?\DateTimeInterface $domicileCountryReturningDate = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['post_warrant_calculation', 'put_warrant_calculation', 'get_warrant_calculation'])]
+    #[Groups([
+        'post_warrant_calculation',
+        'put_warrant_calculation',
+        'get_warrant_calculation',
+        'get_warrant_calculation_preview'
+    ])]
     #[Assert\NotBlank]
     private ?VehicleType $travelVehicleType = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['post_warrant_calculation', 'put_warrant_calculation', 'get_warrant_calculation'])]
+    #[Groups([
+        'post_warrant_calculation',
+        'put_warrant_calculation',
+        'get_warrant_calculation',
+        'get_warrant_calculation_preview'
+    ])]
     private ?string $travelVehicleDescription = null;
 
     #[ORM\Column(nullable: true)]
     private ?int $travelDuration = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['post_warrant_calculation', 'put_warrant_calculation', 'get_warrant_calculation'])]
+    #[Groups([
+        'post_warrant_calculation',
+        'put_warrant_calculation',
+        'get_warrant_calculation',
+        'get_warrant_calculation_preview'
+    ])]
     private ?string $travelVehicleRegistration = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['post_warrant_calculation', 'put_warrant_calculation', 'get_warrant_calculation'])]
+    #[Groups([
+        'post_warrant_calculation',
+        'put_warrant_calculation',
+        'get_warrant_calculation',
+        'get_warrant_calculation_preview'
+    ])]
     private ?string $travelVehicleBrand = null;
 
     #[ORM\Column(length: 1000)]
-    #[Groups(['post_warrant_calculation', 'put_warrant_calculation', 'get_warrant_calculation'])]
+    #[Groups([
+        'post_warrant_calculation',
+        'put_warrant_calculation',
+        'get_warrant_calculation',
+        'get_warrant_calculation_preview'
+        ])]
     #[Assert\NotBlank]
     private ?string $travelReport = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['post_warrant_calculation', 'put_warrant_calculation', 'get_warrant_calculation'])]
+    #[Groups([
+        'post_warrant_calculation',
+        'put_warrant_calculation',
+        'get_warrant_calculation',
+        'get_warrant_calculation_preview'
+        ])]
     private ?int $odometerStart = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['post_warrant_calculation', 'put_warrant_calculation', 'get_warrant_calculation'])]
+    #[Groups([
+        'post_warrant_calculation',
+        'put_warrant_calculation',
+        'get_warrant_calculation',
+        'get_warrant_calculation_preview'
+    ])]
     private ?int $odometerEnd = null;
 
     #[ORM\OneToMany(
@@ -114,7 +188,12 @@ class WarrantCalculation
         cascade      : ['persist', 'remove'],
         orphanRemoval: true
     )]
-    #[Groups(['post_warrant_calculation', 'put_warrant_calculation', 'get_warrant_calculation'])]
+    #[Groups([
+        'post_warrant_calculation',
+        'put_warrant_calculation',
+        'get_warrant_calculation',
+        'get_warrant_calculation_preview'
+    ])]
     private Collection $warrantTravelItineraries;
 
     #[ORM\OneToMany(
@@ -123,7 +202,12 @@ class WarrantCalculation
         cascade      : ['persist', 'remove'],
         orphanRemoval: true
     )]
-    #[Groups(['post_warrant_calculation', 'put_warrant_calculation', 'get_warrant_calculation'])]
+    #[Groups([
+        'post_warrant_calculation',
+        'put_warrant_calculation',
+        'get_warrant_calculation',
+        'get_warrant_calculation_preview'
+    ])]
     private Collection $warrantCalculationExpenses;
 
     #[ORM\OneToMany(
@@ -132,11 +216,17 @@ class WarrantCalculation
         cascade      : ['persist', 'remove'],
         orphanRemoval: true
     )]
+    #[Groups(['get_warrant_calculation_preview'])]
     private Collection $warrantCalculationWages;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['post_warrant_calculation', 'put_warrant_calculation', 'get_warrant_calculation'])]
+    #[Groups([
+        'post_warrant_calculation',
+        'put_warrant_calculation',
+        'get_warrant_calculation',
+        'get_warrant_calculation_preview'
+    ])]
     #[Assert\NotBlank]
     private ?WageType $wageType = null;
 

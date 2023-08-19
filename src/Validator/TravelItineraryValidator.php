@@ -36,7 +36,7 @@ class TravelItineraryValidator extends ConstraintValidator
 
         if (!$this->isValidTransition($departureItineraries) || !$this->isValidTransition($returnItineraries)) {
             $this->context->buildViolation($constraint->message)
-                ->atPath('warrantTravelItineraries')
+                ->atPath('domicileCountryReturningDate')
                 ->addViolation();
         }
     }

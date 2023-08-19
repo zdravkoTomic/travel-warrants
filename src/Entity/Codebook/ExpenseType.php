@@ -49,15 +49,15 @@ class ExpenseType
     #[ORM\GeneratedValue]
     #[ORM\Column]
     #[ApiProperty(identifier: true)]
-    #[Groups(['get_predefined_expense'])]
+    #[Groups(['get_predefined_expense', 'get_warrant_calculation_preview'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 50)]
-    #[Groups(['get_predefined_expense'])]
+    #[Groups(['get_predefined_expense', 'get_warrant_calculation_preview'])]
     private ?string $code = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['get_predefined_expense'])]
+    #[Groups(['get_predefined_expense', 'get_warrant_calculation_preview'])]
     private ?string $name = null;
 
     #[ORM\Column]

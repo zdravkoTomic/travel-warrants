@@ -27,28 +27,30 @@ class WarrantCalculationExpense
     private ?WarrantCalculation $warrantCalculation = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['get_warrant_calculation_preview'])]
     private ?float $amount = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: true)]
+    #[Groups(['get_warrant_calculation_preview'])]
     private ?Currency $currency = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['post_warrant_calculation', 'put_warrant_calculation', 'get_warrant_calculation'])]
+    #[Groups(['post_warrant_calculation', 'put_warrant_calculation', 'get_warrant_calculation', 'get_warrant_calculation_preview'])]
     private ?ExpenseType $expenseType = null;
 
     #[ORM\Column]
-    #[Groups(['post_warrant_calculation', 'put_warrant_calculation', 'get_warrant_calculation'])]
+    #[Groups(['post_warrant_calculation', 'put_warrant_calculation', 'get_warrant_calculation', 'get_warrant_calculation_preview'])]
     private ?float $originalAmount = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['post_warrant_calculation', 'put_warrant_calculation', 'get_warrant_calculation'])]
+    #[Groups(['post_warrant_calculation', 'put_warrant_calculation', 'get_warrant_calculation', 'get_warrant_calculation_preview'])]
     private ?Currency $originalCurrency = null;
 
     #[ORM\Column(length: 1000, nullable: true)]
-    #[Groups(['post_warrant_calculation', 'put_warrant_calculation', 'get_warrant_calculation'])]
+    #[Groups(['post_warrant_calculation', 'put_warrant_calculation', 'get_warrant_calculation', 'get_warrant_calculation_preview'])]
     private ?string $description = null;
 
     public function getId(): ?int

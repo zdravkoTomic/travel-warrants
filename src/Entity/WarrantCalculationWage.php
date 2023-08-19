@@ -8,6 +8,7 @@ use App\Entity\Codebook\Country;
 use App\Entity\Codebook\Currency;
 use App\Repository\WarrantCalculationWageRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: WarrantCalculationWageRepository::class)]
 #[ApiResource]
@@ -17,10 +18,12 @@ class WarrantCalculationWage
     #[ORM\GeneratedValue]
     #[ORM\Column]
     #[ApiProperty(identifier: true)]
+    #[Groups(['get_warrant_calculation_preview'])]
     private ?int $id = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['get_warrant_calculation_preview'])]
     private ?Country $country = null;
 
     #[ORM\ManyToOne(inversedBy: 'warrantCalculationWages')]
@@ -28,13 +31,16 @@ class WarrantCalculationWage
     private ?WarrantCalculation $warrantCalculation = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['get_warrant_calculation_preview'])]
     private ?float $amount = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['get_warrant_calculation_preview'])]
     private ?Currency $currency = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['get_warrant_calculation_preview'])]
     private ?float $numberOfWages = null;
 
     public function getId(): ?int

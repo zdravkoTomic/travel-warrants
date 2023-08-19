@@ -50,26 +50,52 @@ class Currency
     #[ORM\GeneratedValue]
     #[ORM\Column]
     #[ApiProperty(identifier: true)]
-    #[Groups(['get_warrant', 'get_country_item', 'get_country_wages', 'get_predefined_expense'])]
+    #[Groups([
+        'get_warrant',
+        'get_country_item',
+        'get_country_wages',
+        'get_predefined_expense',
+        'get_warrant_calculation_preview'
+    ])]
     private ?int $id = null;
 
     #[ORM\Column(length: 50)]
-    #[Groups(['get_warrant', 'get_country_item', 'get_country_wages', 'get_predefined_expense'])]
+    #[Groups([
+        'get_warrant',
+        'get_country_item',
+        'get_country_wages',
+        'get_predefined_expense',
+        'get_warrant_calculation_preview'
+    ])]
     #[Assert\NotBlank]
     private ?string $code = null;
 
     #[ORM\Column]
-    #[Groups(['get_warrant', 'get_country_item', 'get_country_wages', 'get_predefined_expense'])]
+    #[Groups([
+        'get_warrant',
+        'get_country_item',
+        'get_country_wages',
+        'get_predefined_expense',
+        'get_warrant_calculation_preview'
+    ])]
     #[Assert\NotBlank]
     private ?string $codeNumeric = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['get_warrant', 'get_country_item', 'get_country_wages', 'get_predefined_expense'])]
+    #[Groups([
+        'get_warrant',
+        'get_country_item',
+        'get_country_wages',
+        'get_predefined_expense',
+        'get_warrant_calculation_preview'
+    ])]
     #[Assert\NotBlank]
     private ?string $name = null;
 
     #[ORM\Column]
-    #[Groups(['get_country_item', 'get_predefined_expense'])]
+    #[Groups([
+        'get_country_item',
+        'get_predefined_expense'])]
     private ?bool $active = null;
 
     public function getId(): ?int

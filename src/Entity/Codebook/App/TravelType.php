@@ -34,11 +34,11 @@ class TravelType
     private ?int $id = null;
 
     #[ORM\Column(length: 50)]
-    #[Groups(['get_user_group_warrants', 'get_warrant', 'get_user_warrants_by_status'])]
+    #[Groups(['get_user_group_warrants', 'get_warrant', 'get_user_warrants_by_status', 'get_warrant_calculation_preview'])]
     private ?string $code = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['get_user_group_warrants', 'get_warrant', 'get_user_warrants_by_status'])]
+    #[Groups(['get_user_group_warrants', 'get_warrant', 'get_user_warrants_by_status', 'get_warrant_calculation_preview'])]
     private ?string $name = null;
 
     #[ORM\Column]
