@@ -79,4 +79,60 @@ class PaymentRepository extends ServiceEntityRepository
             ->getQuery()
             ->execute();
     }
+
+    public function findPaymentExpensesById(int $paymentId): ?array
+    {
+        return $this->createQueryBuilder('p')
+            ->select(
+                'w.code AS warrant_code',
+                'e.name AS employee_name',
+                'e.surname AS employee_surname',
+                'd.name AS department_name',
+                'et.code AS expense_type_code',
+                'et.name AS expense_type_name',
+                'wce.amount AS expense_amount',
+                'c.code AS currency_code',
+                'c.name AS currency_name'
+            )
+            ->innerJoin('p.warrantPayments', 'wp')
+            ->innerJoin('wp.warrant', 'w')
+            ->innerJoin('w.warrantCalculation', 'wc')
+            ->innerJoin('wc.warrantCalculationExpenses', 'wce')
+            ->innerJoin('wce.expenseType', 'et')
+            ->innerJoin('wce.currency', 'c')
+            ->innerJoin('w.employee', 'e')
+            ->innerJoin('w.department', 'd')
+            ->where('p.id = :paymentId')
+            ->setParameter('paymentId', $paymentId)
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findPaymentWarrantCalculationWages(int $paymentId)
+    {
+        return $this->createQueryBuilder('p')
+            ->select(
+                'w.code AS warrant_code',
+                'e.name AS employee_name',
+                'e.surname AS employee_surname',
+                'd.name AS department_name',
+                'co.code AS country_code',
+                'co.domicile AS country_domicile',
+                'wcw.amount AS expense_amount',
+                'c.code AS currency_code',
+                'c.name AS currency_name'
+            )
+            ->innerJoin('p.warrantPayments', 'wp')
+            ->innerJoin('wp.warrant', 'w')
+            ->innerJoin('w.warrantCalculation', 'wc')
+            ->innerJoin('wc.warrantCalculationWages', 'wcw')
+            ->innerJoin('wcw.country', 'co')
+            ->innerJoin('wcw.currency', 'c')
+            ->innerJoin('w.employee', 'e')
+            ->innerJoin('w.department', 'd')
+            ->where('p.id = :paymentId')
+            ->setParameter('paymentId', $paymentId)
+            ->getQuery()
+            ->getResult();
+    }
 }

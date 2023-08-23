@@ -45,6 +45,12 @@ use Symfony\Component\Serializer\Annotation\Groups;
 ])]
 class ExpenseType
 {
+    public const DOMICILE_WAGE = 'DOMICILE_WAGE';
+
+    public const INTERNATIONAL_WAGE = 'INTERNATIONAL_WAGE';
+
+    public const ADVANCES = 'ADVANCES';
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]

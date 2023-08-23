@@ -13,6 +13,7 @@ use ApiPlatform\Metadata\Link;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\Serializer\Filter\PropertyFilter;
 use App\Controller\Payment\ClosePaymentAction;
+use App\Controller\Payment\DownloadPaymentExpensesReportAction;
 use App\Entity\Codebook\WarrantPaymentStatus;
 use App\Repository\PaymentRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -26,6 +27,12 @@ use Symfony\Component\Serializer\Annotation\Groups;
     operations: [
         new Get(
             security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_PROCURATOR')"
+        ),
+        new Get(
+            uriTemplate: '/payments/{id}/report',
+            formats    : ['pdf'],
+            controller : DownloadPaymentExpensesReportAction::class,
+            read       : false
         ),
         new GetCollection(
             uriTemplate         : '/catalog/payments',

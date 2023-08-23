@@ -3,7 +3,7 @@ VALUES('PARKING', 'Parking', 1);
 INSERT INTO expense_type (code,  name, active)
 VALUES('TAXI', 'Taxi', 1);
 INSERT INTO expense_type (code,  name, active)
-VALUES('DOMICILE_WAGE', 'DnevnicA', 1);
+VALUES('DOMICILE_WAGE', 'Domicilna Dnevnica', 1);
 INSERT INTO expense_type (code,  name, active)
 VALUES('INTERNATIONAL_WAGE', 'Inozemna dnevnica', 1);
 INSERT INTO expense_type (code,  name, active)
