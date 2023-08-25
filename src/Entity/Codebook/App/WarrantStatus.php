@@ -38,6 +38,7 @@ class WarrantStatus
     public const APPROVING_CALCULATION         = 'APPROVING_CALCULATION';
     public const APPROVING_CALCULATION_PAYMENT = 'APPROVING_CALCULATION_PAYMENT';
     public const CALCULATION_IN_PAYMENT        = 'CALCULATION_IN_PAYMENT';
+    public const ADVANCE_REFUND                = 'ADVANCE_REFUND';
     public const CLOSED                        = 'CLOSED';
     public const CANCELLED                     = 'CANCELLED';
 
@@ -50,16 +51,17 @@ class WarrantStatus
         'get_warrant',
         'get_user_warrants_by_status',
         'get_warrant_status_by_code',
-        'get_payments_by_payment_status'
+        'get_payments_by_payment_status',
+        'get_all_warrants'
     ])]
     private ?int $id = null;
 
     #[ORM\Column(length: 30)]
-    #[Groups(['get_user_group_warrants', 'get_warrant', 'get_user_warrants_by_status', 'get_warrant_status_by_code', 'get_payments_by_payment_status'])]
+    #[Groups(['get_user_group_warrants', 'get_warrant', 'get_user_warrants_by_status', 'get_all_warrants', 'get_warrant_status_by_code', 'get_payments_by_payment_status'])]
     private ?string $code = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['get_user_group_warrants', 'get_warrant', 'get_user_warrants_by_status', 'get_warrant_status_by_code', 'get_payments_by_payment_status'])]
+    #[Groups(['get_user_group_warrants', 'get_warrant', 'get_user_warrants_by_status', 'get_all_warrants', 'get_all_warrants', 'get_warrant_status_by_code', 'get_payments_by_payment_status'])]
     private ?string $name = null;
 
     #[ORM\Column]

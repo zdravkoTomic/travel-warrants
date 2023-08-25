@@ -8,9 +8,11 @@ use App\Entity\Codebook\WarrantPaymentStatus;
 use App\Entity\Employee;
 use App\Entity\Payment;
 use App\Exception\RecordNotFoundException;
+use App\Repository\Codebook\App\WarrantStatusRepository;
 use App\Repository\Codebook\ExpenseTypeRepository;
 use App\Repository\Codebook\WarrantPaymentStatusRepository;
 use App\Repository\PaymentRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use RuntimeException;
 
 class PaymentService
@@ -18,15 +20,21 @@ class PaymentService
     private PaymentRepository $paymentRepository;
     private WarrantPaymentStatusRepository $warrantPaymentStatusRepository;
     private ExpenseTypeRepository $expenseTypeRepository;
+    private WarrantStatusRepository $warrantStatusRepository;
+    private EntityManagerInterface $entityManager;
 
     public function __construct(
         PaymentRepository              $paymentRepository,
         WarrantPaymentStatusRepository $warrantPaymentStatusRepository,
-        ExpenseTypeRepository          $expenseTypeRepository
+        ExpenseTypeRepository          $expenseTypeRepository,
+        WarrantStatusRepository        $warrantStatusRepository,
+        EntityManagerInterface         $entityManager
     ) {
         $this->paymentRepository              = $paymentRepository;
         $this->warrantPaymentStatusRepository = $warrantPaymentStatusRepository;
         $this->expenseTypeRepository          = $expenseTypeRepository;
+        $this->warrantStatusRepository        = $warrantStatusRepository;
+        $this->entityManager                  = $entityManager;
     }
 
     public function closeOpenedPayment(Payment $payment, Employee $user): void
@@ -41,7 +49,35 @@ class PaymentService
             throw new RuntimeException('An exception occured while fetching closed warrant payment status');
         }
 
+        $calculationEditStatus = $this->warrantStatusRepository->findExistingByCode(
+            WarrantStatus::CALCULATION_EDIT
+        );
+
+        $closedWarrantStatus = $this->warrantStatusRepository->findExistingByCode(
+            WarrantStatus::CLOSED
+        );
+
         $this->paymentRepository->closePayment($payment, $user, $closedWarrantPaymentStatus);
+
+        foreach ($payment->getWarrantPayments() as $warrantPayment) {
+            $warrant = $warrantPayment->getWarrant();
+
+            if (!$warrant) {
+                throw new RuntimeException('An exception occured while fetching warrant data');
+            }
+
+            if ($warrant->getStatus()->getCode() === WarrantStatus::ADVANCE_IN_PAYMENT) {
+                $warrant->setStatus($calculationEditStatus);
+            }
+
+            if ($warrant->getStatus()->getCode() === WarrantStatus::CALCULATION_IN_PAYMENT) {
+                $warrant->setStatus($closedWarrantStatus);
+            }
+
+            $this->entityManager->persist($warrant);
+        }
+
+        $this->entityManager->flush();
     }
 
     /**

@@ -15,6 +15,7 @@ final class WarrantStatusTransition
     public const TO_APPROVING_CALCULATION         = 'to_approving_calculation';
     public const TO_APPROVING_CALCULATION_PAYMENT = 'to_approving_calculation_payment';
     public const TO_CALCULATION_IN_PAYMENT        = 'to_calculation_in_payment';
+    public const TO_ADVANCE_REFUND                = 'to_advance_refund';
     public const TO_CLOSED                        = 'to_closed';
     public const TO_CANCELLED                     = 'to_cancelled';
 

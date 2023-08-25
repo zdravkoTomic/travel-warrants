@@ -73,11 +73,13 @@ use Symfony\Component\Serializer\Annotation\Groups;
     'warrantPayments.warrant.employee.department.code' => 'ipartial',
     'warrantPayments.warrant.destination'              => 'ipartial',
     'warrantPayments.warrant.advancesRequired'         => 'ipartial',
-    'warrantPayments.warrant.warrantStatus.code'       => 'ipartial'
+    'warrantPayments.warrant.warrantStatus.code'       => 'ipartial',
+    'warrantPayments.payment.id'                       => 'exact'
 ])]
 #[ApiFilter(
     OrderFilter::class,
     properties: [
+        'id',
         'warrantPayments.warrant.code',
         'warrantPayments.warrant.travelType.code',
         'warrantPayments.warrant.employee.name',

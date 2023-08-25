@@ -30,7 +30,7 @@ class TravelType
     #[ORM\GeneratedValue]
     #[ORM\Column]
     #[ApiProperty(identifier: true)]
-    #[Groups(['get_user_group_warrants', 'get_warrant', 'get_user_warrants_by_status'])]
+    #[Groups(['get_user_group_warrants', 'get_warrant', 'get_user_warrants_by_status', 'get_all_warrants'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 50)]
@@ -38,7 +38,8 @@ class TravelType
         'get_user_group_warrants',
         'get_warrant',
         'get_user_warrants_by_status',
-        'get_warrant_calculation_preview'
+        'get_warrant_calculation_preview',
+        'get_all_warrants'
     ])]
     private ?string $code = null;
 
@@ -48,7 +49,8 @@ class TravelType
         'get_warrant',
         'get_user_warrants_by_status',
         'get_warrant_calculation_preview',
-        'get_payments_by_payment_status'
+        'get_payments_by_payment_status',
+        'get_all_warrants'
     ])]
     private ?string $name = null;
 

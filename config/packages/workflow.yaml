@@ -16,6 +16,7 @@ framework:
                 - !php/const App\Entity\Codebook\App\WarrantStatus::APPROVING_CALCULATION
                 - !php/const App\Entity\Codebook\App\WarrantStatus::APPROVING_CALCULATION_PAYMENT
                 - !php/const App\Entity\Codebook\App\WarrantStatus::CALCULATION_IN_PAYMENT
+                - !php/const App\Entity\Codebook\App\WarrantStatus::ADVANCE_REFUND
                 - !php/const App\Entity\Codebook\App\WarrantStatus::CLOSED
                 - !php/const App\Entity\Codebook\App\WarrantStatus::CANCELLED
             transitions:
@@ -65,9 +66,18 @@ framework:
                         - !php/const App\Entity\Codebook\App\WarrantStatus::APPROVING_CALCULATION_PAYMENT
                     to: !php/const App\Entity\Codebook\App\WarrantStatus::CALCULATION_IN_PAYMENT
 
+                !php/const App\Workflow\WarrantStatusTransition::TO_ADVANCE_REFUND:
+                    from:
+                        - !php/const App\Entity\Codebook\App\WarrantStatus::CALCULATION_EDIT
+                        - !php/const App\Entity\Codebook\App\WarrantStatus::APPROVING_CALCULATION
+                        - !php/const App\Entity\Codebook\App\WarrantStatus::APPROVING_CALCULATION_PAYMENT
+                        - !php/const App\Entity\Codebook\App\WarrantStatus::CALCULATION_IN_PAYMENT
+                    to: !php/const App\Entity\Codebook\App\WarrantStatus::ADVANCE_REFUND
+
                 !php/const App\Workflow\WarrantStatusTransition::TO_CLOSED:
                     from:
                         - !php/const App\Entity\Codebook\App\WarrantStatus::CALCULATION_IN_PAYMENT
+                        - !php/const App\Entity\Codebook\App\WarrantStatus::ADVANCE_REFUND
                     to: !php/const App\Entity\Codebook\App\WarrantStatus::CLOSED
 
                 !php/const App\Workflow\WarrantStatusTransition::TO_CANCELLED:
@@ -80,4 +90,5 @@ framework:
                         - !php/const App\Entity\Codebook\App\WarrantStatus::APPROVING_CALCULATION
                         - !php/const App\Entity\Codebook\App\WarrantStatus::APPROVING_CALCULATION_PAYMENT
                         - !php/const App\Entity\Codebook\App\WarrantStatus::CALCULATION_IN_PAYMENT
+                        - !php/const App\Entity\Codebook\App\WarrantStatus::ADVANCE_REFUND
                     to: !php/const App\Entity\Codebook\App\WarrantStatus::CANCELLED

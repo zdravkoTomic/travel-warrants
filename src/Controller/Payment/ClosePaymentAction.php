@@ -8,7 +8,7 @@ use App\Entity\Payment;
 use App\Repository\Codebook\App\WarrantStatusRepository;
 use App\Service\Payment\PaymentService;
 use App\Service\Warrant\WarrantStatusService;
-use http\Exception\RuntimeException;
+use RuntimeException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;

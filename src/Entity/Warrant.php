@@ -44,7 +44,6 @@ use Symfony\Component\Validator\Constraints as Assert;
             controller : DownloadWarrantPdfReportAction::class,
             read       : false
         ),
-        new GetCollection(paginationClientItemsPerPage: true),
         new GetCollection(
             uriTemplate                 : '/employees/{employeeId}/warrant-group-statuses/{groupStatusId}/warrants',
             uriVariables                : [
@@ -88,6 +87,14 @@ use Symfony\Component\Validator\Constraints as Assert;
             security                    : "is_granted('ROLE_PROCURATOR') or is_granted('ROLE_ADMIN')",
             name                        : 'get_crediting_warrants'
         ),
+        new GetCollection(
+            paginationEnabled           : true,
+            paginationClientItemsPerPage: true,
+            description                 : 'Retrieves all user warrants',
+            normalizationContext        : ['groups' => ['get_all_warrants']],
+            security                    : "is_granted('ROLE_ADMIN')",
+            name                        : 'get_all_warrants'
+        ),
         new Post(
             denormalizationContext: ['groups' => ['post_warrant']],
             security              : "is_granted('ROLE_EMPLOYEE')",
@@ -112,8 +119,10 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiFilter(SearchFilter::class, properties: [
     'employee.name'           => 'ipartial',
     'employee.surname'        => 'ipartial',
+    'department.name'         => 'ipartial',
     'travelType.name'         => 'ipartial',
     'destinationCountry.name' => 'ipartial',
+    'destination.name'        => 'ipartial',
     'status.name'             => 'ipartial'
 ])]
 #[ApiFilter(
@@ -121,9 +130,14 @@ use Symfony\Component\Validator\Constraints as Assert;
     properties: [
         'createdAt',
         'destination',
+        'employee.surname',
         'status.name',
+        'department.name',
         'destinationCountry.name',
         'departureDate',
+        'travelType.code',
+        'travelType.name',
+        'advancesRequired',
         'active' => 'ASC', 'ACTIVE'
     ]
 )]
@@ -139,7 +153,8 @@ class Warrant
         'get_user_group_warrants',
         'get_warrant',
         'get_user_warrants_by_status',
-        'get_payments_by_payment_status'
+        'get_payments_by_payment_status',
+        'get_all_warrants'
     ])]
     private ?int $id = null;
 
@@ -151,7 +166,8 @@ class Warrant
         'get_warrant',
         'get_user_warrants_by_status',
         'get_warrant_calculation_preview',
-        'get_payments_by_payment_status'
+        'get_payments_by_payment_status',
+        'get_all_warrants'
     ])]
     #[ApiFilter(SearchFilter::class, strategy: 'exact')]
     private ?string $code = null;
@@ -164,14 +180,15 @@ class Warrant
         'get_warrant',
         'get_user_warrants_by_status',
         'get_user_group_warrants',
-        'get_payments_by_payment_status'
+        'get_payments_by_payment_status',
+        'get_all_warrants'
     ])]
     #[ApiFilter(SearchFilter::class, strategy: 'exact')]
     private Employee $employee;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups('get_warrant')]
+    #[Groups(['get_warrant', 'get_all_warrants'])]
     private ?Department $department = null;
 
     #[ORM\ManyToOne]
@@ -181,7 +198,8 @@ class Warrant
         'get_user_group_warrants',
         'get_warrant',
         'get_user_warrants_by_status',
-        'get_payments_by_payment_status'
+        'get_payments_by_payment_status',
+        'get_all_warrants'
     ])]
     #[ApiFilter(SearchFilter::class, strategy: 'exact')]
     private ?WarrantStatus $status = null;
@@ -198,7 +216,8 @@ class Warrant
         'get_warrant',
         'get_user_warrants_by_status',
         'get_warrant_calculation_preview',
-        'get_payments_by_payment_status'
+        'get_payments_by_payment_status',
+        'get_all_warrants'
     ])]
     private ?TravelType $travelType = null;
 
@@ -211,7 +230,8 @@ class Warrant
         'get_warrant',
         'get_user_warrants_by_status',
         'get_warrant_calculation',
-        'get_payments_by_payment_status'
+        'get_payments_by_payment_status',
+        'get_all_warrants'
     ])]
     #[Assert\NotBlank(groups: ['post_warrant', 'put_warrant'])]
     #[ApiFilter(SearchFilter::class, strategy: 'exact')]
@@ -232,7 +252,8 @@ class Warrant
         'put_warrant',
         'get_warrant',
         'get_user_group_warrants',
-        'get_user_warrants_by_status'
+        'get_user_warrants_by_status',
+        'get_all_warrants'
     ])]
     #[Assert\NotBlank(groups: ['post_warrant', 'put_warrant'])]
     private ?string $departurePoint = null;
@@ -245,7 +266,8 @@ class Warrant
         'get_warrant',
         'get_user_warrants_by_status',
         'get_warrant_calculation',
-        'get_payments_by_payment_status'
+        'get_payments_by_payment_status',
+        'get_all_warrants'
     ])]
     #[Assert\NotBlank(groups: ['post_warrant', 'put_warrant', 'get_payments_by_payment_status'])]
     #[ApiFilter(SearchFilter::class, strategy: 'ipartial')]
@@ -259,7 +281,8 @@ class Warrant
         'put_warrant',
         'get_warrant',
         'get_user_group_warrants',
-        'get_user_warrants_by_status'
+        'get_user_warrants_by_status',
+        'get_all_warrants'
     ])]
     private ?\DateTimeInterface $departureDate = null;
 
@@ -302,11 +325,11 @@ class Warrant
     private ?string $vehicleDescription = null;
 
     #[ORM\Column]
-    #[Groups(['get_warrant', 'get_user_warrants_by_status', 'get_payments_by_payment_status'])]
+    #[Groups(['get_warrant', 'get_user_warrants_by_status', 'get_payments_by_payment_status', 'get_all_warrants'])]
     private ?bool $advancesRequired = null;
 
     #[ORM\Column]
-    #[Groups(['post_warrant', 'put_warrant', 'get_warrant', 'get_user_warrants_by_status'])]
+    #[Groups(['post_warrant', 'put_warrant', 'get_warrant', 'get_user_warrants_by_status', 'get_all_warrants'])]
     private ?float $advancesAmount = null;
 
     #[ORM\ManyToOne]
@@ -316,7 +339,7 @@ class Warrant
 
     #[ORM\Column]
     #[Gedmo\Timestampable(on: 'create')]
-    #[Groups(['get_user_group_warrants', 'get_user_warrants_by_status', 'get_warrant'])]
+    #[Groups(['get_user_group_warrants', 'get_user_warrants_by_status', 'get_warrant', 'get_all_warrants'])]
     #[ApiFilter(OrderFilter::class)]
     private ?\DateTimeImmutable $createdAt = null;
 
@@ -325,7 +348,7 @@ class Warrant
     private Collection $warrantStatusFlows;
 
     #[ORM\OneToOne(mappedBy: 'warrant', cascade: ['persist', 'remove'])]
-    #[Groups(['get_user_group_warrants', 'get_approving_warrants', 'get_user_warrants_by_status', 'get_payments_by_payment_status'])]
+    #[Groups(['get_user_group_warrants', 'get_approving_warrants', 'get_user_warrants_by_status', 'get_all_warrants', 'get_payments_by_payment_status'])]
     private ?WarrantCalculation $warrantCalculation = null;
 
     public function __construct()

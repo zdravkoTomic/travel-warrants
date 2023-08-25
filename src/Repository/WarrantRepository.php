@@ -118,4 +118,36 @@ class WarrantRepository extends ServiceEntityRepository
         $this->getEntityManager()->persist($warrant);
         $this->getEntityManager()->flush();
     }
+
+    public function findWarrantExpensesByWarrantId(int $warrantId): ?array
+    {
+        return $this->createQueryBuilder('w')
+            ->select(
+                'SUM(wce.amount) AS expense_amount',
+                'c.code AS currency_code'
+            )
+            ->innerJoin('w.warrantCalculation', 'wc')
+            ->innerJoin('wc.warrantCalculationExpenses', 'wce')
+            ->innerJoin('wce.currency', 'c')
+            ->where('w.id = :warrantId')
+            ->setParameter('warrantId', $warrantId)
+            ->groupBy('c.code')  // Group by currency_code
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findWarrantCalculationWagesByWarrantId(int $warrantId): ?array
+    {
+        return $this->createQueryBuilder('w')
+            ->select('wcw.amount AS expense_amount',
+                     'c.code AS currency_code',
+            )
+            ->innerJoin('w.warrantCalculation', 'wc')
+            ->innerJoin('wc.warrantCalculationWages', 'wcw')
+            ->innerJoin('wcw.currency', 'c')
+            ->where('w.id = :warrantId')
+            ->setParameter('warrantId', $warrantId)
+            ->getQuery()
+            ->getResult();
+    }
 }

@@ -13,7 +13,7 @@ VALUES('APPROVING_CALCULATION', 'Odobravanje obračuna', 1);
 INSERT INTO warrant_status (code, name, active)
 VALUES('APPROVING_CALCULATION_PAYMENT', 'Odobravanje obračuna za plaćanje', 1);
 INSERT INTO warrant_status (code, name, active)
-VALUES('CALCULATION_IN_PAYMENT', 'Plaćanje obračuna', 1);
+VALUES('ADVANCE_REFUND', 'Povrat akontacije', 1);
 INSERT INTO warrant_status (code, name, active)
 VALUES('CLOSED', 'Nalog isplaćen', 1);
 INSERT INTO warrant_status (code, name, active)

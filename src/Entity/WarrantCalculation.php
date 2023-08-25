@@ -62,7 +62,8 @@ class WarrantCalculation
         'get_warrant_calculation_preview',
         'get_approving_warrants',
         'get_user_warrants_by_status',
-        'get_payments_by_payment_status'
+        'get_payments_by_payment_status',
+        'get_all_warrants'
     ])]
     private ?int $id = null;
 
