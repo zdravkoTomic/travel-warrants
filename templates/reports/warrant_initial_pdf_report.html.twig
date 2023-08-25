@@ -4,6 +4,19 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title>Putni nalog</title>
     <style>
+        .page {
+            margin: 0 auto;
+            display: block;
+            width: 500px;
+        }
+
+        .page-calculation {
+            margin: 0 auto;
+            display: block;
+            width: 700px;
+            font-size: 0.8em;
+        }
+
         .pdf_title {
             text-align: center;
         }
@@ -37,10 +50,26 @@
             width: 100%;
             font-size: 0.6em;
         }
+
+        .page-break {
+            page-break-before: always;
+        }
+
+        .table-header-side-cell {
+            background-color: lightgrey;
+            font-weight: bold;
+            padding: 5px;
+            border: 1px solid #000;
+        }
+
+        .table-cell {
+            padding: 5px;
+            border: 1px solid #000;
+        }
     </style>
 </head>
 <body>
-<div style="margin: 0 auto;display: block;width: 500px;">
+<div class="page">
     <div style="display: block; width: 100px;">
         <p>{{ barcode | raw }}
             {{ code }}
@@ -65,8 +94,9 @@
         <p>
             Očekivano trajanje putovanja: {{ expectedTravelDuration }} dana <br>
             Iznos dnevnice putovanja: {{ wageAmount | number_format(2, '.', ',') }} {{ wageCurrency }} <br>
-            Odobrava se akontacija u iznosu od: {{ getAdvancesAmount | number_format(2, '.', ',') }} EUR <br>
-            Odobrava se upotreba prijevoznog sredstva: {{ vehicleType }} {{ vehicleTypeDescription ? '(' ~ vehicleTypeDescription ~ ')' : '' }}
+            Odobrava se akontacija u iznosu od: {{ advancesAmount | number_format(2, '.', ',') }} EUR <br>
+            Odobrava se upotreba prijevoznog
+            sredstva: {{ vehicleType }} {{ vehicleTypeDescription ? '(' ~ vehicleTypeDescription ~ ')' : '' }}
         </p>
     </div>
     <div id="pdf_signature_right">
@@ -78,5 +108,203 @@
         <div class="signature_text">Nalogodavatelj</div>
     </div>
 </div>
+
+{% if calculation_data is not empty %}
+    <div class="page-calculation page-break">
+        <h1 class="pdf_title">Obračun putnih troškova</h1>
+        <h2>Dnevnik putovanja</h2>
+        {% if travelTypeCode == 'DOMESTIC' %}
+            <table style="width: 100%; border-collapse: collapse;">
+                <tr>
+                    <th class="table-header-side-cell"></th>
+                    <th style="width: 70%; background-color: lightgrey; font-weight: bold; padding: 5px; border: 1px solid #000;">
+                        Datum i vrijeme
+                    </th>
+                </tr>
+                <tr>
+                    <td class="table-header-side-cell">
+                        Polazak
+                    </td>
+                    <td style="width: 70%; padding: 5px; border: 1px solid #000;">{{ calculation_data.departureDate }}</td>
+                </tr>
+                <tr>
+                    <td class="table-header-side-cell">Povratak
+                    </td>
+                    <td style="padding: 5px; border: 1px solid #000;">{{ calculation_data.returningDate }}</td>
+                </tr>
+            </table>
+        {% else %}
+            <table style="width: 100%; border-collapse: collapse;">
+                <tr>
+                    <th class="table-header-side-cell"></th>
+                    <th class="table-header-side-cell">
+                        Datum i vrijeme
+                    </th>
+                    <th class="table-header-side-cell">
+                        Datum i vrijeme prelaska granice
+                    </th>
+                </tr>
+                <tr>
+                    <td class="table-header-side-cell">
+                        Polazak
+                    </td>
+                    <td class="table-cell">{{ calculation_data.departureDate }}</td>
+                    <td class="table-cell">{{ calculation_data.domicileCountryLeavingDate }}</td>
+                </tr>
+                <tr>
+                    <td class="table-header-side-cell">
+                        Povratak
+                    </td>
+                    <td class="table-cell">{{ calculation_data.returningDate }}</td>
+                    <td class="table-cell">{{ calculation_data.domicileCountryReturningDate }}</td>
+                </tr>
+            </table>
+
+            {% if calculation_data.warrantTravelItineraries is not empty %}
+                <h4>Zemlje putovanja</h4>
+                <table style="width: 100%; border-collapse: collapse;">
+                    <tr>
+                        <th class="table-header-side-cell"></th>
+                        <th class="table-header-side-cell">
+                            Datum i vrijeme ulaska
+                        </th>
+                        <th class="table-header-side-cell">
+                            Datum i vrijeme izlaska
+                        </th>
+                    </tr>
+                    {% for itinerary in calculation_data.warrantTravelItineraries %}
+                        <tr>
+                            <td class="table-header-side-cell">
+                                {{ itinerary.country.name }}
+                            </td>
+                            <td class="table-cell">
+                                {{ itinerary.enteredDate|date('d.m.Y H:i:s') }}
+                            </td>
+                            <td class="table-cell">
+                                {{ itinerary.exitedDate|date('d.m.Y H:i:s') }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            {% endif %}
+        {% endif %}
+        {% if calculation_data.warrantCalculationWages is not empty %}
+            <h4>Dnevnice</h4>
+            <table style="width: 100%; border-collapse: collapse;">
+                <tr>
+                    <th class="table-header-side-cell"></th>
+                    <th class="table-header-side-cell">
+                        Br. dnevnica
+                    </th>
+                    <th class="table-header-side-cell">
+                        Tip dnevnice
+                    </th>
+                    <th class="table-header-side-cell">
+                        Iznos ukupno
+                    </th>
+                </tr>
+                {% for wage in calculation_data.warrantCalculationWages %}
+                    <tr>
+                        <td class="table-header-side-cell">
+                            {{ wage.country.name }}
+                        </td>
+                        <td class="table-cell">
+                            {{ wage.numberOfWages }}
+                        </td>
+                        <td class="table-cell">
+                            {{ calculation_data.wageType.name }}
+                        </td>
+                        <td class="table-cell">
+                            {{ wage.amount }} {{ wage.currency.code }}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% endif %}
+        {% if calculation_data.warrantCalculationExpenses is not empty %}
+            <h4>Troškovi</h4>
+            <table style="width: 100%; border-collapse: collapse;">
+                <tr>
+                    <th class="table-header-side-cell">Trošak</th>
+                    <th class="table-header-side-cell">
+                        Originalni iznos
+                    </th>
+                    <th class="table-header-side-cell">
+                        Iznos za isplatu
+                    </th>
+                </tr>
+                {% for expense in calculation_data.warrantCalculationExpenses %}
+                    <tr>
+                        <td class="table-header-side-cell">
+                            {{ expense.expenseType.name }} - {{ expense.description }}
+                        </td>
+                        <td class="table-cell">
+                            {{ expense.originalAmount | number_format(2, '.', ',') }} {{ expense.originalCurrency.code }}
+                        </td>
+                        <td class="table-cell">
+                            {{ expense.amount | number_format(2, '.', ',') }} {{ expense.currency.code }}
+                        </td>
+                    </tr>
+                {% endfor %}
+
+            </table>
+        {% endif %}
+        {% if advancesRequired %}
+            <h4>Akontacija</h4>
+            <table style="width: 100%; border-collapse: collapse;">
+                <tr>
+                    <th class="table-header-side-cell"></th>
+                    <th class="table-header-side-cell">
+                        Iznos
+                    </th>
+                </tr>
+                <tr>
+                    <td class="table-header-side-cell">
+                        Isplaćena akontacija
+                    </td>
+                    <td class="table-cell">
+                        -{{ advancesAmount | number_format(2, '.', ',') }} {{ advancesCurrency.code }}
+                    </td>
+                </tr>
+            </table>
+        {% endif %}
+        <br>
+        {% if calculation_data.totalExpenses is not empty %}
+            <table style="width: 100%; border-collapse: collapse;">
+                <tr>
+                    <td class="table-header-side-cell">
+                        Ukupno za isplatu
+                    </td>
+                    <td class="table-cell">
+                        {% for item in calculation_data.totalExpenses %}
+                            {{ item.amount }} {{ item.currency }}<br>
+                        {% endfor %}
+                    </td>
+                </tr>
+            </table>
+        {% else %}
+            <table style="width: 100%; border-collapse: collapse;">
+                <tr>
+                    <td class="table-header-side-cell">
+                        Ukupno za isplatu
+                    </td>
+                    <td class="table-cell">
+                        0.00 EUR
+                    </td>
+                </tr>
+            </table>
+        {% endif %}
+    </div>
+
+    <div class="page page-break">
+        <div>
+            <br>
+            <h2 class="pdf_title">Izvješće putovanja</h2>
+            <p class="pdf_paragraph_text">
+                {{ calculation_data.travelReport }}
+            </p>
+        </div>
+    </div>
+{% endif %}
 </body>
 </html>

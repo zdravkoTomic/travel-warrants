@@ -26,9 +26,12 @@ class WarrantPdfReportService
             'expectedTravelDuration'   => $warrant->getExpectedTravelDuration(),
             'wageAmount'               => $warrant->getWageAmount(),
             'wageCurrency'             => $warrant->getWageCurrency()->getCode(),
-            'getAdvancesAmount'        => $warrant->getAdvancesAmount(),
+            'advancesRequired'         => $warrant->isAdvancesRequired(),
+            'advancesAmount'           => $warrant->getAdvancesAmount(),
+            'advancesCurrency'         => $warrant->getAdvancesCurrency(),
             'vehicleType'              => $warrant->getVehicleType()->getName(),
             'vehicleTypeDescription'   => $warrant->getVehicleDescription(),
+            'travelTypeCode'           => $warrant->getTravelType()->getCode(),
         ];
     }
 
@@ -46,5 +49,70 @@ class WarrantPdfReportService
         $dompdf->render();
 
         return $dompdf->output();
+    }
+
+    public function getCalculationReportData(Warrant $warrant): ?array
+    {
+        if (!$warrant->getWarrantCalculation()) {
+            return [];
+        }
+
+        $totalExpenses = [];
+
+        foreach ($warrant->getWarrantCalculation()->getWarrantCalculationWages() as $wage) {
+            $this->addToTotalExpenses($totalExpenses, $wage->getAmount(), $wage->getCurrency()->getCode());
+        }
+
+        foreach ($warrant->getWarrantCalculation()->getWarrantCalculationExpenses() as $expense) {
+            $this->addToTotalExpenses($totalExpenses, $expense->getAmount(), $expense->getCurrency()->getCode());
+        }
+
+        $advancesDeducted = false;
+
+        if ($warrant->getAdvancesAmount() > 0) {
+            foreach ($totalExpenses as $expense) {
+                if ($expense['currency'] === $warrant->getAdvancesCurrency()->getCode()) {
+                    $totalExpenses[$expense['currency']]['amount'] -= $warrant->getAdvancesAmount();
+                    $advancesDeducted                  = true;
+                }
+            }
+        }
+
+        if (!$advancesDeducted) {
+            $totalExpenses[$warrant->getAdvancesCurrency()->getCode()] = [
+                'amount'   => $warrant->getAdvancesAmount(),
+                'currency' => $warrant->getAdvancesCurrency()->getCode()
+            ];
+        }
+
+        return [
+            'departureDate'                => $warrant->getWarrantCalculation()->getDepartureDate()->format(
+                'd.m.Y H:i:s'
+            ),
+            'returningDate'                => $warrant->getWarrantCalculation()->getReturningDate()->format(
+                'd.m.Y H:i:s'
+            ),
+            'domicileCountryLeavingDate'   => $warrant->getWarrantCalculation()->getDomicileCountryLeavingDate(
+            )->format(
+                'd.m.Y H:i:s'
+            ),
+            'domicileCountryReturningDate' => $warrant->getWarrantCalculation()->getDomicileCountryReturningDate(
+            )->format('d.m.Y H:i:s'),
+            'warrantTravelItineraries'     => $warrant->getWarrantCalculation()->getWarrantTravelItineraries(),
+            'warrantCalculationWages'      => $warrant->getWarrantCalculation()->getWarrantCalculationWages(),
+            'warrantCalculationExpenses'   => $warrant->getWarrantCalculation()->getWarrantCalculationExpenses(),
+            'travelReport'                 => $warrant->getWarrantCalculation()->getTravelReport(),
+            'wageType'                     => $warrant->getWarrantCalculation()->getWageType(),
+            'totalExpenses'                => $totalExpenses
+        ];
+    }
+
+    private function addToTotalExpenses(&$result, $amount, $currency)
+    {
+        if (isset($result[$currency])) {
+            $result[$currency]['amount'] += $amount;
+        } else {
+            $result[$currency] = ['amount' => $amount, 'currency' => $currency];
+        }
     }
 }
