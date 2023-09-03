@@ -53,7 +53,6 @@ class SetUserTemporaryPasswordListener
                 $uow->recomputeSingleEntityChangeSet($em->getClassMetadata(get_class($entity)), $entity);
                 $uow->computeChangeSets();
 
-                // TODO replace subject and text with translations once translations are added to project
                 $mail = (new Email())
                     ->from($this->parameterBag->get('app_name'))
                     ->to($entity->getEmail())

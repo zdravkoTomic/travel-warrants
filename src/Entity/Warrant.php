@@ -206,6 +206,7 @@ class Warrant
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['get_payments_by_payment_status'])]
     private ?WarrantGroupStatus $groupStatus = null;
 
     #[ORM\ManyToOne]

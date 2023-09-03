@@ -38,11 +38,11 @@ class WarrantPaymentStatus
     #[ORM\GeneratedValue]
     #[ORM\Column]
     #[ApiProperty(identifier: true)]
-    #[Groups(['get_warrant_payment_status_by_code'])]
+    #[Groups(['get_warrant_payment_status_by_code', 'get_payment_catalog'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 50)]
-    #[Groups(['get_warrant_payment_status_by_code'])]
+    #[Groups(['get_warrant_payment_status_by_code', 'get_payment_catalog'])]
     private ?string $code = null;
 
     #[ORM\Column(length: 255)]

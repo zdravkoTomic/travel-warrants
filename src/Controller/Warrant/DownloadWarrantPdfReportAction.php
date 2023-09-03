@@ -9,16 +9,13 @@ use Symfony\Component\HttpFoundation\Response;
 
 class DownloadWarrantPdfReportAction extends AbstractController
 {
-    private WarrantPdfReportService $pdfReportService;
-
-    public function __construct(WarrantPdfReportService $pdfReportService)
+    public function __construct(readonly WarrantPdfReportService $pdfReportService)
     {
-        $this->pdfReportService = $pdfReportService;
     }
 
     public function __invoke(Warrant $warrant): Response
     {
-        $data = $this->pdfReportService->getInitialReportData($warrant);
+        $data            = $this->pdfReportService->getInitialReportData($warrant);
         $calculationData = $this->pdfReportService->getCalculationReportData($warrant);
 
         $data['calculation_data'] = $calculationData;

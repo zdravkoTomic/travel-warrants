@@ -59,7 +59,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
         new Post(
             uriTemplate           : '/logout',
             controller            : LogoutController::class,
-            description           : 'Logout em ployee',
+            description           : 'Logout employee',
             denormalizationContext: ['groups' => ['logout_employee']],
             name                  : 'app_logout'
         ),

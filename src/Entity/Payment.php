@@ -74,6 +74,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
     'warrantPayments.warrant.destination'              => 'ipartial',
     'warrantPayments.warrant.advancesRequired'         => 'ipartial',
     'warrantPayments.warrant.warrantStatus.code'       => 'ipartial',
+    'warrantPaymentStatus.code'                        => 'ipartial',
     'warrantPayments.payment.id'                       => 'exact'
 ])]
 #[ApiFilter(
@@ -109,6 +110,7 @@ class Payment
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['get_payment_catalog'])]
     private ?WarrantPaymentStatus $warrantPaymentStatus = null;
 
     #[ORM\OneToMany(mappedBy: 'payment', targetEntity: WarrantPayment::class, orphanRemoval: true)]

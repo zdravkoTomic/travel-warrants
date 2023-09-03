@@ -22,8 +22,8 @@ class MailerService
      */
     public function sendMail(Email $email): void
     {
-        $dns       = $this->getMailerDsn();
-        $transport = Transport::fromDsn($dns);
+        $dsn       = $this->getMailerDsn();
+        $transport = Transport::fromDsn($dsn);
 
         $mailer = new Mailer($transport);
         $mailer->send($email);
@@ -31,6 +31,6 @@ class MailerService
 
     private function getMailerDsn(): string
     {
-        return $this->parameterBag->get('dns');
+        return $this->parameterBag->get('dsn');
     }
 }

@@ -11,6 +11,7 @@ use Doctrine\ORM\Events;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\Event\LifecycleEventArgs;
 use Exception;
+use RuntimeException;
 use Symfony\Bundle\SecurityBundle\Security;
 
 #[AsDoctrineListener(event: Events::prePersist)]
@@ -49,7 +50,7 @@ class SetWarrantInitialDataListener
         $user = $this->security->getUser();
 
         if (!$user) {
-            throw new Exception("Couldn't retrieve current user");
+            throw new RuntimeException("Couldn't retrieve current user");
         }
 
         $warrantStatusFlow = $this->warrantStatusFlowService->setWarrantStatusFlow(

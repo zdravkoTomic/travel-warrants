@@ -16,20 +16,14 @@ use Symfony\Component\Serializer\SerializerInterface;
 #[AsController]
 class LoginController extends AbstractController
 {
-    private RouterInterface $router;
-
-    public function __construct(RouterInterface $router)
+    public function __construct(readonly RouterInterface $router)
     {
-        $this->router = $router;
     }
 
-    /**
-     * @throws \JsonException
-     */
-    public function __invoke(SerializerInterface $serializer, #[CurrentUser] Employee $user = null)
+    public function __invoke(SerializerInterface $serializer, #[CurrentUser] Employee $user = null): JsonResponse
     {
         if (!$user || !$user->isActive()) {
-            new JsonResponse(['error' => 'Invalid credentials'], 401);
+            new JsonResponse(['error' => 'Pogrešan unos email-a i lozinke'], 401);
         }
 
         $cookie = new Cookie('user_auth', bin2hex(random_bytes(10)), time() + 14400, '/', "localhost");
