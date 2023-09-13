@@ -67,22 +67,12 @@ class WarrantPdfReportService
             $this->addToTotalExpenses($totalExpenses, $expense->getAmount(), $expense->getCurrency()->getCode());
         }
 
-        $advancesDeducted = false;
-
         if ($warrant->getAdvancesAmount() > 0) {
             foreach ($totalExpenses as $expense) {
                 if ($expense['currency'] === $warrant->getAdvancesCurrency()->getCode()) {
                     $totalExpenses[$expense['currency']]['amount'] -= $warrant->getAdvancesAmount();
-                    $advancesDeducted                  = true;
                 }
             }
-        }
-
-        if (!$advancesDeducted) {
-            $totalExpenses[$warrant->getAdvancesCurrency()->getCode()] = [
-                'amount'   => $warrant->getAdvancesAmount(),
-                'currency' => $warrant->getAdvancesCurrency()->getCode()
-            ];
         }
 
         return [
@@ -93,11 +83,11 @@ class WarrantPdfReportService
                 'd.m.Y H:i:s'
             ),
             'domicileCountryLeavingDate'   => $warrant->getWarrantCalculation()->getDomicileCountryLeavingDate(
-            )->format(
+            )?->format(
                 'd.m.Y H:i:s'
             ),
             'domicileCountryReturningDate' => $warrant->getWarrantCalculation()->getDomicileCountryReturningDate(
-            )->format('d.m.Y H:i:s'),
+            )?->format('d.m.Y H:i:s'),
             'warrantTravelItineraries'     => $warrant->getWarrantCalculation()->getWarrantTravelItineraries(),
             'warrantCalculationWages'      => $warrant->getWarrantCalculation()->getWarrantCalculationWages(),
             'warrantCalculationExpenses'   => $warrant->getWarrantCalculation()->getWarrantCalculationExpenses(),

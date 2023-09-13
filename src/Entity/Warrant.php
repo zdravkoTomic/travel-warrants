@@ -154,7 +154,8 @@ class Warrant
         'get_warrant',
         'get_user_warrants_by_status',
         'get_payments_by_payment_status',
-        'get_all_warrants'
+        'get_all_warrants',
+        'get_warrant_status_flow'
     ])]
     private ?int $id = null;
 
@@ -167,7 +168,8 @@ class Warrant
         'get_user_warrants_by_status',
         'get_warrant_calculation_preview',
         'get_payments_by_payment_status',
-        'get_all_warrants'
+        'get_all_warrants',
+        'get_warrant_status_flow'
     ])]
     #[ApiFilter(SearchFilter::class, strategy: 'exact')]
     private ?string $code = null;

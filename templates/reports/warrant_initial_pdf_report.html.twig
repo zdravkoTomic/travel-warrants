@@ -66,6 +66,9 @@
             padding: 1px;
             border: 1px solid #000;
         }
+        .expense-cell {
+            text-align: right
+        }
     </style>
 </head>
 <body>
@@ -214,7 +217,7 @@
                         <td class="table-cell">
                             {{ calculation_data.wageType.name }}
                         </td>
-                        <td class="table-cell">
+                        <td class="table-cell expense-cell">
                             {{ wage.amount }} {{ wage.currency.code }}
                         </td>
                     </tr>
@@ -238,10 +241,10 @@
                         <td class="table-header-side-cell">
                             {{ expense.expenseType.name }} - {{ expense.description }}
                         </td>
-                        <td class="table-cell">
+                        <td class="table-cell expense-cell">
                             {{ expense.originalAmount | number_format(2, '.', ',') }} {{ expense.originalCurrency.code }}
                         </td>
-                        <td class="table-cell">
+                        <td class="table-cell expense-cell">
                             {{ expense.amount | number_format(2, '.', ',') }} {{ expense.currency.code }}
                         </td>
                     </tr>
@@ -262,7 +265,7 @@
                     <td class="table-header-side-cell">
                         Isplaćena akontacija
                     </td>
-                    <td class="table-cell">
+                    <td class="table-cell expense-cell">
                         -{{ advancesAmount | number_format(2, '.', ',') }} {{ advancesCurrency.code }}
                     </td>
                 </tr>
@@ -275,7 +278,7 @@
                     <td class="table-header-side-cell">
                         Ukupno za isplatu
                     </td>
-                    <td class="table-cell">
+                    <td class="table-cell expense-cell">
                         {% for item in calculation_data.totalExpenses %}
                             {{ item.amount }} {{ item.currency }}<br>
                         {% endfor %}

@@ -8,15 +8,15 @@ WHERE code = '0001';
 INSERT INTO department (code, name, parent, active)
 SELECT '0011', 'Računovodstvo', d.id, 1
 FROM department d
-WHERE code = '';
+WHERE code = '0001';
 INSERT INTO department (code, name, parent, active)
 SELECT '0012', 'Budžetiranje', d.id, 1
 FROM department d
-WHERE code = '';
+WHERE code = '0001';
 INSERT INTO department (code, name, parent, active)
 SELECT '0013', 'Prodaja', d.id, 1
 FROM department d
-WHERE code = '';
+WHERE code = '0001';
 
 INSERT INTO department (code, name, parent, active)
 SELECT '0020', 'Ljudski resursi', d.id, 1
